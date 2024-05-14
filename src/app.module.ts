@@ -12,6 +12,10 @@ import { RepositoryModule } from './modules/repository/repository.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
+import { BookModule } from './modules/book/book.module';
+import { RatingModule } from './modules/rating/rating.module';
+import { AuthorModule } from './modules/author/author.module';
+import { CartModule } from './modules/cart/cart.module';
 
 @Module({
   imports: [
@@ -48,6 +52,10 @@ import { MongoConfigService } from './database/factories/mongo.typeorm-options.f
     RepositoryModule,
     UserModule,
     AuthModule,
+    BookModule,
+    RatingModule,
+    AuthorModule,
+    CartModule,
   ],
 })
 export class AppModule {
