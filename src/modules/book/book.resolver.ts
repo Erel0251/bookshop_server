@@ -9,8 +9,13 @@ export class BookResolver {
   constructor(private bookService: BookService) {}
 
   @Query(() => [Book])
-  async books(): Promise<Book[]> {
-    return await this.bookService.findAll();
+  async books(
+    @Args('offset', { type: () => Number, nullable: true, defaultValue: 0 })
+    offset: number,
+    @Args('limit', { type: () => Number, nullable: true, defaultValue: 20 })
+    limit: number,
+  ): Promise<Book[]> {
+    return await this.bookService.findAll(offset, limit);
   }
 
   @Query(() => Book, { name: 'book' })

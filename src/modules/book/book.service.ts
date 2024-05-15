@@ -26,8 +26,8 @@ export class BookService {
     return 'This action adds a new book';
   }
 
-  async findAll(): Promise<Book[]> {
-    return await this.book.find();
+  async findAll(offset: number = 0, limit: number = 20): Promise<Book[]> {
+    return await this.book.find({ skip: offset, take: limit });
   }
 
   async findOne(id: string): Promise<Book> {

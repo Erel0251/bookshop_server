@@ -34,6 +34,6 @@ type Book {
 }
 
 type Query {
-  books: [Book!]!
+  books(offset: Float = 0, limit: Float = 20): [Book!]!
   book(id: String!): Book!
 }
