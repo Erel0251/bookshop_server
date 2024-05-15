@@ -1,4 +1,3 @@
-import helmet from 'helmet';
 import cors from 'cors';
 import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';

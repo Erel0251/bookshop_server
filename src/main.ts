@@ -9,8 +9,8 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const config = new DocumentBuilder()
-    .setTitle('NestJS API')
-    .setDescription('NestJS API description')
+    .setTitle('Bookshop API')
+    .setDescription('Bookshop API description')
     .setVersion('1.0')
     .build();
 
@@ -21,6 +21,17 @@ async function bootstrap() {
   app.useLogger(app.get(Logger));
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
-  await app.listen(configService.get('PORT'));
+  await app.listen(configService.get('PORT'), () => {
+    const logger = app.get(Logger);
+    logger.log(
+      `Server is running on http://localhost:${configService.get('PORT')}`,
+    );
+    logger.log(
+      `Swagger is running on http://localhost:${configService.get('PORT')}/api`,
+    );
+    logger.log(
+      `GraphQL is running on http://localhost:${configService.get('PORT')}/graphql`,
+    );
+  });
 }
 bootstrap();

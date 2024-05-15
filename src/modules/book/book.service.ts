@@ -56,4 +56,8 @@ export class BookService {
   remove(id: number) {
     return `This action removes a #${id} book`;
   }
+
+  async getCountTotal(): Promise<number> {
+    return await this.book.count();
+  }
 }
