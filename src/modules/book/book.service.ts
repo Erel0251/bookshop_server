@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
-import { CreateBookDto } from './dto/create-book.dto';
-import { UpdateBookDto } from './dto/update-book.dto';
+// import { CreateBookDto } from './dto/create-book.dto';
+// import { UpdateBookDto } from './dto/update-book.dto';
 
 import { Book } from './entities/book.entity';
 import { AuthorService } from '../author/author.service';
@@ -22,7 +22,7 @@ export class BookService {
     private readonly ratingService: RatingService,
   ) {}
 
-  create(createBookDto: CreateBookDto) {
+  create() {
     return 'This action adds a new book';
   }
 
@@ -49,7 +49,7 @@ export class BookService {
     return await this.ratingService.findRatingByBook(book);
   }
 
-  update(id: number, updateBookDto: UpdateBookDto) {
+  update(id: number) {
     return `This action updates a #${id} book`;
   }
 

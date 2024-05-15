@@ -1,10 +1,10 @@
 import { Injectable } from '@nestjs/common';
-import { CreateRepositoryDto } from './dto/create-repository.dto';
-import { UpdateRepositoryDto } from './dto/update-repository.dto';
+// import { CreateRepositoryDto } from './dto/create-repository.dto';
+// import { UpdateRepositoryDto } from './dto/update-repository.dto';
 
 @Injectable()
 export class RepositoryService {
-  create(createRepositoryDto: CreateRepositoryDto) {
+  create() {
     return 'This action adds a new repository';
   }
 
@@ -16,7 +16,7 @@ export class RepositoryService {
     return `This action returns a #${id} repository`;
   }
 
-  update(id: number, updateRepositoryDto: UpdateRepositoryDto) {
+  update(id: number) {
     return `This action updates a #${id} repository`;
   }
 
