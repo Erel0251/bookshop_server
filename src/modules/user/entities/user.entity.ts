@@ -1,12 +1,9 @@
 import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { CommonEntity } from '../../../shared/entites/common.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne } from 'typeorm';
 
 @Entity()
 export class User extends CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
   @Column({ type: 'text' })
   first_name: string;
 

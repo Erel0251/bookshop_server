@@ -1,18 +1,13 @@
-import {Cart} from 'src/modules/cart/entities/cart.entity';
-import {Rating} from 'src/modules/rating/entities/rating.entity';
-import { CommonEntity } from 'src/shared/entites/common.entity';
-import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import { Cart } from 'src/modules/cart/entities/cart.entity';
+import { Rating } from 'src/modules/rating/entities/rating.entity';
+import { CommonEntity } from '../../../shared/entites/common.entity';
+import { Author } from 'src/modules/author/entities/author.entity';
 
 @Entity()
 export class Book extends CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
   @Column({ type: 'text', nullable: false, unique: true })
   title: string;
-
-  @Column({ type: 'text', nullable: false, array: true, default: [] })
-  authors: string[];
 
   @Column({ type: 'text', nullable: false })
   publisher: string;
@@ -46,6 +41,9 @@ export class Book extends CommonEntity {
 
   @Column({ type: 'integer', default: 0 })
   buy_count: number;
+
+  @ManyToMany(() => Author, (author) => author.books)
+  authors: Author[];
 
   @OneToMany(() => Rating, (rating) => rating.book)
   ratings: Rating[];
