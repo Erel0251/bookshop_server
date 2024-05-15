@@ -8,14 +8,10 @@ import {
   JoinTable,
   ManyToMany,
   OneToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity({ name: 'cart' })
 export class Cart extends CommonEntity {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
   @Column({ type: 'smallint', default: 0 })
   quantity: number;
 

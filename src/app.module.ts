@@ -1,17 +1,22 @@
-import { MiddlewareConsumer, Module } from '@nestjs/common';
-import { ConfigModule } from '@nestjs/config';
-import configuration from './config/configuration';
-import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostgreConfigService } from './database/factories/postgre.typeorm-options.factory';
-import { DataSource } from 'typeorm';
 import helmet from 'helmet';
 import cors from 'cors';
-import { LoggerMiddleware } from './middleware/logger.middleware';
+import { MiddlewareConsumer, Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { GraphQLModule } from '@nestjs/graphql';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { join } from 'path';
+import { DataSource } from 'typeorm';
 import { LoggerModule } from 'nestjs-pino';
+
+import configuration from './config/configuration';
+import { PostgreConfigService } from './database/factories/postgre.typeorm-options.factory';
+import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
+import { LoggerMiddleware } from './middleware/logger.middleware';
+
 import { RepositoryModule } from './modules/repository/repository.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
-import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
 import { BookModule } from './modules/book/book.module';
 import { RatingModule } from './modules/rating/rating.module';
 import { AuthorModule } from './modules/author/author.module';
@@ -49,17 +54,22 @@ import { CartModule } from './modules/cart/cart.module';
         return await new DataSource(options!).initialize();
       },
     }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'src/database/schema/schema.gql'),
+      playground: true,
+    }),
     RepositoryModule,
     UserModule,
     AuthModule,
-    BookModule,
-    RatingModule,
     AuthorModule,
+    RatingModule,
     CartModule,
+    BookModule,
   ],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware, helmet, cors).forRoutes('*');
+    consumer.apply(LoggerMiddleware, cors).forRoutes('*');
   }
 }

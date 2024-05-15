@@ -1,0 +1,39 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Rating {
+  title: String!
+  comment: String!
+  rating: Int!
+}
+
+type Author {
+  last_name: String!
+  first_name: String!
+  bio: String!
+  img_url: String!
+  books: [Book!]!
+}
+
+type Book {
+  title: String!
+  publisher: String!
+  img_urls: [String!]!
+  overview: String!
+  isbn: String!
+  categories: [String!]!
+  price: Float!
+  sale: Float!
+  currency: String!
+  is_recommended: Boolean!
+  buy_count: Int!
+  authors: [Author!]!
+  ratings: [Rating!]!
+  rating: [Rating!]!
+}
+
+type Query {
+  books: [Book!]!
+  book(id: String!): Book!
+}

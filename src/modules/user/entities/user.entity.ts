@@ -1,5 +1,5 @@
 import { Cart } from 'src/modules/cart/entities/cart.entity';
-import { CommonEntity } from '../../../shared/entites/common.entity';
+import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Column, Entity, OneToOne } from 'typeorm';
 
 @Entity()
