@@ -19,7 +19,7 @@ export class BookController {
 
   @Post()
   create(@Body() createBookDto: CreateBookDto) {
-    return this.bookService.create(createBookDto);
+    console.log(createBookDto);
   }
 
   @Get()
@@ -34,7 +34,8 @@ export class BookController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
-    return this.bookService.update(+id, updateBookDto);
+    console.log(updateBookDto);
+    console.log(id);
   }
 
   @Delete(':id')

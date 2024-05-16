@@ -20,6 +20,10 @@ import { BookModule } from './modules/book/book.module';
 import { RatingModule } from './modules/rating/rating.module';
 import { AuthorModule } from './modules/author/author.module';
 import { CartModule } from './modules/cart/cart.module';
+import { CategoryModule } from './modules/category/category.module';
+import { SaleModule } from './modules/sale/sale.module';
+import { OrderModule } from './modules/order/order.module';
+import { SupplementModule } from './modules/supplement/supplement.module';
 
 @Module({
   imports: [
@@ -64,6 +68,10 @@ import { CartModule } from './modules/cart/cart.module';
     AuthorModule,
     RatingModule,
     CartModule,
+    CategoryModule,
+    SaleModule,
+    OrderModule,
+    SupplementModule,
     BookModule,
   ],
 })

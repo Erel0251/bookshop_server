@@ -3,6 +3,8 @@ import { Book } from './entities/book.entity';
 import { BookService } from './book.service';
 import { Author } from '../author/entities/author.entity';
 import { Rating } from '../rating/entities/rating.entity';
+import { Category } from '../category/entities/category.entity';
+import { Sale } from '../sale/entities/sale.entity';
 
 @Resolver(() => Book)
 export class BookResolver {
@@ -21,6 +23,16 @@ export class BookResolver {
   @Query(() => Book, { name: 'book' })
   async book(@Args('id') id: string): Promise<Book> {
     return await this.bookService.findOne(id);
+  }
+
+  @ResolveField(() => [Category], { name: 'categories' })
+  async categories(@Parent() book: Book): Promise<Category[]> {
+    return await this.bookService.findCategoryByBookId(book.id);
+  }
+
+  @ResolveField(() => Sale, { name: 'sale' })
+  async sale(@Parent() book: Book): Promise<Sale> {
+    return await this.bookService.findSaleInfoByBookId(book.id);
   }
 
   @ResolveField(() => [Author], { name: 'authors' })

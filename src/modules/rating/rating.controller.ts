@@ -19,7 +19,8 @@ export class RatingController {
 
   @Post()
   create(@Body() createRatingDto: CreateRatingDto) {
-    return this.ratingService.create(createRatingDto);
+    //return this.ratingService.create(createRatingDto);
+    console.log(createRatingDto);
   }
 
   @Get()
@@ -34,7 +35,9 @@ export class RatingController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateRatingDto: UpdateRatingDto) {
-    return this.ratingService.update(+id, updateRatingDto);
+    //return this.ratingService.update(+id, updateRatingDto);
+    console.log(updateRatingDto);
+    console.log(id);
   }
 
   @Delete(':id')

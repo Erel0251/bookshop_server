@@ -19,7 +19,7 @@ export class CartController {
 
   @Post()
   create(@Body() createCartDto: CreateCartDto) {
-    return this.cartService.create(createCartDto);
+    console.log('createCartDto', createCartDto);
   }
 
   @Get()
@@ -34,7 +34,8 @@ export class CartController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateCartDto: UpdateCartDto) {
-    return this.cartService.update(+id, updateCartDto);
+    console.log('updateCartDto', updateCartDto);
+    console.log('id', id);
   }
 
   @Delete(':id')

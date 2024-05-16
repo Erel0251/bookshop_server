@@ -11,6 +11,10 @@ import { AuthorService } from '../author/author.service';
 import { Author } from '../author/entities/author.entity';
 import { RatingService } from '../rating/rating.service';
 import { Rating } from '../rating/entities/rating.entity';
+import { CategoryService } from '../category/category.service';
+import { Category } from '../category/entities/category.entity';
+import { SaleService } from '../sale/sale.service';
+import { Sale } from '../sale/entities/sale.entity';
 
 @Injectable()
 export class BookService {
@@ -20,6 +24,8 @@ export class BookService {
 
     private readonly authorService: AuthorService,
     private readonly ratingService: RatingService,
+    private readonly categoryService: CategoryService,
+    private readonly saleService: SaleService,
   ) {}
 
   create() {
@@ -47,6 +53,16 @@ export class BookService {
   async findRatingByBookId(id: string): Promise<Rating[]> {
     const book = await this.book.findOne({ where: { id } });
     return await this.ratingService.findRatingByBook(book);
+  }
+
+  async findCategoryByBookId(id: string): Promise<Category[]> {
+    const book = await this.book.findOne({ where: { id } });
+    return await this.categoryService.findCategoryByBook(book);
+  }
+
+  async findSaleInfoByBookId(id: string): Promise<Sale> {
+    const book = await this.book.findOne({ where: { id } });
+    return await this.saleService.findSaleByBook(book);
   }
 
   update(id: number) {

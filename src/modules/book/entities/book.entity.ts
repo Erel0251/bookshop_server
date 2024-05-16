@@ -1,9 +1,16 @@
 import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
-import { Cart } from 'src/modules/cart/entities/cart.entity';
+
+import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Rating } from 'src/modules/rating/entities/rating.entity';
 import { Author } from 'src/modules/author/entities/author.entity';
-import { CommonEntity } from 'src/shared/entites/common.entity';
+import { Category } from 'src/modules/category/entities/category.entity';
+import { Sale } from 'src/modules/sale/entities/sale.entity';
+import { OrderDetail } from 'src/modules/order/entities/order-detail.entity';
+
+import { Status } from '../constants/status.enum';
+import { CartDetail } from 'src/modules/cart/entities/cart-detail.entity';
+import { SupplementDetail } from 'src/modules/supplement/entities/supplement-detail.entity';
 
 @Entity()
 @ObjectType()
@@ -28,17 +35,13 @@ export class Book extends CommonEntity {
   @Column({ type: 'char', length: 13, nullable: false })
   isbn: string;
 
-  @Field(() => [String])
-  @Column({ type: 'text', array: true, default: [] })
-  categories: string[];
-
   @Field(() => Float)
   @Column({ type: 'real', nullable: false })
   price: number;
 
-  @Field(() => Float)
-  @Column({ type: 'real', default: 0 })
-  sale: number;
+  @Field()
+  @Column({ type: 'text', nullable: false })
+  status: Status;
 
   @Field()
   @Column({ type: 'text', nullable: false })
@@ -52,6 +55,14 @@ export class Book extends CommonEntity {
   @Column({ type: 'integer', default: 0 })
   buy_count: number;
 
+  @Field(() => Int)
+  @Column({ type: 'integer', default: 0 })
+  inventory: number;
+
+  @Field(() => [Category])
+  @OneToMany(() => Category, (category) => category.book)
+  categories: Category[];
+
   @Field(() => [Author])
   @ManyToMany(() => Author, (author) => author.books)
   authors: Author[];
@@ -60,6 +71,18 @@ export class Book extends CommonEntity {
   @OneToMany(() => Rating, (rating) => rating.book)
   ratings?: Rating[];
 
-  @ManyToMany(() => Cart, (cart) => cart.books)
-  carts?: Cart[];
+  @OneToMany(() => Sale, (sale) => sale.books)
+  sale?: Sale[];
+
+  @OneToMany(() => CartDetail, (cartDetail) => cartDetail.books)
+  cart_details?: CartDetail[];
+
+  @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.books)
+  order_details?: OrderDetail[];
+
+  @OneToMany(
+    () => SupplementDetail,
+    (supplementDetail) => supplementDetail.books,
+  )
+  supplement_details?: SupplementDetail[];
 }

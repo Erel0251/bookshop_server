@@ -17,7 +17,8 @@ export class RepositoryController {
 
   @Post()
   create(@Body() createRepositoryDto: CreateRepositoryDto) {
-    return this.repositoryService.create(createRepositoryDto);
+    //return this.repositoryService.create(createRepositoryDto);
+    console.log(createRepositoryDto);
   }
 
   @Get()
@@ -35,7 +36,9 @@ export class RepositoryController {
     @Param('id') id: string,
     @Body() updateRepositoryDto: UpdateRepositoryDto,
   ) {
-    return this.repositoryService.update(+id, updateRepositoryDto);
+    console.log(updateRepositoryDto);
+    console.log(id);
+    //return this.repositoryService.update(+id, updateRepositoryDto);
   }
 
   @Delete(':id')
