@@ -5,7 +5,8 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from './book.service';
@@ -18,8 +19,14 @@ export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   @Post()
-  create(@Body() createBookDto: CreateBookDto) {
-    console.log(createBookDto);
+  async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
+    try {
+      await this.bookService.createBook(createBookDto);
+      res.status(HttpStatus.CREATED).send();
+    } catch (error) {
+      console.error(error);
+      res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+    }
   }
 
   @Get()
@@ -36,11 +43,6 @@ export class BookController {
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     console.log(updateBookDto);
     console.log(id);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.bookService.remove(+id);
   }
 
   @Get('total')

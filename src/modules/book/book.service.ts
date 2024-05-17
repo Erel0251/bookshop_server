@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
 
-// import { CreateBookDto } from './dto/create-book.dto';
-// import { UpdateBookDto } from './dto/update-book.dto';
+import { CreateBookDto } from './dto/create-book.dto';
+import { UpdateBookDto } from './dto/update-book.dto';
 
 import { Book } from './entities/book.entity';
 import { AuthorService } from '../author/author.service';
@@ -15,6 +15,8 @@ import { CategoryService } from '../category/category.service';
 import { Category } from '../category/entities/category.entity';
 import { SaleService } from '../sale/sale.service';
 import { Sale } from '../sale/entities/sale.entity';
+import { BookStatus } from './constants/status.enum';
+import { generateISBN } from './helpers/helper';
 
 @Injectable()
 export class BookService {
@@ -27,9 +29,14 @@ export class BookService {
     private readonly categoryService: CategoryService,
     private readonly saleService: SaleService,
   ) {}
+  async createBook(createBookDto: CreateBookDto): Promise<Book> {
+    // generate isbn if needed
+    createBookDto.isbn = createBookDto.isbn || generateISBN();
+    return await this.book.save(createBookDto);
+  }
 
-  create() {
-    return 'This action adds a new book';
+  async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<void> {
+    await this.book.update(id, updateBookDto);
   }
 
   async findAll(offset: number = 0, limit: number = 20): Promise<Book[]> {
@@ -41,8 +48,13 @@ export class BookService {
   }
 
   async findBooksByAuthorId(id: string): Promise<Book[]> {
-    const author = await this.authorService.findOne(id);
-    return await this.book.find({ where: { authors: author } });
+    try {
+      const author = await this.authorService.findOne(id);
+      return await this.book.find({ where: { authors: author as Author } });
+    } catch (error) {
+      console.error(error);
+      return [];
+    }
   }
 
   async findAuthorByBookId(id: string): Promise<Author[]> {
@@ -65,15 +77,23 @@ export class BookService {
     return await this.saleService.findSaleByBook(book);
   }
 
-  update(id: number) {
-    return `This action updates a #${id} book`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} book`;
-  }
-
   async getCountTotal(): Promise<number> {
     return await this.book.count();
+  }
+
+  async updateInventory(id: string, buy: number = 0): Promise<void> {
+    const book = await this.book.findOne({ where: { id } });
+    book.inventory -= buy;
+    // if inventory empty, set status to 'out of stock'
+    if (book.inventory === 0) {
+      book.status = BookStatus.OUT_OF_STOCK;
+    }
+    await this.book.save(book);
+  }
+
+  async deleteBook(id: string): Promise<void | Error> {
+    const book = await this.book.findOne({ where: { id } });
+    book.is_deleted = true;
+    await this.book.save(book);
   }
 }

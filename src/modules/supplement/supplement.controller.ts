@@ -1,45 +1,48 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
   Patch,
   Param,
-  Delete,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { SupplementService } from './supplement.service';
 import { CreateSupplementDto } from './dto/create-supplement.dto';
 import { UpdateSupplementDto } from './dto/update-supplement.dto';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Supplement')
 @Controller('supplement')
 export class SupplementController {
   constructor(private readonly supplementService: SupplementService) {}
 
   @Post()
-  create(@Body() createSupplementDto: CreateSupplementDto) {
-    return this.supplementService.create(createSupplementDto);
-  }
-
-  @Get()
-  findAll() {
-    return this.supplementService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.supplementService.findOne(+id);
+  async asynccreate(
+    @Body() createSupplementDto: CreateSupplementDto,
+    @Res() res: any,
+  ) {
+    try {
+      await this.supplementService.create(createSupplementDto);
+      return res.status(HttpStatus.CREATED).send();
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message);
+    }
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id') id: string,
     @Body() updateSupplementDto: UpdateSupplementDto,
+    @Res() res: any,
   ) {
-    return this.supplementService.update(+id, updateSupplementDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.supplementService.remove(+id);
+    try {
+      await this.supplementService.update(id, updateSupplementDto);
+      return res.status(HttpStatus.OK).send();
+    } catch (error) {
+      console.error(error);
+      return res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(error.message);
+    }
   }
 }

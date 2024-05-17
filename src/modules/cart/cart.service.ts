@@ -2,7 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Cart } from './entities/cart.entity';
 import { Repository } from 'typeorm';
-import { CartDetail } from './entities/cart-detail.entity';
 
 // import { CreateCartDto } from './dto/create-cart.dto';
 // import { UpdateCartDto } from './dto/update-cart.dto';
@@ -11,82 +10,54 @@ import { CartDetail } from './entities/cart-detail.entity';
 export class CartService {
   constructor(
     @InjectRepository(Cart)
-    private cartRepository: Repository<Cart>,
-
-    @InjectRepository(CartDetail)
-    private cartDetailRepository: Repository<CartDetail>,
+    private cartItemRepository: Repository<Cart>,
   ) {}
-  async addBookToCart(
-    cartId: string,
+  async create(
+    userId: string,
     bookId: string,
     quantity: number = 1,
   ): Promise<void | Error> {
-    const cart = await this.cartRepository.findOne({ where: { id: cartId } });
-    const cartDetail = await this.cartDetailRepository.findOne({
-      where: { carts: cart, books: { id: bookId } },
+    const cartExist = await this.cartItemRepository.findOne({
+      where: { user: { id: userId }, books: { id: bookId } },
     });
-    if (cartDetail) {
-      cartDetail.quantity += quantity;
-      await this.cartDetailRepository.save(cartDetail);
+    if (cartExist) {
+      cartExist.quantity += quantity;
+      await this.cartItemRepository.save(cartExist);
     } else {
-      await this.cartDetailRepository.save({
-        quantity,
-        carts: cart,
+      await this.cartItemRepository.save({
+        user: { id: userId },
         books: { id: bookId },
+        quantity,
       });
     }
-    await this.updateTotalPrice(cartId);
   }
 
-  async removeBookFromCart(
-    cartId: string,
-    bookId: string,
-  ): Promise<void | Error> {
-    const cart = await this.cartRepository.findOne({ where: { id: cartId } });
-    const cartDetail = await this.cartDetailRepository.findOne({
-      where: { carts: cart, books: { id: bookId } },
-    });
-    if (cartDetail) {
-      await this.cartDetailRepository.remove(cartDetail);
-    }
-    await this.updateTotalPrice(cartId);
-  }
-
-  async updateBookQuantity(
-    cartId: string,
+  async update(
+    userId: string,
     bookId: string,
     quantity: number,
   ): Promise<void | Error> {
-    const cart = await this.cartRepository.findOne({ where: { id: cartId } });
-    const cartDetail = await this.cartDetailRepository.findOne({
-      where: { carts: cart, books: { id: bookId } },
+    const cartExist = await this.cartItemRepository.findOne({
+      where: { user: { id: userId }, books: { id: bookId } },
     });
-    if (cartDetail) {
-      // if quantity is 0, remove the book from cart
-      // if quantity is greater than 0, update the quantity
-      // if quantity is less than 0, return an error
+    if (cartExist) {
       if (quantity === 0) {
-        await this.cartDetailRepository.remove(cartDetail);
+        await this.cartItemRepository.remove(cartExist);
       } else if (quantity > 0) {
-        cartDetail.quantity = quantity;
-        await this.cartDetailRepository.save(cartDetail);
+        cartExist.quantity = quantity;
+        await this.cartItemRepository.save(cartExist);
       } else {
-        throw new Error('Quantity must be greater than or equal to 0');
+        throw new Error('Quantity must be greater than 0');
       }
     }
-    await this.updateTotalPrice(cartId);
   }
 
-  async updateTotalPrice(cartId: string) {
-    const cart = await this.cartRepository.findOne({
-      where: { id: cartId },
-      relations: ['cart_details', 'cart_details.books'],
+  async remove(userId: string, bookId: string): Promise<void | Error> {
+    const cartExist = await this.cartItemRepository.findOne({
+      where: { user: { id: userId }, books: { id: bookId } },
     });
-    cart.total_price = cart.cart_details.reduce(
-      (total, cartDetail) =>
-        total + cartDetail.quantity * cartDetail.books.price,
-      0,
-    );
-    await this.cartRepository.save(cart);
+    if (cartExist) {
+      await this.cartItemRepository.remove(cartExist);
+    }
   }
 }
