@@ -35,6 +35,20 @@ export class SaleController {
     }
   }
 
+  @Post('book/:id')
+  async createSaleBook(
+    @Body() createSaleBookDto: CreateSaleBookDto,
+    @Res() res: any,
+  ) {
+    try {
+      this.saleService.createSaleBook(createSaleBookDto);
+      res.status(HttpStatus.CREATED).send();
+    } catch (error) {
+      this.logger.error(error);
+      res.status(error.status).send(error.message);
+    }
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string, @Res() res: any) {
     try {
@@ -72,31 +86,6 @@ export class SaleController {
     }
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string, @Res() res: any) {
-    try {
-      this.saleService.remove(id);
-      res.status(HttpStatus.ACCEPTED).send();
-    } catch (error) {
-      this.logger.error(error);
-      res.status(error.status).send(error.message);
-    }
-  }
-
-  @Post('book/:id')
-  async createSaleBook(
-    @Body() createSaleBookDto: CreateSaleBookDto,
-    @Res() res: any,
-  ) {
-    try {
-      this.saleService.createSaleBook(createSaleBookDto);
-      res.status(HttpStatus.CREATED).send();
-    } catch (error) {
-      this.logger.error(error);
-      res.status(error.status).send(error.message);
-    }
-  }
-
   @Patch('book/:id')
   async updateSaleBook(
     @Param('id') id: string,
@@ -105,6 +94,17 @@ export class SaleController {
   ) {
     try {
       this.saleService.updateSaleBook(id, updateSaleBookDto);
+      res.status(HttpStatus.ACCEPTED).send();
+    } catch (error) {
+      this.logger.error(error);
+      res.status(error.status).send(error.message);
+    }
+  }
+
+  @Delete(':id')
+  async remove(@Param('id') id: string, @Res() res: any) {
+    try {
+      this.saleService.remove(id);
       res.status(HttpStatus.ACCEPTED).send();
     } catch (error) {
       this.logger.error(error);

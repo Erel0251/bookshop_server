@@ -27,11 +27,11 @@ export class CreateSupplementDto {
   supplier?: string;
 
   @IsArray()
-  @ApiProperty()
-  supplement_details: SupplementDetailDto[];
+  @ApiPropertyOptional()
+  supplement_details?: SupplementDetailDto[];
 }
 
-class SupplementDetailDto {
+export class SupplementDetailDto {
   @IsNumber()
   @ApiProperty()
   quantity: number;
@@ -43,6 +43,10 @@ class SupplementDetailDto {
   @IsString()
   @ApiProperty()
   currency: string;
+
+  @IsString()
+  @ApiProperty()
+  bookId: string;
 
   @ApiProperty()
   book: any;

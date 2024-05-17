@@ -33,21 +33,6 @@ export class AuthorController {
     }
   }
 
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() author: UpdateAuthorDto,
-    @Res() res: any,
-  ) {
-    try {
-      await this.authorService.update(id, author);
-      res.status(HttpStatus.ACCEPTED).send();
-    } catch (error) {
-      this.logger.error(error);
-      res.status(error.status).send(error.message);
-    }
-  }
-
   @Get()
   async findAll(@Res() res: any) {
     try {
@@ -70,10 +55,25 @@ export class AuthorController {
     }
   }
 
-  @Delete(':id')
-  async delete(@Param('id') id: string, @Res() res: any) {
+  @Get('book/:id')
+  async findAuthorByBookId(@Param('id') id: string, @Res() res: any) {
     try {
-      await this.authorService.delete(id);
+      const authors = await this.authorService.findAuthorByBookId(id);
+      res.status(HttpStatus.OK).send(authors);
+    } catch (error) {
+      this.logger.error(error);
+      res.status(error.status).send(error.message);
+    }
+  }
+
+  @Patch(':id')
+  async update(
+    @Param('id') id: string,
+    @Body() author: UpdateAuthorDto,
+    @Res() res: any,
+  ) {
+    try {
+      await this.authorService.update(id, author);
       res.status(HttpStatus.ACCEPTED).send();
     } catch (error) {
       this.logger.error(error);
@@ -81,11 +81,11 @@ export class AuthorController {
     }
   }
 
-  @Get('book/:id')
-  async findAuthorByBookId(@Param('id') id: string, @Res() res: any) {
+  @Delete(':id')
+  async delete(@Param('id') id: string, @Res() res: any) {
     try {
-      const authors = await this.authorService.findAuthorByBookId(id);
-      res.status(HttpStatus.OK).send(authors);
+      await this.authorService.delete(id);
+      res.status(HttpStatus.ACCEPTED).send();
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);

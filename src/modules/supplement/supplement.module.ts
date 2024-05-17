@@ -4,9 +4,13 @@ import { SupplementController } from './supplement.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Supplement } from './entities/supplement.entity';
 import { SupplementDetail } from './entities/supplement-detail.entity';
+import { BookModule } from '../book/book.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Supplement, SupplementDetail])],
+  imports: [
+    TypeOrmModule.forFeature([Supplement, SupplementDetail]),
+    BookModule,
+  ],
   controllers: [SupplementController],
   providers: [SupplementService],
   exports: [SupplementService],

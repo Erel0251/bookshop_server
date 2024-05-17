@@ -71,8 +71,8 @@ import { SupplementModule } from './modules/supplement/supplement.module';
     CategoryModule,
     SaleModule,
     OrderModule,
-    SupplementModule,
     BookModule,
+    SupplementModule,
   ],
 })
 export class AppModule {

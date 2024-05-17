@@ -39,14 +39,14 @@ export class BookController {
     return this.bookService.findOne(id);
   }
 
+  @Get('total')
+  async getCountTotal() {
+    return await this.bookService.getCountTotal();
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
     console.log(updateBookDto);
     console.log(id);
-  }
-
-  @Get('total')
-  async getCountTotal() {
-    return await this.bookService.getCountTotal();
   }
 }

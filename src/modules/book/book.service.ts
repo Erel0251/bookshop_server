@@ -17,6 +17,7 @@ import { SaleService } from '../sale/sale.service';
 import { Sale } from '../sale/entities/sale.entity';
 import { BookStatus } from './constants/status.enum';
 import { generateISBN } from './helpers/helper';
+import { SupplementDetail } from '../supplement/entities/supplement-detail.entity';
 
 @Injectable()
 export class BookService {
@@ -87,6 +88,16 @@ export class BookService {
     if (book.inventory === 0) {
       book.status = BookStatus.OUT_OF_STOCK;
     }
+    await this.book.save(book);
+  }
+
+  async updateSupplement(
+    id: string,
+    supplementDetail: SupplementDetail,
+  ): Promise<void> {
+    const book = await this.book.findOne({ where: { id } });
+    book.inventory += supplementDetail.quantity;
+    book.supplement_details.push(supplementDetail);
     await this.book.save(book);
   }
 
