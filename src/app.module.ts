@@ -13,7 +13,6 @@ import { PostgreConfigService } from './database/factories/postgre.typeorm-optio
 import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
-import { RepositoryModule } from './modules/repository/repository.module';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BookModule } from './modules/book/book.module';
@@ -62,7 +61,6 @@ import { SupplementModule } from './modules/supplement/supplement.module';
       autoSchemaFile: join(process.cwd(), 'src/database/schema/schema.gql'),
       playground: true,
     }),
-    RepositoryModule,
     UserModule,
     AuthModule,
     AuthorModule,

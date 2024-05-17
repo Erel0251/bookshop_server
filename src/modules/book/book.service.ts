@@ -48,7 +48,10 @@ export class BookService {
   }
 
   async findOne(id: string): Promise<Book> {
-    return await this.book.findOne({ where: { id } });
+    return await this.book.findOne({
+      where: { id },
+      relations: ['authors', 'ratings', 'categories', 'sale_book'],
+    });
   }
 
   async findBooksByAuthorId(id: string): Promise<Book[]> {

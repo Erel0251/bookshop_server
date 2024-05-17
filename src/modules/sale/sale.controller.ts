@@ -36,7 +36,7 @@ export class SaleController {
     }
   }
 
-  @Post('book/:id')
+  @Post(':id/book')
   async createSaleBook(
     @Body() createSaleBookDto: CreateSaleBookDto,
     @Res() res: any,
@@ -87,7 +87,7 @@ export class SaleController {
     }
   }
 
-  @Patch('book/:id')
+  @Patch(':id/book')
   async updateSaleBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateSaleBookDto: UpdateSaleBookDto,
@@ -113,7 +113,7 @@ export class SaleController {
     }
   }
 
-  @Delete('book/:id')
+  @Delete(':id/book')
   async deleteSaleBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() bookId: string,

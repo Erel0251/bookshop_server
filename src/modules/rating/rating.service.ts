@@ -12,22 +12,6 @@ import { Rating } from './entities/rating.entity';
 export class RatingService {
   constructor() {} // private rating: Repository<Rating>, // @InjectRepository(Rating)
 
-  create() {
-    return 'This action adds a new rating';
-  }
-
-  findAll() {
-    return `This action returns all rating`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} rating`;
-  }
-
-  update(id: number) {
-    return `This action updates a #${id} rating`;
-  }
-
   async findRatingByBook(book: Book): Promise<Rating[]> {
     return await Rating.find({ where: { book } });
   }

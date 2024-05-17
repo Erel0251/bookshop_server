@@ -56,7 +56,7 @@ export class AuthorController {
     }
   }
 
-  @Get('book/:id')
+  @Get(':id/books')
   async findAuthorByBookId(
     @Param('id', ParseUUIDPipe) id: string,
     @Res() res: any,

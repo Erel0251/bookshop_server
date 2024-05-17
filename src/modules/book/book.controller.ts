@@ -22,6 +22,7 @@ export class BookController {
 
   private readonly looger = new Logger(BookController.name);
 
+  // TODO: Remove or comment, book only created when supplement is created or updated
   @Post()
   async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
     try {
