@@ -1,6 +1,6 @@
-export enum Status {
-  AVAILABLE = 'available',
-  OUT_OF_STOCK = 'out_of_stock',
-  COMING_SOON = 'coming_soon',
-  DISCONTINUED = 'discontinued',
+export enum BookStatus {
+  AVAILABLE = 'AVAILABLE',
+  OUT_OF_STOCK = 'OUT_OF_STOCK',
+  COMING_SOON = 'COMING_SOON',
+  DISCONTINUED = 'DISCONTINUED',
 }

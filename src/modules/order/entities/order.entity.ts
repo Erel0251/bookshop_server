@@ -1,7 +1,8 @@
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { OrderDetail } from './order-detail.entity';
 import { User } from 'src/modules/user/entities/user.entity';
 import { CommonEntity } from 'src/shared/entites/common.entity';
-import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
+import { OrderStatus } from '../constants/order-status.enum';
 
 @Entity()
 export class Order extends CommonEntity {
@@ -22,6 +23,9 @@ export class Order extends CommonEntity {
 
   @Column()
   email: string;
+
+  @Column()
+  status: OrderStatus;
 
   @Column({ type: 'real' })
   total_price: number;

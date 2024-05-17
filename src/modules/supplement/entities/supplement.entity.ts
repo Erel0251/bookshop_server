@@ -19,8 +19,8 @@ export class Supplement extends CommonEntity {
   @Column()
   currency: string;
 
-  @Column()
-  supplier: string;
+  @Column({ nullable: true })
+  supplier?: string;
 
   @OneToMany(
     () => SupplementDetail,

@@ -1,7 +1,7 @@
+import { Column, Entity, OneToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
-import { Book } from 'src/modules/book/entities/book.entity';
 import { CommonEntity } from 'src/shared/entites/common.entity';
-import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { SaleBook } from './sale-book.entity';
 
 @Entity()
 @ObjectType()
@@ -22,8 +22,6 @@ export class Sale extends CommonEntity {
   @Column({ type: 'date', nullable: true })
   to: Date;
 
-  @Field(() => [Book])
-  @ManyToOne(() => Book, (book) => book.sale)
-  @JoinColumn({ name: 'book_id' })
-  books: Book;
+  @OneToMany(() => SaleBook, (saleBook) => saleBook.sale)
+  sale_books: SaleBook[];
 }

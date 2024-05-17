@@ -22,19 +22,6 @@ type Category {
   children: [Category!]
 }
 
-type Sale {
-  name: String!
-  description: String!
-  from: DateTime!
-  to: DateTime!
-  books: [Book!]!
-}
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
-
 type Book {
   title: String!
   publisher: String!
@@ -45,12 +32,12 @@ type Book {
   status: String!
   currency: String!
   is_recommended: Boolean!
+  is_deleted: Boolean!
   buy_count: Int!
   inventory: Int!
   categories: [Category!]!
   authors: [Author!]!
   ratings: [Rating!]!
-  sale: Sale!
   rating: [Rating!]!
 }
 
