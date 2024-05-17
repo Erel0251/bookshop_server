@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsString } from 'class-validator';
 import { BookStatus } from '../constants/status.enum';
 
 export class CreateBookDto {
@@ -36,43 +36,7 @@ export class CreateBookDto {
   @ApiProperty()
   currency: string;
 
-  @IsBoolean()
-  @ApiPropertyOptional()
-  is_recommended?: boolean;
-
-  @IsNumber()
-  @ApiPropertyOptional()
-  buy_count?: number;
-
   @IsNumber()
   @ApiPropertyOptional()
   inventory?: number;
-
-  @IsArray()
-  @ApiPropertyOptional()
-  categories?: any[];
-
-  @IsArray()
-  @ApiPropertyOptional()
-  authors?: any[];
-
-  @IsArray()
-  @ApiPropertyOptional()
-  ratings?: any[];
-
-  @IsArray()
-  @ApiPropertyOptional()
-  sale?: any[];
-
-  @IsArray()
-  @ApiPropertyOptional()
-  cartItem?: any[];
-
-  @IsArray()
-  @ApiPropertyOptional()
-  orderDetail?: any[];
-
-  @IsArray()
-  @ApiPropertyOptional()
-  supplementDetail?: any[];
 }

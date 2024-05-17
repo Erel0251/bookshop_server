@@ -9,6 +9,7 @@ import {
   Patch,
   Logger,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { AuthorService } from './author.service';
@@ -45,7 +46,7 @@ export class AuthorController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() res: any) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const author = await this.authorService.findOne(id);
       res.status(HttpStatus.OK).send(author);
@@ -56,7 +57,10 @@ export class AuthorController {
   }
 
   @Get('book/:id')
-  async findAuthorByBookId(@Param('id') id: string, @Res() res: any) {
+  async findAuthorByBookId(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Res() res: any,
+  ) {
     try {
       const authors = await this.authorService.findAuthorByBookId(id);
       res.status(HttpStatus.OK).send(authors);
@@ -68,7 +72,7 @@ export class AuthorController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() author: UpdateAuthorDto,
     @Res() res: any,
   ) {
@@ -82,7 +86,7 @@ export class AuthorController {
   }
 
   @Delete(':id')
-  async delete(@Param('id') id: string, @Res() res: any) {
+  async delete(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       await this.authorService.delete(id);
       res.status(HttpStatus.ACCEPTED).send();

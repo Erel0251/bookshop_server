@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
@@ -30,6 +30,9 @@ export class BookService {
     private readonly categoryService: CategoryService,
     private readonly saleService: SaleService,
   ) {}
+
+  private readonly logger = new Logger(BookService.name);
+
   async create(createBookDto: CreateBookDto): Promise<Book> {
     // generate isbn if needed
     createBookDto.isbn = createBookDto.isbn || generateISBN();
@@ -53,7 +56,7 @@ export class BookService {
       const author = await this.authorService.findOne(id);
       return await this.book.find({ where: { authors: author as Author } });
     } catch (error) {
-      console.error(error);
+      this.logger.error(error);
       return [];
     }
   }

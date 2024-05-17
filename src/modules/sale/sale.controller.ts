@@ -9,6 +9,7 @@ import {
   HttpStatus,
   Logger,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { SaleService } from './sale.service';
 import { CreateSaleDto } from './dto/create-sale.dto';
@@ -50,7 +51,7 @@ export class SaleController {
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() res: any) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const sale = this.saleService.findOne(id);
       res.status(HttpStatus.OK).send(sale);
@@ -73,7 +74,7 @@ export class SaleController {
 
   @Patch(':id')
   async update(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateSaleDto: UpdateSaleDto,
     @Res() res: any,
   ) {
@@ -88,7 +89,7 @@ export class SaleController {
 
   @Patch('book/:id')
   async updateSaleBook(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() updateSaleBookDto: UpdateSaleBookDto,
     @Res() res: any,
   ) {
@@ -102,7 +103,7 @@ export class SaleController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() res: any) {
+  async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       this.saleService.remove(id);
       res.status(HttpStatus.ACCEPTED).send();
@@ -114,7 +115,7 @@ export class SaleController {
 
   @Delete('book/:id')
   async deleteSaleBook(
-    @Param('id') id: string,
+    @Param('id', ParseUUIDPipe) id: string,
     @Body() bookId: string,
     @Res() res: any,
   ) {

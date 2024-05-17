@@ -1,5 +1,27 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsNumber, IsString, IsUUID } from 'class-validator';
+import { CreateBookDto } from 'src/modules/book/dto/create-book.dto';
+
+export class SupplementDetailDto {
+  @IsNumber()
+  @ApiProperty()
+  quantity: number;
+
+  @IsNumber()
+  @ApiProperty()
+  price: number;
+
+  @IsString()
+  @ApiProperty()
+  currency: string;
+
+  @IsUUID()
+  @ApiProperty()
+  bookId: string;
+
+  @ApiPropertyOptional({ type: CreateBookDto })
+  book?: CreateBookDto;
+}
 
 export class CreateSupplementDto {
   @IsString()
@@ -27,27 +49,6 @@ export class CreateSupplementDto {
   supplier?: string;
 
   @IsArray()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: [SupplementDetailDto] })
   supplement_details?: SupplementDetailDto[];
-}
-
-export class SupplementDetailDto {
-  @IsNumber()
-  @ApiProperty()
-  quantity: number;
-
-  @IsNumber()
-  @ApiProperty()
-  price: number;
-
-  @IsString()
-  @ApiProperty()
-  currency: string;
-
-  @IsString()
-  @ApiProperty()
-  bookId: string;
-
-  @ApiProperty()
-  book: any;
 }

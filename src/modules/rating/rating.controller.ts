@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { RatingService } from './rating.service';
@@ -29,19 +30,22 @@ export class RatingController {
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.ratingService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateRatingDto: UpdateRatingDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateRatingDto: UpdateRatingDto,
+  ) {
     //return this.ratingService.update(+id, updateRatingDto);
     console.log(updateRatingDto);
     console.log(id);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.ratingService.remove(+id);
   }
 }

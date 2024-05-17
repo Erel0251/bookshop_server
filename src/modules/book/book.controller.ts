@@ -7,6 +7,8 @@ import {
   Param,
   Res,
   HttpStatus,
+  Logger,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from './book.service';
@@ -18,34 +20,47 @@ import { UpdateBookDto } from './dto/update-book.dto';
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
+  private readonly looger = new Logger(BookController.name);
+
   @Post()
   async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
     try {
       await this.bookService.create(createBookDto);
       res.status(HttpStatus.CREATED).send();
     } catch (error) {
-      console.error(error);
-      res.status(HttpStatus.INTERNAL_SERVER_ERROR).send();
+      this.looger.error(error);
+      res.status(error.status).send();
     }
   }
 
   @Get()
-  findAll() {
-    return this.bookService.findAll();
+  findAll(@Res() res: any) {
+    const books = this.bookService.findAll();
+    res.status(HttpStatus.OK).send(books);
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.bookService.findOne(id);
+  findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
+    try {
+      const book = this.bookService.findOne(id);
+      res.status(HttpStatus.OK).send(book);
+    } catch (error) {
+      this.looger.error(error);
+      res.status(error.status).send(error.message);
+    }
   }
 
   @Get('total')
-  async getCountTotal() {
-    return await this.bookService.getCountTotal();
+  async getCountTotal(@Res() res: any) {
+    const total = await this.bookService.getCountTotal();
+    res.status(HttpStatus.OK).send(total);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBookDto: UpdateBookDto) {
+  update(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() updateBookDto: UpdateBookDto,
+  ) {
     console.log(updateBookDto);
     console.log(id);
   }

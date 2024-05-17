@@ -22,6 +22,9 @@ export class Supplement extends CommonEntity {
   @Column({ nullable: true })
   supplier?: string;
 
+  @Column({ type: 'boolean', default: false })
+  is_deleted: boolean;
+
   @OneToMany(
     () => SupplementDetail,
     (supplementDetail) => supplementDetail.supplements,
