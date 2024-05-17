@@ -21,7 +21,7 @@ export class BookController {
   @Post()
   async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
     try {
-      await this.bookService.createBook(createBookDto);
+      await this.bookService.create(createBookDto);
       res.status(HttpStatus.CREATED).send();
     } catch (error) {
       console.error(error);

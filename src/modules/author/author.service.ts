@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { CreateAuthorDto } from './dto/create-author.dto';
 import { UpdateAuthorDto } from './dto/update-author.dto';
 import { Author } from './entities/author.entity';
-import { Book } from '../book/entities/book.entity';
 
 @Injectable()
 export class AuthorService {
@@ -13,13 +12,11 @@ export class AuthorService {
     @InjectRepository(Author)
     private author: Repository<Author>,
   ) {}
-  async createAuthor(
-    createAuthorDto: CreateAuthorDto,
-  ): Promise<Author | Error> {
+  async create(createAuthorDto: CreateAuthorDto): Promise<Author | Error> {
     return await this.author.save(createAuthorDto);
   }
 
-  async updateAuthor(
+  async update(
     id: string,
     updateAuthorDto: UpdateAuthorDto,
   ): Promise<void | Error> {
@@ -30,7 +27,18 @@ export class AuthorService {
     return await this.author.findOne({ where: { id } });
   }
 
-  async findAuthorByBook(book: Book): Promise<Author[]> {
-    return await this.author.find({ where: { books: book } });
+  async findAll(): Promise<Author[]> {
+    return await this.author.find();
+  }
+
+  async delete(id: string): Promise<void> {
+    await this.author.delete(id);
+  }
+
+  async findAuthorByBookId(id: string): Promise<Author[]> {
+    return await this.author.find({
+      where: { books: { id } },
+      relations: ['books'],
+    });
   }
 }

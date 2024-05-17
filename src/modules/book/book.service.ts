@@ -29,13 +29,13 @@ export class BookService {
     private readonly categoryService: CategoryService,
     private readonly saleService: SaleService,
   ) {}
-  async createBook(createBookDto: CreateBookDto): Promise<Book> {
+  async create(createBookDto: CreateBookDto): Promise<Book> {
     // generate isbn if needed
     createBookDto.isbn = createBookDto.isbn || generateISBN();
     return await this.book.save(createBookDto);
   }
 
-  async updateBook(id: string, updateBookDto: UpdateBookDto): Promise<void> {
+  async update(id: string, updateBookDto: UpdateBookDto): Promise<void> {
     await this.book.update(id, updateBookDto);
   }
 
@@ -58,8 +58,7 @@ export class BookService {
   }
 
   async findAuthorByBookId(id: string): Promise<Author[]> {
-    const book = await this.book.findOne({ where: { id } });
-    return await this.authorService.findAuthorByBook(book);
+    return await this.authorService.findAuthorByBookId(id);
   }
 
   async findRatingByBookId(id: string): Promise<Rating[]> {
@@ -91,7 +90,7 @@ export class BookService {
     await this.book.save(book);
   }
 
-  async deleteBook(id: string): Promise<void | Error> {
+  async delete(id: string): Promise<void | Error> {
     const book = await this.book.findOne({ where: { id } });
     book.is_deleted = true;
     await this.book.save(book);

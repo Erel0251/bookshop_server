@@ -19,6 +19,6 @@ export class CreateAuthorDto {
   img_url?: string;
 
   @IsArray()
-  @ApiProperty()
-  books: any[];
+  @ApiPropertyOptional()
+  books?: any[];
 }
