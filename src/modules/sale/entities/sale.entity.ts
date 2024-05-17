@@ -22,6 +22,10 @@ export class Sale extends CommonEntity {
   @Column({ type: 'date', nullable: true })
   to: Date;
 
+  @Field()
+  @Column({ type: 'boolean', default: false })
+  is_deleted: boolean;
+
   @OneToMany(() => SaleBook, (saleBook) => saleBook.sale)
   sale_books: SaleBook[];
 }

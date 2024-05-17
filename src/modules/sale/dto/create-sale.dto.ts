@@ -20,6 +20,6 @@ export class CreateSaleDto {
   to: Date;
 
   @IsObject({ each: true })
-  @ApiProperty()
-  sale_books: CreateSaleBookDto[];
+  @ApiPropertyOptional()
+  sale_books?: CreateSaleBookDto[];
 }

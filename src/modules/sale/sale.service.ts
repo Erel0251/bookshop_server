@@ -35,25 +35,34 @@ export class SaleService {
     await this.sale.update(id, sale);
   }
 
-  async createSaleBook(
-    saleId: string,
-    saleBook: CreateSaleBookDto,
-  ): Promise<SaleBook | Error> {
-    return this.saleBook.save({ sale: { id: saleId }, saleBook });
+  async remove(id: string): Promise<void | Error> {
+    const sale = await this.sale.findOne({ where: { id } });
+    if (!sale) {
+      throw new Error('Sale not found');
+    }
+    sale.is_deleted = true;
+    await this.sale.save(sale);
+  }
+
+  async createSaleBook(saleBook: CreateSaleBookDto): Promise<SaleBook | Error> {
+    return this.saleBook.save(saleBook);
   }
 
   async updateSaleBook(
     saleId: string,
     saleBook: UpdateSaleBookDto,
   ): Promise<void | Error> {
-    await this.saleBook.update({ sale: { id: saleId } }, saleBook);
+    await this.saleBook.update(saleId, saleBook);
   }
 
-  async removeSaleBook(
-    saleId: string,
-    book: UpdateSaleBookDto,
-  ): Promise<void | Error> {
-    await this.saleBook.delete({ sale: { id: saleId }, book });
+  async deleteSaleBook(saleId: string, bookId: string): Promise<void | Error> {
+    const saleBook = await this.saleBook.findOne({
+      where: { sale: { id: saleId }, book: { id: bookId } },
+    });
+    if (!saleBook) {
+      throw new Error('Sale book not found');
+    }
+    this.saleBook.delete(saleBook.id);
   }
 
   async findSaleByBook(book: Book): Promise<Sale> {
