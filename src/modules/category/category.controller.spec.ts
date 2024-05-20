@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { CategoryController } from './category.controller';
 import { CategoryService } from './category.service';
+import { BookService } from '../book/book.service';
 
 describe('CategoryController', () => {
   let controller: CategoryController;
@@ -9,6 +10,10 @@ describe('CategoryController', () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [CategoryController],
       providers: [
+        {
+          provide: BookService,
+          useValue: {},
+        },
         {
           provide: CategoryService,
           useValue: {},
