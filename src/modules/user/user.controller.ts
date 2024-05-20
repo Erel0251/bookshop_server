@@ -29,8 +29,9 @@ export class UserController {
   }
 
   @Get()
-  async findAll() {
-    return await this.userService.findAll();
+  async findAll(@Res() res: any) {
+    const users = await this.userService.findAll();
+    res.status(HttpStatus.OK).render('pages/user', { users });
   }
 
   @Get(':id')

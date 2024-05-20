@@ -7,7 +7,7 @@ export class AdminController {
 
   @Get('supplements')
   root(@Res() res: any) {
-    return res.render('pages/supplements', { message: 'Hello world!' });
+    return res.render('pages/supplement', { message: 'Hello world!' });
   }
 
   @Get('admin')
