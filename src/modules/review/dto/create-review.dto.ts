@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber, IsString } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsNumber, IsString, IsUUID } from 'class-validator';
 
 export class CreateReviewDto {
   @IsString()
@@ -14,11 +14,11 @@ export class CreateReviewDto {
   @ApiProperty()
   rating: number;
 
-  @IsString()
-  @ApiProperty()
-  book_id: string;
+  @IsUUID()
+  @ApiPropertyOptional()
+  book_id?: string;
 
-  @IsString()
-  @ApiProperty()
-  user_id: string;
+  @IsUUID()
+  @ApiPropertyOptional()
+  user_id?: string;
 }

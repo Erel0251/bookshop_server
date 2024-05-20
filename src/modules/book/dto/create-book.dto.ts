@@ -49,18 +49,18 @@ export class CreateBookDto {
   inventory?: number;
 
   @IsArray()
-  @ApiPropertyOptional({ type: [UpdateCategoryDto] })
+  @ApiPropertyOptional({ type: () => [UpdateCategoryDto] })
   categories?: UpdateCategoryDto[];
 
   @IsArray()
-  @ApiPropertyOptional({ type: [UpdateAuthorDto] })
+  @ApiPropertyOptional({ type: () => [UpdateAuthorDto] })
   authors?: UpdateAuthorDto[];
 
   @IsArray()
-  @ApiPropertyOptional({ type: [UpdateReviewDto] })
+  @ApiPropertyOptional({ type: () => [UpdateReviewDto] })
   review?: UpdateReviewDto[];
 
   @IsArray()
-  @ApiPropertyOptional({ type: [CreateSupplementDetailDto] })
+  @ApiPropertyOptional({ type: () => [CreateSupplementDetailDto] })
   supplement_details?: CreateSupplementDetailDto[];
 }

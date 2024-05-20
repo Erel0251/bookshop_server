@@ -19,6 +19,6 @@ export class CreateSupplementDetailDto {
   @ApiPropertyOptional()
   bookId?: string;
 
-  @ApiPropertyOptional({ type: CreateBookDto })
+  @ApiPropertyOptional({ type: () => CreateBookDto })
   book?: CreateBookDto;
 }

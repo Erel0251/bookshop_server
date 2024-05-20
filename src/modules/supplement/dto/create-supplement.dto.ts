@@ -28,6 +28,6 @@ export class CreateSupplementDto {
   supplier?: string;
 
   @IsArray()
-  @ApiPropertyOptional({ type: [CreateSupplementDetailDto] })
+  @ApiPropertyOptional({ type: () => [CreateSupplementDetailDto] })
   supplement_details?: CreateSupplementDetailDto[];
 }
