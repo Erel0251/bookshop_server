@@ -15,6 +15,8 @@ import { SupplementService } from './supplement.service';
 import { CreateSupplementDto } from './dto/create-supplement.dto';
 import { UpdateSupplementDto } from './dto/update-supplement.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { CreateBookDto } from '../book/dto/create-book.dto';
+import { UpdateBookDto } from '../book/dto/update-book.dto';
 
 @ApiTags('Supplement')
 @Controller('supplement')
@@ -103,15 +105,31 @@ export class SupplementController {
     }
   }
 
+  // Create book in supplement
+  @Patch(':id/create-book')
+  async createBook(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() book: CreateBookDto,
+    @Res() res: any,
+  ) {
+    try {
+      await this.supplementService.createBookInSupplement(id, book);
+      return res.status(HttpStatus.OK).send();
+    } catch (error) {
+      this.logger.error(error);
+      return res.status(error.status).send(error.message);
+    }
+  }
+
   // Add book to supplement
   @Patch(':id/add-book')
   async addBook(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body('bookId', ParseUUIDPipe) bookId: string, // book entities
+    @Body() book: UpdateBookDto, // book entities
     @Res() res: any,
   ) {
     try {
-      //await this.supplementService.addBook(id, bookId);
+      await this.supplementService.addBook(id, book);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
@@ -123,11 +141,11 @@ export class SupplementController {
   @Patch(':id/update-book')
   async updateBook(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body('bookId', ParseUUIDPipe) bookId: string,
+    @Body() book: UpdateBookDto,
     @Res() res: any,
   ) {
     try {
-      //await this.supplementService.updateBook(id, bookId);
+      await this.supplementService.updateBook(id, book);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
@@ -143,7 +161,7 @@ export class SupplementController {
     @Res() res: any,
   ) {
     try {
-      //await this.supplementService.removeBook(id, bookId);
+      await this.supplementService.removeBook(id, bookId);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);

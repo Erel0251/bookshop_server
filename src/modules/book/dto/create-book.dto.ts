@@ -1,6 +1,10 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsNumber, IsString } from 'class-validator';
 import { BookStatus } from '../constants/status.enum';
+import { UpdateCategoryDto } from '../../category/dto/update-category.dto';
+import { UpdateAuthorDto } from '../../author/dto/update-author.dto';
+import { UpdateReviewDto } from '../../review/dto/update-review.dto';
+import { CreateSupplementDetailDto } from '../../supplement/dto/create-supplement-detail.dto';
 
 export class CreateBookDto {
   @IsString()
@@ -36,7 +40,27 @@ export class CreateBookDto {
   @ApiProperty()
   currency: string;
 
+  @IsBoolean()
+  @ApiPropertyOptional()
+  is_recommended?: boolean;
+
   @IsNumber()
   @ApiPropertyOptional()
   inventory?: number;
+
+  @IsArray()
+  @ApiPropertyOptional({ type: [UpdateCategoryDto] })
+  categories?: UpdateCategoryDto[];
+
+  @IsArray()
+  @ApiPropertyOptional({ type: [UpdateAuthorDto] })
+  authors?: UpdateAuthorDto[];
+
+  @IsArray()
+  @ApiPropertyOptional({ type: [UpdateReviewDto] })
+  review?: UpdateReviewDto[];
+
+  @IsArray()
+  @ApiPropertyOptional({ type: [CreateSupplementDetailDto] })
+  supplement_details?: CreateSupplementDetailDto[];
 }
