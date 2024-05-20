@@ -2,12 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Rating {
-  title: String!
-  comment: String!
-  rating: Int!
-}
-
 type Author {
   last_name: String!
   first_name: String!
@@ -20,6 +14,12 @@ type Category {
   name: String!
   description: String
   children: [Category!]
+}
+
+type Review {
+  title: String!
+  comment: String!
+  rating: Int!
 }
 
 type Book {
@@ -37,8 +37,7 @@ type Book {
   inventory: Int!
   categories: [Category!]!
   authors: [Author!]!
-  ratings: [Rating!]!
-  rating: [Rating!]!
+  reviews: [Review!]!
 }
 
 type Query {

@@ -35,8 +35,8 @@ export class BookResolver {
     return await this.bookService.findAuthorByBookId(book.id);
   }
 
-  @ResolveField(() => [Review], { name: 'review' })
-  async review(@Parent() book: Book): Promise<Review[]> {
+  @ResolveField(() => [Review], { name: 'reviews' })
+  async reviews(@Parent() book: Book): Promise<Review[]> {
     return await this.bookService.findReviewByBook(book.id);
   }
 }

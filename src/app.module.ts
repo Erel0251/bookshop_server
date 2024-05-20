@@ -23,6 +23,7 @@ import { OrderModule } from './modules/order/order.module';
 import { SupplementModule } from './modules/supplement/supplement.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -72,6 +73,7 @@ import { PromotionModule } from './modules/promotion/promotion.module';
     BookModule,
     SupplementModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
