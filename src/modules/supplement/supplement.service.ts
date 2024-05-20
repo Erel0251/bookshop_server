@@ -35,7 +35,9 @@ export class SupplementService {
   }
 
   async findAll(): Promise<Supplement[]> {
-    return await this.supplementRepository.find();
+    return await this.supplementRepository.find({
+      order: { created_at: 'DESC' },
+    });
   }
 
   async findOne(id: string): Promise<Supplement | Error> {

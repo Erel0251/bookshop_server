@@ -6,6 +6,7 @@ import { Logger, LoggerErrorInterceptor } from 'nestjs-pino';
 import { join } from 'path';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppModule } from './app.module';
+import * as hbs from 'hbs';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -25,6 +26,7 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
+  hbs.registerPartials(join(__dirname, '..', 'views/partials'));
   app.setViewEngine('hbs');
 
   await app.listen(configService.get('PORT'), () => {
