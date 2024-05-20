@@ -129,4 +129,37 @@ export class BookService {
     const category = await this.categoryService.findOne(id);
     return await this.book.find({ where: { categories: category } });
   }
+
+  async addBookCategory(id: string, bookId: string): Promise<void | Error> {
+    try {
+      const book = await this.book.findOne({
+        where: { id: bookId },
+        relations: ['categories'],
+      });
+      const category = await this.categoryService.findOne(id);
+      if (category instanceof Category) {
+        book.categories.push(category);
+      }
+      await this.book.save(book);
+    } catch (error) {
+      this.logger.error(error);
+      return new Error(error);
+    }
+  }
+
+  async removeBookCategory(id: string, bookId: string): Promise<void | Error> {
+    try {
+      const book = await this.book.findOne({
+        where: { id: bookId },
+        relations: ['categories'],
+      });
+      book.categories = book.categories.filter(
+        (category) => category.id !== id,
+      );
+      await this.book.save(book);
+    } catch (error) {
+      this.logger.error(error);
+      return new Error(error);
+    }
+  }
 }

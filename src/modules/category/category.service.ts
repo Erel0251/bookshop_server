@@ -25,7 +25,10 @@ export class CategoryService {
   }
 
   async findOne(id: string): Promise<Category | Error> {
-    return await this.category.findOne({ where: { id } });
+    return await this.category.findOne({
+      where: { id },
+      relations: ['children', 'book'],
+    });
   }
 
   async update(
