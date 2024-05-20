@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDate, IsObject, IsString } from 'class-validator';
-import { CreatePromotionBookDto } from './create-promotion-book.dto';
+import { UpdatePromotionBookDto } from './update-promotion-book.dto';
 
 export class CreatePromotionDto {
   @IsString()
@@ -20,6 +20,6 @@ export class CreatePromotionDto {
   to: Date;
 
   @IsObject({ each: true })
-  @ApiPropertyOptional()
-  promotion_books?: CreatePromotionBookDto[];
+  @ApiPropertyOptional({ type: () => [UpdatePromotionBookDto] })
+  promotion_books?: UpdatePromotionBookDto[];
 }

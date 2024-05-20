@@ -9,6 +9,7 @@ import {
   Logger,
   Res,
   HttpStatus,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { PromotionService } from './promotion.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
@@ -21,6 +22,7 @@ export class PromotionController {
 
   private readonly logger = new Logger(PromotionController.name);
 
+  // Create a new promotion event
   @Post()
   async create(
     @Body() createPromotionDto: CreatePromotionDto,
@@ -35,22 +37,21 @@ export class PromotionController {
     }
   }
 
-  @Post(':id/book')
-  async createPromotionBook(
-    @Body() createPromotionBookDto: CreatePromotionBookDto,
-    @Res() res: any,
-  ) {
+  // Get all promotion events
+  @Get()
+  async findAll(@Res() res: any) {
     try {
-      this.promotionService.createPromotionBook(createPromotionBookDto);
-      res.status(HttpStatus.CREATED).send();
+      const promotions = this.promotionService.findAll();
+      res.status(HttpStatus.OK).send(promotions);
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
     }
   }
 
+  // Get specific promotion event
   @Get(':id')
-  async findOne(@Param('id') id: string, @Res() res: any) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const promotion = this.promotionService.findOne(id);
       res.status(HttpStatus.OK).send(promotion);
@@ -60,6 +61,7 @@ export class PromotionController {
     }
   }
 
+  // Update specific promotion event
   @Patch(':id')
   async update(
     @Param('id') id: string,
@@ -75,6 +77,40 @@ export class PromotionController {
     }
   }
 
+  // Delete specific promotion event
+  @Delete(':id')
+  async remove(@Param('id') id: string, @Res() res: any) {
+    try {
+      this.promotionService.remove(id);
+      res.status(HttpStatus.OK).send();
+    } catch (error) {
+      this.logger.error(error);
+      res.status(error.status).send(error.message);
+    }
+  }
+
+  // Add a book to a promotion event
+  @Post(':id/book/:bookId')
+  async createPromotionBook(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('bookId', ParseUUIDPipe) bookId: string,
+    @Body() createPromotionBookDto: CreatePromotionBookDto,
+    @Res() res: any,
+  ) {
+    try {
+      this.promotionService.createPromotionBook(
+        id,
+        bookId,
+        createPromotionBookDto,
+      );
+      res.status(HttpStatus.CREATED).send();
+    } catch (error) {
+      this.logger.error(error);
+      res.status(error.status).send(error.message);
+    }
+  }
+
+  // Update specific promotion book
   @Patch(':id/book')
   async updatePromotionBook(
     @Param('id') id: string,
@@ -90,17 +126,7 @@ export class PromotionController {
     }
   }
 
-  @Delete(':id')
-  async remove(@Param('id') id: string, @Res() res: any) {
-    try {
-      this.promotionService.remove(id);
-      res.status(HttpStatus.OK).send();
-    } catch (error) {
-      this.logger.error(error);
-      res.status(error.status).send(error.message);
-    }
-  }
-
+  // Delete specific promotion book
   @Delete(':id/book/:bookId')
   async deletePromotionBook(
     @Param('id') id: string,

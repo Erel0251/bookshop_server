@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { PromotionBook } from './entities/promotion-book.entity';
 import { Book } from '../book/entities/book.entity';
 import { CreatePromotionBookDto } from './dto/create-promotion-book.dto';
+import { UpdatePromotionBookDto } from './dto/update-promotion-book.dto';
 
 @Injectable()
 export class PromotionService {
@@ -29,11 +30,27 @@ export class PromotionService {
   }
 
   async findOne(id: string): Promise<Promotion | Error> {
-    return await this.promotion.findOne({ where: { id } });
+    return await this.promotion.findOne({
+      where: { id },
+      relations: ['promotion_books', 'promotion_books.book'],
+    });
   }
 
   async update(id: string, update: UpdatePromotionDto): Promise<void | Error> {
     await this.promotion.update(id, update);
+    if (update.promotion_books) {
+      for (const promotionBook of update.promotion_books) {
+        if (promotionBook.id) {
+          await this.updatePromotionBook(promotionBook.id, promotionBook);
+        } else {
+          await this.createPromotionBook(
+            id,
+            promotionBook.book.id,
+            promotionBook,
+          );
+        }
+      }
+    }
   }
 
   async remove(id: string): Promise<void | Error> {
@@ -46,16 +63,37 @@ export class PromotionService {
   }
 
   async createPromotionBook(
+    id: string,
+    bookId: string,
     promotionBook: CreatePromotionBookDto,
-  ): Promise<PromotionBook | Error> {
-    return await this.promotionBook.save(promotionBook);
+  ): Promise<void | Error> {
+    const promotion = await this.promotion.findOne({ where: { id } });
+    if (!promotion) {
+      throw new Error('Promotion not found');
+    }
+    const book = await Book.findOne({ where: { id: bookId } });
+    await this.promotionBook.save({ ...promotionBook, promotion, book });
   }
 
   async updatePromotionBook(
-    promotionId: string,
-    promotionBook: PromotionBook,
+    id: string,
+    promotionBook: UpdatePromotionBookDto,
   ): Promise<void | Error> {
-    await this.promotionBook.update(promotionId, promotionBook);
+    const promotionBookEntity = await this.promotionBook.findOne({
+      where: { id },
+    });
+    if (!promotionBookEntity) {
+      throw new Error('Promotion book not found');
+    }
+    await this.promotionBook.update(id, promotionBook);
+  }
+
+  async findPromotionByBook(book: Book): Promise<Promotion> {
+    const promotionBook = await this.promotionBook.findOne({
+      where: { book },
+      relations: ['promotion'],
+    });
+    return promotionBook.promotion;
   }
 
   async deletePromotionBook(
@@ -69,13 +107,5 @@ export class PromotionService {
       throw new Error('Promotion book not found');
     }
     await this.promotionBook.delete(promotionBook.id);
-  }
-
-  async findPromotionByBook(book: Book): Promise<Promotion> {
-    const promotionBook = await this.promotionBook.findOne({
-      where: { book },
-      relations: ['promotion'],
-    });
-    return promotionBook.promotion;
   }
 }
