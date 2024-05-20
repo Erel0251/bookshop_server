@@ -2,6 +2,7 @@ import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Order } from 'src/modules/order/entities/order.entity';
 import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
+import { Review } from '../../review/entities/review.entity';
 
 @Entity()
 export class User extends CommonEntity {
@@ -34,4 +35,7 @@ export class User extends CommonEntity {
 
   @OneToMany(() => Order, (order) => order.user)
   orders: Order[];
+
+  @OneToMany(() => Review, (review) => review.user)
+  reviews: Review[];
 }

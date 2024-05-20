@@ -2,10 +2,11 @@ import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { Book } from 'src/modules/book/entities/book.entity';
 import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { User } from '../../user/entities/user.entity';
 
-@Entity({ name: 'rating' })
+@Entity({ name: 'review' })
 @ObjectType()
-export class Rating extends CommonEntity {
+export class Review extends CommonEntity {
   @Field()
   @Column({ type: 'varchar', length: 255 })
   title: string;
@@ -18,7 +19,11 @@ export class Rating extends CommonEntity {
   @Column({ type: 'int' })
   rating: number;
 
-  @ManyToOne(() => Book, (book) => book.ratings)
+  @ManyToOne(() => Book, (book) => book.reviews)
   @JoinColumn({ name: 'book_id', referencedColumnName: 'id' })
   book: Book;
+
+  @ManyToOne(() => User, (user) => user.reviews)
+  @JoinColumn({ name: 'user_id', referencedColumnName: 'id' })
+  user: User;
 }

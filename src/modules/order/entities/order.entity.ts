@@ -7,6 +7,9 @@ import { OrderStatus } from '../constants/order-status.enum';
 @Entity()
 export class Order extends CommonEntity {
   @Column()
+  name: string;
+
+  @Column()
   province: string;
 
   @Column()

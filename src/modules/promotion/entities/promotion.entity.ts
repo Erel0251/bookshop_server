@@ -1,11 +1,12 @@
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Field, ObjectType } from '@nestjs/graphql';
 import { CommonEntity } from 'src/shared/entites/common.entity';
-import { SaleBook } from './sale-book.entity';
+import { PromotionBook } from './promotion-book.entity';
+import { PromotionType } from '../constants/promotion-type.enum';
 
 @Entity()
 @ObjectType()
-export class Sale extends CommonEntity {
+export class Promotion extends CommonEntity {
   @Field()
   @Column({ type: 'text', nullable: false })
   name: string;
@@ -13,6 +14,10 @@ export class Sale extends CommonEntity {
   @Field()
   @Column({ type: 'text', nullable: true })
   description?: string;
+
+  @Field()
+  @Column({ default: PromotionType.SALE })
+  type: PromotionType;
 
   @Field()
   @Column({ type: 'date', nullable: true })
@@ -26,6 +31,6 @@ export class Sale extends CommonEntity {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
-  @OneToMany(() => SaleBook, (saleBook) => saleBook.sale)
-  sale_books: SaleBook[];
+  @OneToMany(() => PromotionBook, (promotionBook) => promotionBook.promotion)
+  promotion_books: PromotionBook[];
 }

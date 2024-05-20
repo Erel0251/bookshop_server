@@ -1,8 +1,8 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDate, IsObject, IsString } from 'class-validator';
-import { CreateSaleBookDto } from './create-sale-book.dto';
+import { CreatePromotionBookDto } from './create-promotion-book.dto';
 
-export class CreateSaleDto {
+export class CreatePromotionDto {
   @IsString()
   @ApiProperty()
   name: string;
@@ -21,5 +21,5 @@ export class CreateSaleDto {
 
   @IsObject({ each: true })
   @ApiPropertyOptional()
-  sale_books?: CreateSaleBookDto[];
+  promotion_books?: CreatePromotionBookDto[];
 }

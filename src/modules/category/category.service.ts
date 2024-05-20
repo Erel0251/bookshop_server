@@ -14,21 +14,33 @@ export class CategoryService {
     private category: Repository<Category>,
   ) {}
 
-  async createCategory(
+  async create(
     createCategoryDto: CreateCategoryDto,
   ): Promise<Category | Error> {
     return await this.category.save(createCategoryDto);
   }
 
-  async updateCategory(
-    id: number,
+  async findAll(): Promise<Category[]> {
+    return await this.category.find();
+  }
+
+  async findOne(id: string): Promise<Category | Error> {
+    return await this.category.findOne({ where: { id } });
+  }
+
+  async update(
+    id: string,
     updateCategoryDto: UpdateCategoryDto,
   ): Promise<void | Error> {
     await this.category.update(id, updateCategoryDto);
   }
 
-  async removeCategory(id: string): Promise<void | Error> {
+  async remove(id: string): Promise<void | Error> {
     const category = await this.category.findOne({ where: { id } });
+    // if children exist, reject with reason
+    if (category.children) {
+      return new Error('children exist');
+    }
     await this.category.remove(category);
   }
 

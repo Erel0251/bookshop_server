@@ -4,13 +4,13 @@ import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 import { CommonEntity } from 'src/shared/entites/common.entity';
 import { BookStatus } from '../constants/status.enum';
 
-import { Rating } from 'src/modules/rating/entities/rating.entity';
 import { Author } from 'src/modules/author/entities/author.entity';
 import { Category } from 'src/modules/category/entities/category.entity';
 import { OrderDetail } from 'src/modules/order/entities/order-detail.entity';
 import { SupplementDetail } from 'src/modules/supplement/entities/supplement-detail.entity';
 import { Cart } from 'src/modules/cart/entities/cart.entity';
-import { SaleBook } from 'src/modules/sale/entities/sale-book.entity';
+import { Review } from '../../review/entities/review.entity';
+import { PromotionBook } from '../../promotion/entities/promotion-book.entity';
 
 @Entity()
 @ObjectType()
@@ -40,7 +40,7 @@ export class Book extends CommonEntity {
   price: number;
 
   @Field()
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text', default: BookStatus.AVAILABLE })
   status: BookStatus;
 
   @Field()
@@ -71,12 +71,12 @@ export class Book extends CommonEntity {
   @ManyToMany(() => Author, (author) => author.books)
   authors: Author[];
 
-  @Field(() => [Rating])
-  @OneToMany(() => Rating, (rating) => rating.book)
-  ratings?: Rating[];
+  @Field(() => [Review])
+  @OneToMany(() => Review, (review) => review.book)
+  reviews?: Review[];
 
-  @OneToMany(() => SaleBook, (saleBook) => saleBook.book)
-  sale_books?: SaleBook[];
+  @OneToMany(() => PromotionBook, (promotionBook) => promotionBook.book)
+  promotion_books?: PromotionBook[];
 
   @OneToMany(() => Cart, (cart) => cart.books)
   cart_items?: Cart[];

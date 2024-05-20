@@ -7,17 +7,17 @@ import { BookResolver } from './book.resolver';
 import { Book } from './entities/book.entity';
 
 import { AuthorModule } from '../author/author.module';
-import { RatingModule } from '../rating/rating.module';
 import { CategoryModule } from '../category/category.module';
-import { SaleModule } from '../sale/sale.module';
+import { ReviewModule } from '../review/review.module';
+import { PromotionModule } from '../promotion/promotion.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Book]),
     AuthorModule,
-    RatingModule,
+    ReviewModule,
     CategoryModule,
-    SaleModule,
+    PromotionModule,
   ],
   controllers: [BookController],
   providers: [BookService, BookResolver],

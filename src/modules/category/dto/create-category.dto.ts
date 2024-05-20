@@ -11,6 +11,6 @@ export class CreateCategoryDto {
   description?: string;
 
   @IsArray()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ type: [CreateCategoryDto] })
   children?: CreateCategoryDto[];
 }

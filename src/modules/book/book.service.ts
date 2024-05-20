@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
@@ -9,15 +9,15 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
 import { AuthorService } from '../author/author.service';
 import { Author } from '../author/entities/author.entity';
-import { RatingService } from '../rating/rating.service';
-import { Rating } from '../rating/entities/rating.entity';
 import { CategoryService } from '../category/category.service';
 import { Category } from '../category/entities/category.entity';
-import { SaleService } from '../sale/sale.service';
-import { Sale } from '../sale/entities/sale.entity';
 import { BookStatus } from './constants/status.enum';
 import { generateISBN } from './helpers/helper';
 import { SupplementDetail } from '../supplement/entities/supplement-detail.entity';
+import { ReviewService } from '../review/review.service';
+import { Review } from '../review/entities/review.entity';
+import { PromotionService } from '../promotion/promotion.service';
+import { Promotion } from '../promotion/entities/promotion.entity';
 
 @Injectable()
 export class BookService {
@@ -26,9 +26,11 @@ export class BookService {
     private book: Repository<Book>,
 
     private readonly authorService: AuthorService,
-    private readonly ratingService: RatingService,
+    private readonly reviewService: ReviewService,
+    private readonly promotionService: PromotionService,
+
+    @Inject(forwardRef(() => CategoryService))
     private readonly categoryService: CategoryService,
-    private readonly saleService: SaleService,
   ) {}
 
   private readonly logger = new Logger(BookService.name);
@@ -36,10 +38,13 @@ export class BookService {
   async create(createBookDto: CreateBookDto): Promise<Book> {
     // generate isbn if needed
     createBookDto.isbn = createBookDto.isbn || generateISBN();
+    // lower case name
+    createBookDto.title = createBookDto.title.toLowerCase();
     return await this.book.save(createBookDto);
   }
 
   async update(id: string, updateBookDto: UpdateBookDto): Promise<void> {
+    updateBookDto.title = updateBookDto.title.toLowerCase();
     await this.book.update(id, updateBookDto);
   }
 
@@ -50,7 +55,7 @@ export class BookService {
   async findOne(id: string): Promise<Book> {
     return await this.book.findOne({
       where: { id },
-      relations: ['authors', 'ratings', 'categories', 'sale_book'],
+      relations: ['authors', 'reviews', 'categories', 'promotion_books'],
     });
   }
 
@@ -68,9 +73,9 @@ export class BookService {
     return await this.authorService.findAuthorByBookId(id);
   }
 
-  async findRatingByBookId(id: string): Promise<Rating[]> {
+  async findReviewByBook(id: string): Promise<Review[]> {
     const book = await this.book.findOne({ where: { id } });
-    return await this.ratingService.findRatingByBook(book);
+    return await this.reviewService.findReviewByBook(book);
   }
 
   async findCategoryByBookId(id: string): Promise<Category[]> {
@@ -78,9 +83,9 @@ export class BookService {
     return await this.categoryService.findCategoryByBook(book);
   }
 
-  async findSaleInfoByBookId(id: string): Promise<Sale> {
+  async findPromotionInfoByBookId(id: string): Promise<Promotion> {
     const book = await this.book.findOne({ where: { id } });
-    return await this.saleService.findSaleByBook(book);
+    return await this.promotionService.findPromotionByBook(book);
   }
 
   async getCountTotal(): Promise<number> {
@@ -111,5 +116,10 @@ export class BookService {
     const book = await this.book.findOne({ where: { id } });
     book.is_deleted = true;
     await this.book.save(book);
+  }
+
+  async findBookByCategory(id: string): Promise<Book[]> {
+    const category = await this.categoryService.findOne(id);
+    return await this.book.find({ where: { categories: category } });
   }
 }

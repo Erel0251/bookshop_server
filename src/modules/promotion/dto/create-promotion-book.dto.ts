@@ -1,9 +1,9 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { IsInt, IsNumber, IsObject, IsString } from 'class-validator';
 import { UpdateBookDto } from 'src/modules/book/dto/update-book.dto';
-import { UpdateSaleDto } from './update-sale.dto';
+import { UpdatePromotionDto } from './update-promotion.dto';
 
-export class CreateSaleBookDto {
+export class CreatePromotionBookDto {
   @IsString()
   @ApiProperty()
   saleId: string;
@@ -26,7 +26,7 @@ export class CreateSaleBookDto {
 
   @IsObject()
   @ApiProperty()
-  sale: UpdateSaleDto;
+  promotion: UpdatePromotionDto;
 
   @IsObject()
   @ApiProperty()

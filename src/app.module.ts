@@ -10,19 +10,19 @@ import { LoggerModule } from 'nestjs-pino';
 
 import configuration from './config/configuration';
 import { PostgreConfigService } from './database/factories/postgre.typeorm-options.factory';
-import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
+//import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BookModule } from './modules/book/book.module';
-import { RatingModule } from './modules/rating/rating.module';
 import { AuthorModule } from './modules/author/author.module';
 import { CartModule } from './modules/cart/cart.module';
 import { CategoryModule } from './modules/category/category.module';
-import { SaleModule } from './modules/sale/sale.module';
 import { OrderModule } from './modules/order/order.module';
 import { SupplementModule } from './modules/supplement/supplement.module';
+import { ReviewModule } from './modules/review/review.module';
+import { PromotionModule } from './modules/promotion/promotion.module';
 
 @Module({
   imports: [
@@ -42,7 +42,7 @@ import { SupplementModule } from './modules/supplement/supplement.module';
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
-      envFilePath: ['.env.development', '.env.production', '.env'],
+      envFilePath: ['.env.development'],
     }),
     TypeOrmModule.forRootAsync({
       useClass: PostgreConfigService,
@@ -50,12 +50,12 @@ import { SupplementModule } from './modules/supplement/supplement.module';
         return await new DataSource(options!).initialize();
       },
     }),
-    TypeOrmModule.forRootAsync({
-      useClass: MongoConfigService,
-      dataSourceFactory: async (options) => {
-        return await new DataSource(options!).initialize();
-      },
-    }),
+    // TypeOrmModule.forRootAsync({
+    //   useClass: MongoConfigService,
+    //   dataSourceFactory: async (options) => {
+    //     return await new DataSource(options!).initialize();
+    //   },
+    // }),
     GraphQLModule.forRoot<ApolloDriverConfig>({
       driver: ApolloDriver,
       autoSchemaFile: join(process.cwd(), 'src/database/schema/schema.gql'),
@@ -64,10 +64,10 @@ import { SupplementModule } from './modules/supplement/supplement.module';
     UserModule,
     AuthModule,
     AuthorModule,
-    RatingModule,
+    ReviewModule,
     CartModule,
     CategoryModule,
-    SaleModule,
+    PromotionModule,
     OrderModule,
     BookModule,
     SupplementModule,
