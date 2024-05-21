@@ -15,6 +15,8 @@ import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { CreateCartDto } from '../cart/dto/create-cart.dto';
+import { UpdateCartDto } from '../cart/dto/update-cart.dto';
 
 @Controller('user')
 @ApiTags('User')
@@ -23,22 +25,26 @@ export class UserController {
 
   private readonly logger = new Logger(UserController.name);
 
+  // Create a new user
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
+  // Get all users
   @Get()
   async findAll(@Res() res: any) {
     const users = await this.userService.findAll();
     res.status(HttpStatus.OK).render('pages/user', { users });
   }
 
+  // Get a single user
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.findOne(id);
   }
 
+  // Update a user
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
@@ -47,6 +53,7 @@ export class UserController {
     return this.userService.update(id, updateUserDto);
   }
 
+  // Delete a user
   @Delete(':id')
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.remove(id);
@@ -56,8 +63,8 @@ export class UserController {
   @Get(':id/cart')
   async getCart(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
-      // return await this.userService.getCart(id);
-      return res.status(HttpStatus.OK).send();
+      const cart = await this.userService.getCart(id);
+      return res.status(HttpStatus.OK).send(cart);
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -68,11 +75,11 @@ export class UserController {
   @Post(':id/cart')
   async addToCart(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() productId: string,
+    @Body() product: CreateCartDto,
     @Res() res: any,
   ) {
     try {
-      // return await this.userService.addToCart(id, productId);
+      await this.userService.addBookToCart(id, product);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
@@ -84,12 +91,11 @@ export class UserController {
   @Patch(':id/cart/:productId')
   async updateCart(
     @Param('id', ParseUUIDPipe) id: string,
-    @Param('productId', ParseUUIDPipe) productId: string,
-    @Body() quantity: number,
+    @Body() product: UpdateCartDto,
     @Res() res: any,
   ) {
     try {
-      // return await this.userService.updateCart(id, productId, quantity);
+      await this.userService.updateCartItem(id, product);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
@@ -105,7 +111,7 @@ export class UserController {
     @Res() res: any,
   ) {
     try {
-      // return await this.userService.removeFromCart(id, productId);
+      await this.userService.removeCartItem(id, productId);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
@@ -117,8 +123,8 @@ export class UserController {
   @Get(':id/order')
   async getOrder(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
-      // return await this.userService.getOrder(id);
-      return res.status(HttpStatus.OK).send();
+      const orders = await this.userService.getOrder(id);
+      return res.status(HttpStatus.OK).send(orders);
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
