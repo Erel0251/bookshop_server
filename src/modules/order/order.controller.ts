@@ -18,27 +18,31 @@ import { ApiTags } from '@nestjs/swagger';
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
+  // Create a new order
   @Post()
-  create(@Body() createOrderDto: CreateOrderDto) {
-    return this.orderService.create(createOrderDto);
+  async create(@Body() createOrderDto: CreateOrderDto) {
+    return await this.orderService.create(createOrderDto);
   }
 
+  // Get all orders
   @Get()
   findAll() {
     return this.orderService.findAll();
   }
 
+  // Get an order by id
   @Get(':id')
   findOne(@Param('id', ParseUUIDPipe) id: string) {
-    return this.orderService.findOne(+id);
+    return this.orderService.findOne(id);
   }
 
+  // Update status of an order
   @Patch(':id')
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateOrderDto: UpdateOrderDto,
   ) {
-    return this.orderService.update(+id, updateOrderDto);
+    return this.orderService.updateStatusOrder(id, updateOrderDto);
   }
 
   @Delete(':id')

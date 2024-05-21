@@ -1,6 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { IsEmail, IsNumber, IsNumberString, IsString } from 'class-validator';
-import { CreateBookDto } from 'src/modules/book/dto/create-book.dto';
+import { OrderStatus } from '../constants/order-status.enum';
 
 export class CreateOrderDto {
   @IsString()
@@ -28,31 +28,14 @@ export class CreateOrderDto {
   @ApiProperty()
   email: string;
 
+  @IsString()
+  @ApiPropertyOptional()
+  status?: OrderStatus;
+
   @IsNumber()
   @ApiProperty()
   total_price: number;
 
   @ApiProperty()
-  order_details: OrderDetailDto[];
-}
-
-class OrderDetailDto {
-  @IsNumber()
-  @ApiProperty()
-  price: number;
-
-  @IsNumber()
-  @ApiPropertyOptional()
-  discount?: number;
-
-  @IsNumber()
-  @ApiProperty({ default: 1 })
-  quantity: number;
-
-  @IsNumber()
-  @ApiPropertyOptional()
-  total_price?: number;
-
-  @ApiPropertyOptional()
-  books?: CreateBookDto;
+  order_details: CreateOrderDto[];
 }

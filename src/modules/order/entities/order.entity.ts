@@ -27,7 +27,7 @@ export class Order extends CommonEntity {
   @Column()
   email: string;
 
-  @Column()
+  @Column({ default: OrderStatus.PENDING })
   status: OrderStatus;
 
   @Column({ type: 'real' })
