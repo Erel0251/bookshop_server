@@ -7,8 +7,10 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
+import { ApiTags } from '@nestjs/swagger';
 
 @Controller('review')
+@ApiTags('Review')
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 

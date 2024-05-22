@@ -47,7 +47,45 @@ export class CategoryService {
     await this.category.remove(category);
   }
 
-  async findCategoryByBook(book: Book): Promise<Category[]> {
-    return await this.category.find({ where: { book } });
+  async findChildrenCategory(id: string): Promise<Category[]> {
+    const children = await this.category.findOne({
+      where: { id },
+      relations: ['children'],
+    });
+    return children.children;
+  }
+
+  async findFatherCategory(id: string): Promise<Category> {
+    const category = await this.category.findOne({
+      where: { id },
+      relations: ['father'],
+    });
+    return category.father;
+  }
+
+  async findBooksByCategory(id: string): Promise<Book[]> {
+    const category = await this.category.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+    return category.books;
+  }
+
+  async addBookToCategory(id: string, book: Book): Promise<void> {
+    const category = await this.category.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+    category.books.push(book);
+    await this.category.save(category);
+  }
+
+  async removeBookFromCategory(id: string, book: Book): Promise<void> {
+    const category = await this.category.findOne({
+      where: { id },
+      relations: ['books'],
+    });
+    category.books = category.books.filter((b) => b.id !== book.id);
+    await this.category.save(category);
   }
 }

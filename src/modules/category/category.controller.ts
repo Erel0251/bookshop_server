@@ -104,7 +104,7 @@ export class CategoryController {
     @Res() res: any,
   ) {
     try {
-      const books = await this.bookService.findBookByCategory(id);
+      const books = await this.categoryService.findBooksByCategory(id);
       return res.status(HttpStatus.OK).send(books);
     } catch (error) {
       this.logger.error(error);
@@ -120,7 +120,8 @@ export class CategoryController {
     @Res() res: any,
   ) {
     try {
-      await this.bookService.addBookCategory(id, bookId);
+      const book = await this.bookService.findOne(bookId);
+      await this.categoryService.addBookToCategory(id, book);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
@@ -136,7 +137,8 @@ export class CategoryController {
     @Res() res: any,
   ) {
     try {
-      await this.bookService.removeBookCategory(id, bookId);
+      const book = await this.bookService.findOne(bookId);
+      await this.categoryService.removeBookFromCategory(id, book);
       return res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);

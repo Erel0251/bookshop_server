@@ -1,7 +1,8 @@
 export enum OrderStatus {
-  PENDING = 'PENDING',
-  CONFIRMED = 'CONFIRMED',
-  DELIVERING = 'DELIVERING',
-  DELIVERED = 'DELIVERED',
-  CANCELED = 'CANCELED',
+  PENDING = 'PENDING', // when user create order
+  CONFIRMED = 'CONFIRMED', // when manager/admin confirm order
+  DELIVERING = 'DELIVERING', // when order is delivering
+  DELIVERED = 'DELIVERED', // when order is delivered
+  CANCELED = 'CANCELED', // when user cancel order
+  REJECTED = 'REJECTED', // when manager/admin reject order
 }

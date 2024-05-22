@@ -48,9 +48,13 @@ export class CreateBookDto {
   @ApiPropertyOptional()
   inventory?: number;
 
+  @IsString()
+  @ApiPropertyOptional()
+  category_id?: string;
+
   @IsArray()
-  @ApiPropertyOptional({ type: () => [UpdateCategoryDto] })
-  categories?: UpdateCategoryDto[];
+  @ApiPropertyOptional({ type: () => UpdateCategoryDto })
+  categories?: UpdateCategoryDto;
 
   @IsArray()
   @ApiPropertyOptional({ type: () => [UpdateAuthorDto] })

@@ -5,6 +5,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { OrderDetail } from './entities/order-detail.entity';
+import { validStatusTransition } from './helpers/helpers';
 
 @Injectable()
 export class OrderService {
@@ -64,6 +65,10 @@ export class OrderService {
     const order = await this.orderRepository.findOne({ where: { id } });
     if (!order) {
       return new Error('Order not found');
+    }
+
+    if (!validStatusTransition(order.status, updateOrderDto.status)) {
+      return new Error('Invalid status transition');
     }
 
     order.status = updateOrderDto.status;

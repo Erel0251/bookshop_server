@@ -13,6 +13,8 @@ type Author {
 type Category {
   name: String!
   description: String
+  books: [Book!]
+  father: Category
   children: [Category!]
 }
 
@@ -35,12 +37,14 @@ type Book {
   is_deleted: Boolean!
   buy_count: Int!
   inventory: Int!
-  categories: [Category!]!
+  category: Category!
   authors: [Author!]!
   reviews: [Review!]!
 }
 
 type Query {
+  categories: [Category!]!
+  category(id: String!): Category!
   books(offset: Float = 0, limit: Float = 20): [Book!]!
   book(id: String!): Book!
 }

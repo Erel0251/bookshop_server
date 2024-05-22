@@ -14,11 +14,18 @@ export class Category extends CommonEntity {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
-  @ManyToOne(() => Book, (book) => book.categories, { nullable: true })
-  @JoinColumn({ name: 'book_id' })
-  book?: Book;
+  @Field(() => [Book], { nullable: true })
+  @OneToMany(() => Book, (book) => book.category, { nullable: true })
+  books?: Book[];
+
+  @Field(() => Category, { nullable: true })
+  @ManyToOne(() => Category, (category) => category.children, {
+    nullable: true,
+  })
+  @JoinColumn({ name: 'father_id' })
+  father?: Category;
 
   @Field(() => [Category], { nullable: true })
-  @OneToMany(() => Category, (category) => category.id, { nullable: true })
-  children: Category[];
+  @OneToMany(() => Category, (category) => category.father, { nullable: true })
+  children?: Category[];
 }

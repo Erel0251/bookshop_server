@@ -1,4 +1,11 @@
-import { Column, Entity, ManyToMany, OneToMany } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 import { CommonEntity } from 'src/shared/entites/common.entity';
@@ -63,9 +70,10 @@ export class Book extends CommonEntity {
   @Column({ type: 'integer', default: 0 })
   inventory: number;
 
-  @Field(() => [Category])
-  @OneToMany(() => Category, (category) => category.book)
-  categories: Category[];
+  @Field(() => Category)
+  @ManyToOne(() => Category, (category) => category.books)
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @Field(() => [Author])
   @ManyToMany(() => Author, (author) => author.books)

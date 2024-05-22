@@ -85,9 +85,12 @@ export class BookService {
     return await this.reviewService.findReviewByBook(book);
   }
 
-  async findCategoryByBookId(id: string): Promise<Category[]> {
-    const book = await this.book.findOne({ where: { id } });
-    return await this.categoryService.findCategoryByBook(book);
+  async findCategoryByBookId(id: string): Promise<Category> {
+    const book = await this.book.findOne({
+      where: { id },
+      relations: ['category'],
+    });
+    return book.category;
   }
 
   async findPromotionInfoByBookId(id: string): Promise<Promotion> {
@@ -123,43 +126,5 @@ export class BookService {
     const book = await this.book.findOne({ where: { id } });
     book.is_deleted = true;
     await this.book.save(book);
-  }
-
-  async findBookByCategory(id: string): Promise<Book[]> {
-    const category = await this.categoryService.findOne(id);
-    return await this.book.find({ where: { categories: category } });
-  }
-
-  async addBookCategory(id: string, bookId: string): Promise<void | Error> {
-    try {
-      const book = await this.book.findOne({
-        where: { id: bookId },
-        relations: ['categories'],
-      });
-      const category = await this.categoryService.findOne(id);
-      if (category instanceof Category) {
-        book.categories.push(category);
-      }
-      await this.book.save(book);
-    } catch (error) {
-      this.logger.error(error);
-      return new Error(error);
-    }
-  }
-
-  async removeBookCategory(id: string, bookId: string): Promise<void | Error> {
-    try {
-      const book = await this.book.findOne({
-        where: { id: bookId },
-        relations: ['categories'],
-      });
-      book.categories = book.categories.filter(
-        (category) => category.id !== id,
-      );
-      await this.book.save(book);
-    } catch (error) {
-      this.logger.error(error);
-      return new Error(error);
-    }
   }
 }

@@ -5,7 +5,6 @@ import {
   Body,
   Patch,
   Param,
-  Delete,
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
@@ -43,10 +42,5 @@ export class OrderController {
     @Body() updateOrderDto: UpdateOrderDto,
   ) {
     return this.orderService.updateStatusOrder(id, updateOrderDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id', ParseUUIDPipe) id: string) {
-    return this.orderService.remove(+id);
   }
 }
