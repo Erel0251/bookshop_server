@@ -38,214 +38,215 @@
     <button type="submit" class="btn btn-primary">Search</button>
   </form>
 
+  <div class="m-4">
+    <table class="table table-hover table-striped">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Supplier</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Date</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Supplement -->
+        <tr data-bs-toggle="collapse" data-bs-target="#details1">
+          <td>1</td>
+          <td>Đợt tháng 4</td>
+          <td>NXB Kim Đồng</td>
+          <td>1000</td>
+          <td>1000000</td>
+          <td>24/04/2024</td>
+          <td>
+            <div class="btn btn-outline-warning py-0">Edit</div>
+            <div class="btn btn-outline-danger py-0">Remove</div>
 
+          </td>
+        </tr>
 
-  <table class="table table-hover table-striped m-3">
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Name</th>
-        <th>Supplier</th>
-        <th>Quantity</th>
-        <th>Price</th>
-        <th>Date</th>
-        <th>Action</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Supplement -->
-      <tr data-bs-toggle="collapse" data-bs-target="#details1">
-        <td>1</td>
-        <td>Đợt tháng 4</td>
-        <td>NXB Kim Đồng</td>
-        <td>1000</td>
-        <td>1000000</td>
-        <td>24/04/2024</td>
-        <td>
-          <div class="btn btn-outline-warning py-0">Edit</div>
-          <div class="btn btn-outline-danger py-0">Remove</div>
+        <!-- Supplement Detail -->
+        <tr id="details1" class="collapse">
+          <td colspan="7" class="">
+            <!-- Nested Table -->
+            <table class="table table-striped table-light table-bordered">
+              <thead>
+                <tr>
+                  <td>#</td>
+                  <td>Book</td>
+                  <td>Quantity</td>
+                  <td>Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Phía tây không có gì lạ</td>
+                  <td>100</td>
+                  <td>100000</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Sousou no Frieren</td>
+                  <td>400</td>
+                  <td>100000</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Dungeon Meshi</td>
+                  <td>500</td>
+                  <td>100000</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
 
-        </td>
-      </tr>
+        <!-- Supplement -->
+        <tr data-bs-toggle="collapse" data-bs-target="#details2">
+          <td>2</td>
+          <td>Đợt tháng 4</td>
+          <td>NXB Trẻ</td>
+          <td>1000</td>
+          <td>1000000</td>
+          <td>24/04/2024</td>
+          <td></td>
+        </tr>
 
-      <!-- Supplement Detail -->
-      <tr id="details1" class="collapse">
-        <td colspan="7" class="">
-          <!-- Nested Table -->
-          <table class="table table-striped table-light table-bordered">
-            <thead>
-              <tr>
-                <td>#</td>
-                <td>Book</td>
-                <td>Quantity</td>
-                <td>Price</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Phía tây không có gì lạ</td>
-                <td>100</td>
-                <td>100000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Sousou no Frieren</td>
-                <td>400</td>
-                <td>100000</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Dungeon Meshi</td>
-                <td>500</td>
-                <td>100000</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
+        <!-- Supplement Detail -->
+        <tr id="details2" class="collapse">
+          <td colspan="7" class="">
+            <!-- Nested Table -->
+            <table class="table table-striped table-light table-bordered">
+              <thead>
+                <tr>
+                  <td>#</td>
+                  <td>Book</td>
+                  <td>Quantity</td>
+                  <td>Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Phía tây không có gì lạ</td>
+                  <td>100</td>
+                  <td>100000</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Sousou no Frieren</td>
+                  <td>400</td>
+                  <td>100000</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Dungeon Meshi</td>
+                  <td>500</td>
+                  <td>100000</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
 
-      <!-- Supplement -->
-      <tr data-bs-toggle="collapse" data-bs-target="#details2">
-        <td>2</td>
-        <td>Đợt tháng 4</td>
-        <td>NXB Trẻ</td>
-        <td>1000</td>
-        <td>1000000</td>
-        <td>24/04/2024</td>
-        <td></td>
-      </tr>
+        <!-- Supplement -->
+        <tr data-bs-toggle="collapse" data-bs-target="#details3">
+          <td>3</td>
+          <td>Đợt tháng 4</td>
+          <td>NXB Lao Động</td>
+          <td>1000</td>
+          <td>1000000</td>
+          <td>24/04/2024</td>
+          <td></td>
+        </tr>
 
-      <!-- Supplement Detail -->
-      <tr id="details2" class="collapse">
-        <td colspan="7" class="">
-          <!-- Nested Table -->
-          <table class="table table-striped table-light table-bordered">
-            <thead>
-              <tr>
-                <td>#</td>
-                <td>Book</td>
-                <td>Quantity</td>
-                <td>Price</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Phía tây không có gì lạ</td>
-                <td>100</td>
-                <td>100000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Sousou no Frieren</td>
-                <td>400</td>
-                <td>100000</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Dungeon Meshi</td>
-                <td>500</td>
-                <td>100000</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
+        <!-- Supplement Detail -->
+        <tr id="details3" class="collapse">
+          <td colspan="7" class="">
+            <!-- Nested Table -->
+            <table class="table table-striped table-light table-bordered">
+              <thead>
+                <tr>
+                  <td>#</td>
+                  <td>Book</td>
+                  <td>Quantity</td>
+                  <td>Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Phía tây không có gì lạ</td>
+                  <td>100</td>
+                  <td>100000</td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td>Sousou no Frieren</td>
+                  <td>400</td>
+                  <td>100000</td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td>Dungeon Meshi</td>
+                  <td>500</td>
+                  <td>100000</td>
+                </tr>
+              </tbody>
+            </table>
+          </td>
+        </tr>
 
-      <!-- Supplement -->
-      <tr data-bs-toggle="collapse" data-bs-target="#details3">
-        <td>3</td>
-        <td>Đợt tháng 4</td>
-        <td>NXB Lao Động</td>
-        <td>1000</td>
-        <td>1000000</td>
-        <td>24/04/2024</td>
-        <td></td>
-      </tr>
+        {{#each supplements}}
+        <!-- Supplement -->
+        <tr data-bs-toggle="collapse" data-bs-target="#detail{{@index}}">
+          <td>{{inc @index}}</td>
+          <td>{{name}}</td>
+          <td>{{supplier}}</td>
+          <td>{{showNum total_quantity}}</td>
+          <td>{{showNum total_price}}</td>
+          <td>{{formatDate date}}</td>
+          <td>
+            <a class="btn btn-outline-info py-0" href="/{{id}}">View</a>
+            <div class="btn btn-outline-warning py-0">Edit</div>
+            <div class="btn btn-outline-danger py-0">Remove</div>
+          </td>
+        </tr>
 
-      <!-- Supplement Detail -->
-      <tr id="details3" class="collapse">
-        <td colspan="7" class="">
-          <!-- Nested Table -->
-          <table class="table table-striped table-light table-bordered">
-            <thead>
-              <tr>
-                <td>#</td>
-                <td>Book</td>
-                <td>Quantity</td>
-                <td>Price</td>
-              </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td>1</td>
-                <td>Phía tây không có gì lạ</td>
-                <td>100</td>
-                <td>100000</td>
-              </tr>
-              <tr>
-                <td>2</td>
-                <td>Sousou no Frieren</td>
-                <td>400</td>
-                <td>100000</td>
-              </tr>
-              <tr>
-                <td>3</td>
-                <td>Dungeon Meshi</td>
-                <td>500</td>
-                <td>100000</td>
-              </tr>
-            </tbody>
-          </table>
-        </td>
-      </tr>
+        <!-- Supplement Detail -->
+        <tr id="detail{{@index}}" class="collapse">
+          <td colspan="7" class="">
+            <!-- Nested Table -->
+            <table class="table table-striped table-light table-bordered">
+              <thead>
+                <tr>
+                  <td>#</td>
+                  <td>Book</td>
+                  <td>Quantity</td>
+                  <td>Price</td>
+                </tr>
+              </thead>
+              <tbody>
+                {{#each supplement_details}}
+                <tr>
+                  <td>{{inc @index}}</td>
+                  <td>{{this.books.title}}</td>
+                  <td>{{this.quantity}}</td>
+                  <td>{{this.price}}</td>
+                </tr>
+                {{/each}}
+              </tbody>
+            </table>
+          </td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
 
-      {{#each supplements}}
-      <!-- Supplement -->
-      <tr data-bs-toggle="collapse" data-bs-target="#detail{{@index}}">
-        <td>{{inc @index}}</td>
-        <td>{{name}}</td>
-        <td>{{supplier}}</td>
-        <td>{{showNum total_quantity}}</td>
-        <td>{{showNum total_price}}</td>
-        <td>{{formatDate date}}</td>
-        <td>
-          <a class="btn btn-outline-info py-0" href="/{{id}}">View</a>
-          <div class="btn btn-outline-warning py-0">Edit</div>
-          <div class="btn btn-outline-danger py-0">Remove</div>
-        </td>
-      </tr>
-
-      <!-- Supplement Detail -->
-      <tr id="detail{{@index}}" class="collapse">
-        <td colspan="7" class="">
-          <!-- Nested Table -->
-          <table class="table table-striped table-light table-bordered">
-            <thead>
-              <tr>
-                <td>#</td>
-                <td>Book</td>
-                <td>Quantity</td>
-                <td>Price</td>
-              </tr>
-            </thead>
-            <tbody>
-              {{#each books}}
-              <tr>
-                <td>{{@index}}</td>
-                <td>{{name}}</td>
-                <td>{{quantity}}</td>
-                <td>{{price}}</td>
-              </tr>
-              {{/each}}
-            </tbody>
-          </table>
-        </td>
-      </tr>
-      {{/each}}
-    </tbody>
-  </table>
 
 
   {{> createSupplement}}

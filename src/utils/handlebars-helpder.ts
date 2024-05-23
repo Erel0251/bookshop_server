@@ -22,6 +22,7 @@ export const absoluteUrl = () => {
 // Format name to normal: '   nguyen van a  ' => 'Nguyen Van A'
 export const formatName = (name: string) => {
   return name
+    .replace(/_/g, ' ')
     .split(' ')
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
