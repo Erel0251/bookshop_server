@@ -18,6 +18,8 @@ import { ReviewService } from '../review/review.service';
 import { Review } from '../review/entities/review.entity';
 import { PromotionService } from '../promotion/promotion.service';
 import { Promotion } from '../promotion/entities/promotion.entity';
+import { QueryBookDto } from './dto/query-book.dto';
+import { Maybe } from 'purify-ts/Maybe';
 
 @Injectable()
 export class BookService {
@@ -118,5 +120,35 @@ export class BookService {
     const book = await this.book.findOne({ where: { id } });
     book.is_deleted = true;
     await this.book.save(book);
+  }
+
+  async filter(filter: QueryBookDto) {
+    const query = this.book.createQueryBuilder('book');
+
+    Maybe.fromFalsy(filter.title).ifJust((title) =>
+      query.andWhere('book.title LIKE :title', {
+        title: `%${title}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.isbn).ifJust((isbn) =>
+      query.andWhere('book.isbn LIKE :isbn', {
+        isbn: `%${isbn}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.publisher).ifJust((publisher) =>
+      query.andWhere('book.publisher LIKE :publisher', {
+        publisher: `%${publisher}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.status).ifJust((status) =>
+      query.andWhere('book.status LIKE :status', {
+        status: `%${status}%`,
+      }),
+    );
+
+    return await query.getMany();
   }
 }

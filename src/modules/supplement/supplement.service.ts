@@ -40,6 +40,7 @@ export class SupplementService {
   async findAll(): Promise<Supplement[]> {
     return await this.supplementRepository.find({
       order: { created_at: 'DESC' },
+      relations: ['supplement_details', 'supplement_details.books'],
     });
   }
 

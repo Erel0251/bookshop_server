@@ -1,0 +1,82 @@
+<!-- component -->
+
+<div class="col container">
+
+  <div class="d-flex justify-content-between align-items-center m-4">
+    <h2 class="text-left">Book Inventory</h2>
+    <div class="d-flex justify-content-evenly gap-3">
+      <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createSupplement">Create</div>
+      <div class="btn btn-outline-success">Import</div>
+    </div>
+  </div>
+
+
+  <form action="/book/filter" method="get" class="card p-4 m-4" id="queryBook">
+    <div class="row">
+      <div class="col-md-6 mb-3">
+        <label for="filterTitle">Title</label>
+        <input type="text" id="filterTitle" class="form-control" placeholder="Search by Title" name="title">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="filterISBN">ISBN</label>
+        <input type="text" id="filterISBN" class="form-control" placeholder="Search by ISBN" name="isbn">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="filterPublisher">Publisher</label>
+        <input type="text" id="filterPublisher" class="form-control" placeholder="Search by Publisher" name="publisher">
+      </div>
+      <div class="col-md-6 mb-3">
+        <label for="filterStatus">Status</label>
+        <select id="filterStatus" name="status" form="queryBook" class="form-select">
+          {{#each statuses}}
+            <option value="{{this}}">{{formatName this}}</option>
+          {{/each}}
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+
+  <div class="m-3">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Title</th>
+          <th>Publisher</th>
+          <th>ISBN</th>
+          <th>Price</th>
+          <th>Status</th>
+          <th>Currency</th>
+          <th>Inventory</th>
+        </tr>
+      </thead>
+      <tbody id="bookTable">
+        <!-- Example row -->
+        <tr>
+          <td><img src="book_image.jpg" class="table-img" alt="Book Image"></td>
+          <td>Book Title 1</td>
+          <td>Publisher 1</td>
+          <td>1234567890123</td>
+          <td>20.00</td>
+          <td>Available</td>
+          <td>USD</td>
+          <td>10</td>
+        </tr>
+        <!-- Add more rows as needed -->
+        {{#each books}}
+        <tr>
+          <td><img src="{{img_urls.[0]}}" class="img-thumbnail" style="width: 150px; height: auto" alt="Book Image"></td>
+          <td>{{formatName title}}</td>
+          <td>{{formatName publisher}}</td>
+          <td>{{isbn}}</td>
+          <td>{{price}}</td>
+          <td>{{formatName status}}</td>
+          <td>{{currency}}</td>
+          <td>{{inventory}}</td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
