@@ -11,7 +11,7 @@ export class SupplementDetail extends CommonEntity {
   @Column()
   price: number;
 
-  @Column()
+  @Column({ default: 'VND' })
   currency: string;
 
   @ManyToOne(() => Supplement, (supplement) => supplement.supplement_details)

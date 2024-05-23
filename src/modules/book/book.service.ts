@@ -55,14 +55,6 @@ export class BookService {
   async findOne(id: string): Promise<Book> {
     return await this.book.findOne({
       where: { id },
-      relations: [
-        'authors',
-        'reviews',
-        'categories',
-        'promotion_books',
-        'reviews.user',
-        'promotion_books.promotion',
-      ],
     });
   }
 

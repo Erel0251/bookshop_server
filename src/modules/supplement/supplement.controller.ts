@@ -19,11 +19,15 @@ import { ApiTags } from '@nestjs/swagger';
 import { CreateBookDto } from '../book/dto/create-book.dto';
 import { UpdateBookDto } from '../book/dto/update-book.dto';
 import { QuerySupplementDto } from './dto/query-supplement.dto';
+import { BookService } from '../book/book.service';
 
 @ApiTags('Supplement')
 @Controller('supplement')
 export class SupplementController {
-  constructor(private readonly supplementService: SupplementService) {}
+  constructor(
+    private readonly supplementService: SupplementService,
+    private readonly bookService: BookService,
+  ) {}
 
   private readonly logger = new Logger(SupplementController.name);
 
@@ -90,7 +94,12 @@ export class SupplementController {
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const supplement = await this.supplementService.findOne(id);
-      return res.status(HttpStatus.OK).send(supplement);
+      const books = await this.bookService.findAll();
+      res.status(HttpStatus.OK).render('detailSupplement', {
+        message: 'Get data successfully',
+        supplement,
+        books,
+      });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

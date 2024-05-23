@@ -65,6 +65,6 @@ export class CreateBookDto {
   review?: UpdateReviewDto[];
 
   @IsArray()
-  @ApiPropertyOptional({ type: () => [CreateSupplementDetailDto] })
-  supplement_details?: CreateSupplementDetailDto[];
+  @ApiPropertyOptional({ type: () => CreateSupplementDetailDto })
+  supplement_detail?: CreateSupplementDetailDto;
 }

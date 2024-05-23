@@ -46,7 +46,7 @@ export class SupplementService {
   async findOne(id: string): Promise<Supplement | Error> {
     return await this.supplementRepository.findOne({
       where: { id },
-      relations: ['supplement_details'],
+      relations: ['supplement_details', 'supplement_details.books'],
     });
   }
 
@@ -101,26 +101,52 @@ export class SupplementService {
     if (!supplement) {
       throw new Error('Supplement not found');
     }
-    book.inventory += book.supplement_details[0]?.quantity;
+    book.inventory += book.supplement_detail?.quantity;
     await this.bookService.create(book);
-    this.supplementDetailRepository.create(book.supplement_details);
+    this.supplementDetailRepository.create(book.supplement_detail);
     await this.supplementRepository.save(supplement);
   }
 
-  async addBook(id: string, book: UpdateBookDto): Promise<void | Error> {
+  async addBook(id: string, bookUpdate: UpdateBookDto): Promise<void | Error> {
     const supplement = await this.supplementRepository.findOne({
       where: { id },
     });
+    const book = await this.bookService.findOne(bookUpdate.id);
+    if (!supplement) {
+      throw new Error('Supplement not found');
+    }
+    if (!book) {
+      throw new Error('Book not found');
+    }
+    book.inventory += bookUpdate.supplement_detail?.quantity;
+    const detail = this.supplementDetailRepository.create(
+      bookUpdate.supplement_detail,
+    );
+    detail.books = book;
+    detail.supplements = supplement;
+    await this.supplementDetailRepository.save(detail);
+    await this.bookService.update(book.id, book);
+
+    /*
+    const supplement = await this.supplementRepository.findOne({
+      where: { id },
+    });
+    const book = await this.bookService.findOne(bookUpdate.id);
     if (!supplement) {
       throw new Error('Supplement not found');
     }
     if (!book.id) {
       throw new Error('Book id is required');
     }
-    book.inventory += book.supplement_details[0]?.quantity;
+    book.inventory += bookUpdate.supplement_detail?.quantity;
     await this.bookService.update(book.id, book);
-    this.supplementDetailRepository.create(book.supplement_details);
+    const detail = this.supplementDetailRepository.create(
+      bookUpdate.supplement_detail,
+    );
+    book.supplement_detail = detail;
+    supplement.supplement_details.push(detail);
     await this.supplementRepository.save(supplement);
+    */
   }
 
   async updateBook(id: string, book: UpdateBookDto): Promise<void | Error> {
@@ -133,16 +159,18 @@ export class SupplementService {
     if (!book.id) {
       throw new Error('Book id is required');
     }
+    /*
     const supplementDetail = await this.supplementDetailRepository.findOne({
       where: { books: { id: book.id }, supplements: { id } },
     });
     // update book inventory
     const quantity =
-      book.supplement_details[0]?.quantity - supplementDetail.quantity;
+      book.supplement_details?.quantity - supplementDetail.quantity;
     book.inventory += quantity;
     await this.bookService.update(book.id, book);
     this.supplementDetailRepository.save(book.supplement_details);
     await this.supplementRepository.save(supplement);
+    */
   }
 
   async removeBook(

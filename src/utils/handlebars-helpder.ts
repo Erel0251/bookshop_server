@@ -14,7 +14,15 @@ export const formatDate = (date: Date) => {
   return `${day}/${month}/${year}`;
 };
 
-export const absoluteUrl = (path: string) => {
+export const absoluteUrl = () => {
   const req = window.location;
-  return `${req.protocol}:${req.port}//${req.host}${path}`;
+  return `${req.protocol}:${req.port}//`;
+};
+
+// Format name to normal: '   nguyen van a  ' => 'Nguyen Van A'
+export const formatName = (name: string) => {
+  return name
+    .split(' ')
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ');
 };

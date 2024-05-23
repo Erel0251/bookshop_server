@@ -12,7 +12,7 @@ export class CreateSupplementDetailDto {
   price: number;
 
   @IsString()
-  @ApiProperty()
+  @ApiPropertyOptional({ default: 'USD' })
   currency: string;
 
   @IsUUID()
