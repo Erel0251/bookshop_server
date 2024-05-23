@@ -10,17 +10,20 @@ export class Supplement extends CommonEntity {
   @Column()
   description?: string;
 
-  @Column()
+  @Column({ default: 0 })
   total_quantity: number;
 
-  @Column()
+  @Column({ default: 0 })
   total_price: number;
 
-  @Column()
+  @Column({ default: 'VND' })
   currency: string;
 
+  @Column()
+  supplier: string;
+
   @Column({ nullable: true })
-  supplier?: string;
+  date: Date;
 
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
@@ -29,5 +32,5 @@ export class Supplement extends CommonEntity {
     () => SupplementDetail,
     (supplementDetail) => supplementDetail.supplements,
   )
-  supplement_details: SupplementDetail[];
+  supplement_details?: SupplementDetail[];
 }

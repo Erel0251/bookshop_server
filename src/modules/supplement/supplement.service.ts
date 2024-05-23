@@ -9,6 +9,9 @@ import { BookService } from '../book/book.service';
 import { CreateSupplementDetailDto } from './dto/create-supplement-detail.dto';
 import { CreateBookDto } from '../book/dto/create-book.dto';
 import { UpdateBookDto } from '../book/dto/update-book.dto';
+import { QuerySupplementDto } from './dto/query-supplement.dto';
+
+import { Maybe } from 'purify-ts/Maybe';
 
 @Injectable()
 export class SupplementService {
@@ -167,5 +170,58 @@ export class SupplementService {
     );
     await this.supplementRepository.save(supplement);
     // await this.supplementDetailRepository.remove(supplementDetail);
+  }
+
+  async filter(filter: QuerySupplementDto): Promise<Supplement[]> {
+    const query = this.supplementRepository.createQueryBuilder('supplement');
+
+    Maybe.fromFalsy(filter.name).ifJust((name) =>
+      query.andWhere('supplement.name LIKE :name', {
+        name: `%${name}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.supplier).ifJust((supplier) =>
+      query.andWhere('supplement.supplier LIKE :supplier', {
+        supplier: `%${supplier}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.date).ifJust((date) =>
+      query.andWhere('supplement.date::text LIKE :date', {
+        date: `%${date}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.month).ifJust((month) =>
+      query.andWhere('EXTRACT(MONTH FROM supplement.date) = :month', {
+        month: parseInt(month),
+      }),
+    );
+
+    Maybe.fromFalsy(filter.year).ifJust((year) =>
+      query.andWhere('EXTRACT(YEAR FROM supplement.date) = :year', {
+        year: parseInt(year),
+      }),
+    );
+
+    return await query.getMany();
+
+    /*
+    return await this.supplementRepository
+      .createQueryBuilder('supplement')
+      .where('supplement.name LIKE :name', { name: `%${filter.name}%` })
+      .where('supplement.supplier LIKE :supplier', {
+        supplier: `%${filter.supplier}%`,
+      })
+      .where('supplement.date::text LIKE :date', { date: `%${filter.date}%` })
+      .where('EXTRACT(MONTH FROM supplement.date) = :month', {
+        month: parseInt(filter.month),
+      })
+      .where('EXTRACT(YEAR FROM supplement.date) = :year', {
+        year: parseInt(filter.year),
+      })
+      .getMany();
+      */
   }
 }

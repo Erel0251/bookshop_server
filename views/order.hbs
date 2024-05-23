@@ -1,0 +1,423 @@
+<!-- component -->
+<div class="col container">
+
+
+  <div class="d-flex justify-content-between align-items-center  m-4">
+    <h2 class="text-left">Order</h2>
+    <div class="btn btn-outline-info ">Export</div>
+  </div>
+
+  <div class="card m-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchStartDate">Start
+                  date</label>
+                <div title="The start date for the search." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input id="SearchStartDate" name="SearchStartDate" type="date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchEndDate">End
+                  date</label>
+                <div title="The end date for the search." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input id="SearchEndDate" name="SearchEndDate" type="date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchDiscountTypeId">Discount
+                  type</label>
+                <div title="Search by discount type." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <select class="form-control" data-val="true" data-val-required="The Discount type field is required."
+                id="SearchDiscountTypeId" name="SearchDiscountTypeId">
+                <option selected="selected" value="0">All</option>
+                <option value="1">Assigned to order total</option>
+                <option value="2">Assigned to products</option>
+                <option value="5">Assigned to categories</option>
+                <option value="6">Assigned to manufacturers</option>
+                <option value="10">Assigned to shipping</option>
+                <option value="20">Assigned to order subtotal</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchDiscountCouponCode">Coupon
+                  code</label>
+                <div title="Search by discount coupon code." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input class="form-control text-box single-line" id="SearchDiscountCouponCode"
+                name="SearchDiscountCouponCode" type="text" value="">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchDiscountName">Discount
+                  name</label>
+                <div title="Search by discount name." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input class="form-control text-box single-line" id="SearchDiscountName" name="SearchDiscountName"
+                type="text" value="">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="IsActiveId">Is
+                  Active</label>
+                <div title="Search by &quot;IsActive&quot; property." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <select class="form-control" data-val="true" data-val-required="The Is Active field is required."
+                id="IsActiveId" name="IsActiveId">
+                <option selected="selected" value="0">All</option>
+                <option value="1">Active only</option>
+                <option value="2">Inactive only</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="d-flex justify-content-end mx-3 my-2">
+        <button type="button" id="search-discounts" class="btn btn-primary btn-search">
+          Search
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <table class="table table-hover table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Customer</th>
+        <th>Address</th>
+        <th>Tel</th>
+        <th>Total Price</th>
+        <th>Status</th>
+        <th>Created At</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Supplement -->
+      <tr data-bs-toggle="collapse" data-bs-target="#details1">
+        <td>1</td>
+        <td>Trần Đức Anh</td>
+        <td>102 đường 43 Phương Thành, Quận 2, TP. HCM</td>
+        <td>0918321230</td>
+        <td>1000000</td>
+        <td>
+          <div class="pending">Pending</div>
+        </td>
+        <td>24/04/2024</td>
+      </tr>
+
+      <!-- Supplement Detail -->
+      <tr id="details1" class="collapse">
+        <td colspan="7" class="">
+          <!-- Nested Table -->
+          <table class="table table-striped table-light table-bordered">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Sale</td>
+                <td>Money</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Phía tây không có gì lạ</td>
+                <td>100</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sousou no Frieren</td>
+                <td>400</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Dungeon Meshi</td>
+                <td>500</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Supplement -->
+      <tr data-bs-toggle="collapse" data-bs-target="#details2">
+        <td>1</td>
+        <td>Trần Đức Anh</td>
+        <td>102 đường 43 Phương Thành, Quận 2, TP. HCM</td>
+        <td>0918321230</td>
+        <td>1000000</td>
+        <td>
+          <div class="accepted">Accepted</div>
+        </td>
+        <td>24/04/2024</td>
+      </tr>
+
+      <!-- Supplement Detail -->
+      <tr id="details2" class="collapse">
+        <td colspan="7" class="">
+          <!-- Nested Table -->
+          <table class="table table-striped table-light table-bordered">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Sale</td>
+                <td>Money</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Phía tây không có gì lạ</td>
+                <td>100</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sousou no Frieren</td>
+                <td>400</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Dungeon Meshi</td>
+                <td>500</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Supplement -->
+      <tr data-bs-toggle="collapse" data-bs-target="#details3">
+        <td>1</td>
+        <td>Trần Đức Anh</td>
+        <td>102 đường 43 Phương Thành, Quận 2, TP. HCM</td>
+        <td>0918321230</td>
+        <td>1000000</td>
+        <td>
+          <div class="rejected">Rejected</div>
+        </td>
+        <td>24/04/2024</td>
+      </tr>
+
+      <!-- Supplement Detail -->
+      <tr id="details3" class="collapse">
+        <td colspan="7" class="">
+          <!-- Nested Table -->
+          <table class="table table-striped table-light table-bordered">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Sale</td>
+                <td>Money</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Phía tây không có gì lạ</td>
+                <td>100</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sousou no Frieren</td>
+                <td>400</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Dungeon Meshi</td>
+                <td>500</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Supplement -->
+      <tr data-bs-toggle="collapse" data-bs-target="#details4">
+        <td>1</td>
+        <td>Trần Đức Anh</td>
+        <td>102 đường 43 Phương Thành, Quận 2, TP. HCM</td>
+        <td>0918321230</td>
+        <td>1000000</td>
+        <td>
+          <div class="cancelled">Cancelled</div>
+        </td>
+        <td>24/04/2024</td>
+      </tr>
+
+      <!-- Supplement Detail -->
+      <tr id="details4" class="collapse">
+        <td colspan="7" class="">
+          <!-- Nested Table -->
+          <table class="table table-striped table-light table-bordered">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Sale</td>
+                <td>Money</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Phía tây không có gì lạ</td>
+                <td>100</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sousou no Frieren</td>
+                <td>400</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Dungeon Meshi</td>
+                <td>500</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+      <!-- Supplement -->
+      <tr data-bs-toggle="collapse" data-bs-target="#details5">
+        <td>1</td>
+        <td>Trần Đức Anh</td>
+        <td>102 đường 43 Phương Thành, Quận 2, TP. HCM</td>
+        <td>0918321230</td>
+        <td>1000000</td>
+        <td>
+          <div class="delivered">Delivered</div>
+        </td>
+        <td>24/04/2024</td>
+      </tr>
+
+      <!-- Supplement Detail -->
+      <tr id="details5" class="collapse">
+        <td colspan="7" class="">
+          <!-- Nested Table -->
+          <table class="table table-striped table-light table-bordered">
+            <thead>
+              <tr>
+                <td>#</td>
+                <td>Product</td>
+                <td>Quantity</td>
+                <td>Price</td>
+                <td>Sale</td>
+                <td>Money</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>1</td>
+                <td>Phía tây không có gì lạ</td>
+                <td>100</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>2</td>
+                <td>Sousou no Frieren</td>
+                <td>400</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+              <tr>
+                <td>3</td>
+                <td>Dungeon Meshi</td>
+                <td>500</td>
+                <td>100000</td>
+                <td>0</td>
+                <td>100000</td>
+              </tr>
+            </tbody>
+          </table>
+        </td>
+      </tr>
+
+    </tbody>
+  </table>
+
+</div>

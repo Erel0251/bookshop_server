@@ -7,6 +7,12 @@ import { join } from 'path';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppModule } from './app.module';
 import * as hbs from 'hbs';
+import {
+  absoluteUrl,
+  formatDate,
+  indexOne,
+  showNum,
+} from './utils/handlebars-helpder';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -26,11 +32,16 @@ async function bootstrap() {
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
-  hbs.registerPartials(join(__dirname, '..', 'views/partials'));
+  hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
   app.setViewEngine('hbs');
+  hbs.registerHelper('showNum', showNum);
+  hbs.registerHelper('inc', indexOne);
+  hbs.registerHelper('formatDate', formatDate);
+  hbs.registerHelper('absoluteUrl', absoluteUrl);
 
   await app.listen(configService.get('PORT'), () => {
     const logger = app.get(Logger);
+    logger.log('App is running');
     logger.log(
       `Server is running on http://localhost:${configService.get('PORT')}`,
     );

@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsNumber, IsString } from 'class-validator';
+import { IsArray, IsDate, IsNumber, IsString } from 'class-validator';
 import { CreateSupplementDetailDto } from './create-supplement-detail.dto';
 
 export class CreateSupplementDto {
@@ -12,20 +12,24 @@ export class CreateSupplementDto {
   description?: string;
 
   @IsNumber()
-  @ApiProperty()
-  total_quantity: number;
+  @ApiPropertyOptional()
+  total_quantity: number = 0;
 
   @IsNumber()
-  @ApiProperty()
-  total_price: number;
-
-  @IsString()
-  @ApiProperty()
-  currency: string;
+  @ApiPropertyOptional()
+  total_price: number = 0;
 
   @IsString()
   @ApiPropertyOptional()
-  supplier?: string;
+  currency: string = 'VND';
+
+  @IsString()
+  @ApiProperty()
+  supplier: string;
+
+  @IsDate()
+  @ApiPropertyOptional()
+  date?: Date = new Date();
 
   @IsArray()
   @ApiPropertyOptional({ type: () => [CreateSupplementDetailDto] })

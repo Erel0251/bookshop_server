@@ -1,0 +1,61 @@
+<div class="modal fade" id="createSupplement" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">New Supplier</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="modalForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="supplier" class="form-label">Supplier</label>
+            <input type="text" class="form-control" id="supplier" name="supplier" required>
+          </div>
+          <div class="mb-3">
+            <label for="date" class="form-label">Date</label>
+            <input type="date" class="form-control" id="date" name="date" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description (Optional)</label>
+            <textarea class="form-control" id="description" name="description"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="modalForm">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('modalForm').addEventListener('submit', function(event) {
+  event.preventDefault();
+  // You can handle the form data here
+  const formData = new FormData(event.target);
+  const obj = Object.fromEntries(formData.entries());
+  fetch('/supplement', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(obj),
+  })
+  .then(response => response.json())
+  .then(() => {
+    // Reload the page after form submission
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  // Close the modal after form submission
+  const modal = bootstrap.Modal.getInstance(document.getElementById('createSupplement'));
+  modal.hide();
+});
+</script>

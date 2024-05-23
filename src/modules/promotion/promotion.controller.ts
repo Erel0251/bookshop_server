@@ -44,7 +44,7 @@ export class PromotionController {
   async findAll(@Res() res: any) {
     try {
       const promotions = this.promotionService.findAll();
-      res.status(HttpStatus.OK).send(promotions);
+      res.status(HttpStatus.OK).render('promotion', { promotions });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);

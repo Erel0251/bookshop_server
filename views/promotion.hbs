@@ -1,0 +1,169 @@
+<!-- component -->
+<div class="col container-fluid">
+
+  <div class="d-flex justify-content-between align-items-center  m-4">
+    <h2 class="text-left">Promotion</h2>
+    <div class="btn btn-outline-success ">Create</div>
+  </div>
+
+  <div class="card m-4">
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchStartDate">Start
+                  date</label>
+                <div title="The start date for the search." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input id="SearchStartDate" name="SearchStartDate" type="date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchEndDate">End
+                  date</label>
+                <div title="The end date for the search." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input id="SearchEndDate" name="SearchEndDate" type="date" class="form-control">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchDiscountTypeId">Discount
+                  type</label>
+                <div title="Search by discount type." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <select class="form-control" data-val="true" data-val-required="The Discount type field is required."
+                id="SearchDiscountTypeId" name="SearchDiscountTypeId">
+                <option selected="selected" value="0">All</option>
+                <option value="1">Assigned to order total</option>
+                <option value="2">Assigned to products</option>
+                <option value="5">Assigned to categories</option>
+                <option value="6">Assigned to manufacturers</option>
+                <option value="10">Assigned to shipping</option>
+                <option value="20">Assigned to order subtotal</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-7">
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchDiscountCouponCode">Coupon
+                  code</label>
+                <div title="Search by discount coupon code." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input class="form-control text-box single-line" id="SearchDiscountCouponCode"
+                name="SearchDiscountCouponCode" type="text" value="">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="SearchDiscountName">Discount
+                  name</label>
+                <div title="Search by discount name." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <input class="form-control text-box single-line" id="SearchDiscountName" name="SearchDiscountName"
+                type="text" value="">
+            </div>
+          </div>
+          <div class="form-group row m-2">
+            <div class="col-md-4">
+              <div class="text-end"><label class="col-form-label" for="IsActiveId">Is
+                  Active</label>
+                <div title="Search by &quot;IsActive&quot; property." data-toggle="tooltip" class="ico-help"><i
+                    class="fas fa-question-circle"></i></div>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <select class="form-control" data-val="true" data-val-required="The Is Active field is required."
+                id="IsActiveId" name="IsActiveId">
+                <option selected="selected" value="0">All</option>
+                <option value="1">Active only</option>
+                <option value="2">Inactive only</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row justify-content-end">
+        <div class="col-2">
+          <button type="button" id="search-discounts" class="btn btn-primary btn-search">
+            Search
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="card m-4">
+    <div class="card-body">
+      <table class="table table-bordered table-hover table-striped">
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Promotion type</th>
+            <th>Discount</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Is active</th>
+            <th>Edit</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Assigned to order total</td>
+            <td>sale</td>
+            <td>20%</td>
+            <td>01/01/2010 12:00:00 AM</td>
+            <td>01/01/2020 12:00:00 AM</td>
+            <td class="  text-center"><i class="fas fa-check true-icon" nop-value="true"></i>
+            </td>
+            <td class="  button-column"><a class="btn btn-default" href="Edit/2"><i
+                  class="fas fa-pencil-alt"></i>Edit</a></td>
+          </tr>
+          <tr>
+            <td>Sample discount with coupon code</td>
+            <td>recommend</td>
+            <td>10 USD</td>
+            <td></td>
+            <td></td>
+            <td class="  text-center">
+              X
+            </td>
+            <td class="  button-column">
+              <a class="btn btn-default" href="Edit/1">Edit</a>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+
+
+
+
+
+
+
+
+    </div>
+
+  </div>
+</div>

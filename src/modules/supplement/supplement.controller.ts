@@ -10,6 +10,7 @@ import {
   Delete,
   ParseUUIDPipe,
   Logger,
+  Query,
 } from '@nestjs/common';
 import { SupplementService } from './supplement.service';
 import { CreateSupplementDto } from './dto/create-supplement.dto';
@@ -17,6 +18,7 @@ import { UpdateSupplementDto } from './dto/update-supplement.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateBookDto } from '../book/dto/create-book.dto';
 import { UpdateBookDto } from '../book/dto/update-book.dto';
+import { QuerySupplementDto } from './dto/query-supplement.dto';
 
 @ApiTags('Supplement')
 @Controller('supplement')
@@ -40,6 +42,22 @@ export class SupplementController {
     }
   }
 
+  // Get all supplements
+  @Get()
+  async findAll(@Res() res: any) {
+    try {
+      const supplements = await this.supplementService.findAll();
+      res.status(HttpStatus.OK);
+      res.render('supplement', {
+        message: 'Get data successfully',
+        supplements,
+      });
+    } catch (error) {
+      this.logger.error(error);
+      return res.status(error.status).send(error.message);
+    }
+  }
+
   // Import supplements from CSV or Excel file
   @Post('import')
   async import(@Res() res: any) {
@@ -52,13 +70,15 @@ export class SupplementController {
     }
   }
 
-  // Get all supplements
-  @Get()
-  async findAll(@Res() res: any) {
+  // Filter Query supplement by name, supplier, date, month, year
+  @Get('filter')
+  async filter(@Query() filter: QuerySupplementDto, @Res() res: any) {
     try {
-      const supplements = await this.supplementService.findAll();
-      res.status(HttpStatus.OK);
-      res.render('pages/supplement', { supplements });
+      const supplements = await this.supplementService.filter(filter);
+      return res.status(HttpStatus.OK).render('supplement', {
+        message: 'Filter data successfully',
+        supplements,
+      });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

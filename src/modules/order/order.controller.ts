@@ -6,6 +6,8 @@ import {
   Patch,
   Param,
   ParseUUIDPipe,
+  Res,
+  HttpStatus,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -25,8 +27,9 @@ export class OrderController {
 
   // Get all orders
   @Get()
-  findAll() {
-    return this.orderService.findAll();
+  findAll(@Res() res: any) {
+    const orders = this.orderService.findAll();
+    res.status(HttpStatus.OK).render('order', { orders });
   }
 
   // Get an order by id

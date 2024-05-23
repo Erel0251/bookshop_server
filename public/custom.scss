@@ -1,0 +1,20 @@
+// Custom.scss
+// Option A: Include all of Bootstrap
+
+// Include any default variable overrides here (though functions won't be available)
+
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+// Then add additional custom code here
+$custom-colors: (
+  "primary":    $blue-400,
+  "secondary":  $gray-400,
+  "success":    $green-400,
+  "info":       $cyan-400,
+  "warning":    $yellow-400,
+  "danger":     $red-400,
+  "light":      $gray-100,
+  "dark":       $gray-900
+);
+
+$theme-colors: map-merge($theme-colors, $custom-colors); 

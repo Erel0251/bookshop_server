@@ -24,6 +24,7 @@ import { SupplementModule } from './modules/supplement/supplement.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -74,6 +75,7 @@ import { AdminModule } from './modules/admin/admin.module';
     SupplementModule,
     AdminModule,
   ],
+  controllers: [AppController],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer) {
