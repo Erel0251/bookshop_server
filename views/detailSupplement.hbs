@@ -9,7 +9,7 @@
       <p>Supplier: {{supplement.supplier}}</p>
       <p>Date: {{formatDate supplement.date}}</p>
       <p>Total Quantity: {{supplement.total_quantity}}</p>
-      <p>Total Price: {{supplement.total_price}}</p>
+      <p>Total Price: {{formatPrice supplement.total_price}}</p>
     </div>
   </div>
 
@@ -64,7 +64,7 @@
           <th scope="row">{{inc @index}}</th>
           <td>{{this.books.title}}</td>
           <td>{{this.quantity}}</td>
-          <td>{{this.price}}</td>
+          <td>{{formatPrice this.price}}</td>
           <td><button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button></td>
         </tr>
         {{/each}}

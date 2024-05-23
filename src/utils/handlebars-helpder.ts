@@ -27,3 +27,7 @@ export const formatName = (name: string) => {
     .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(' ');
 };
+
+export const formatPrice = (price: any) => {
+  return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+};

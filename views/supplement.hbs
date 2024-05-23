@@ -207,7 +207,7 @@
           <td>{{name}}</td>
           <td>{{supplier}}</td>
           <td>{{showNum total_quantity}}</td>
-          <td>{{showNum total_price}}</td>
+          <td>{{formatPrice total_price}}</td>
           <td>{{formatDate date}}</td>
           <td>
             <a class="btn btn-outline-info py-0" href="/{{id}}">View</a>
@@ -235,7 +235,7 @@
                   <td>{{inc @index}}</td>
                   <td>{{this.books.title}}</td>
                   <td>{{this.quantity}}</td>
-                  <td>{{this.price}}</td>
+                  <td>{{formatPrice this.price}}</td>
                 </tr>
                 {{/each}}
               </tbody>

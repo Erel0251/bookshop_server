@@ -11,6 +11,7 @@ import {
   absoluteUrl,
   formatDate,
   formatName,
+  formatPrice,
   indexOne,
   showNum,
 } from './utils/handlebars-helpder';
@@ -42,6 +43,7 @@ async function bootstrap() {
   hbs.registerHelper('lowerCase', (str: string) => str.toLowerCase());
   hbs.registerHelper('formatName', formatName);
   hbs.registerHelper('json', (context: any) => JSON.stringify(context));
+  hbs.registerHelper('formatPrice', formatPrice);
 
   await app.listen(configService.get('PORT'), () => {
     const logger = app.get(Logger);
