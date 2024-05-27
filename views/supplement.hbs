@@ -207,7 +207,7 @@
           <td>{{name}}</td>
           <td>{{supplier}}</td>
           <td>{{showNum total_quantity}}</td>
-          <td>{{formatPrice total_price}}</td>
+          <td>{{formatPrice total_price currency}}</td>
           <td>{{formatDate date}}</td>
           <td>
             <a class="btn btn-outline-info py-0" href="/{{id}}">View</a>
@@ -246,10 +246,7 @@
       </tbody>
     </table>
   </div>
-
-
-
-  {{> createSupplement}}
-
-
 </div>
+
+
+{{> supplement/createSupplement}}

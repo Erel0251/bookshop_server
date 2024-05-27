@@ -51,8 +51,7 @@ export class SupplementController {
   async findAll(@Res() res: any) {
     try {
       const supplements = await this.supplementService.findAll();
-      res.status(HttpStatus.OK);
-      res.render('supplement', {
+      res.status(HttpStatus.OK).render('supplement', {
         message: 'Get data successfully',
         supplements,
       });
