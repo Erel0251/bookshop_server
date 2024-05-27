@@ -1,6 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { PromotionController } from './promotion.controller';
 import { PromotionService } from './promotion.service';
+import { BookService } from '../book/book.service';
 
 describe('PromotionController', () => {
   let controller: PromotionController;
@@ -11,6 +12,10 @@ describe('PromotionController', () => {
       providers: [
         {
           provide: PromotionService,
+          useValue: {},
+        },
+        {
+          provide: BookService,
           useValue: {},
         },
       ],
