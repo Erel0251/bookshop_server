@@ -5,7 +5,7 @@ import { Author } from '../author/entities/author.entity';
 import { Category } from '../category/entities/category.entity';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { Review } from '../review/entities/review.entity';
-
+import { QueryBookDto } from './dto/query-book.dto';
 @Resolver(() => Book)
 export class BookResolver {
   constructor(private bookService: BookService) {}
@@ -17,7 +17,8 @@ export class BookResolver {
     @Args('limit', { type: () => Number, nullable: true, defaultValue: 20 })
     limit: number,
   ): Promise<Book[]> {
-    return await this.bookService.findAll(offset, limit);
+    const query = new QueryBookDto({ offset, limit });
+    return await this.bookService.findAll(query);
   }
 
   @Query(() => Book, { name: 'book' })

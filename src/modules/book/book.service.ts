@@ -51,8 +51,39 @@ export class BookService {
     await this.book.update(id, updateBookDto);
   }
 
-  async findAll(offset: number = 0, limit: number = 20): Promise<Book[]> {
-    return await this.book.find({ skip: offset, take: limit });
+  async findAll(req?: QueryBookDto): Promise<Book[]> {
+    const filter = new QueryBookDto(req);
+    const query = this.book.createQueryBuilder('book');
+
+    Maybe.fromFalsy(filter.title).ifJust((title) =>
+      query.andWhere('book.title LIKE :title', {
+        title: `%${title}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.isbn).ifJust((isbn) =>
+      query.andWhere('book.isbn LIKE :isbn', {
+        isbn: `%${isbn}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.publisher).ifJust((publisher) =>
+      query.andWhere('book.publisher LIKE :publisher', {
+        publisher: `%${publisher}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.status).ifJust((status) =>
+      query.andWhere('book.status LIKE :status', {
+        status: `%${status}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.offset).ifJust((offset) => query.offset(offset));
+
+    Maybe.fromFalsy(filter.limit).ifJust((limit) => query.limit(limit));
+
+    return await query.getMany();
   }
 
   async findOne(id: string): Promise<Book> {
@@ -121,35 +152,5 @@ export class BookService {
     const book = await this.book.findOne({ where: { id } });
     book.is_deleted = true;
     await this.book.save(book);
-  }
-
-  async filter(filter: QueryBookDto) {
-    const query = this.book.createQueryBuilder('book');
-
-    Maybe.fromFalsy(filter.title).ifJust((title) =>
-      query.andWhere('book.title LIKE :title', {
-        title: `%${title}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.isbn).ifJust((isbn) =>
-      query.andWhere('book.isbn LIKE :isbn', {
-        isbn: `%${isbn}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.publisher).ifJust((publisher) =>
-      query.andWhere('book.publisher LIKE :publisher', {
-        publisher: `%${publisher}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.status).ifJust((status) =>
-      query.andWhere('book.status LIKE :status', {
-        status: `%${status}%`,
-      }),
-    );
-
-    return await query.getMany();
   }
 }

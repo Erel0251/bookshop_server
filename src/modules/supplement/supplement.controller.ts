@@ -48,9 +48,9 @@ export class SupplementController {
 
   // Get all supplements
   @Get()
-  async findAll(@Res() res: any) {
+  async findAll(@Query() query: QuerySupplementDto, @Res() res: any) {
     try {
-      const supplements = await this.supplementService.findAll();
+      const supplements = await this.supplementService.findAll(query);
       res.status(HttpStatus.OK).render('supplement', {
         message: 'Get data successfully',
         supplements,
@@ -67,21 +67,6 @@ export class SupplementController {
     try {
       //await this.supplementService.import();
       return res.status(HttpStatus.CREATED).send();
-    } catch (error) {
-      this.logger.error(error);
-      return res.status(error.status).send(error.message);
-    }
-  }
-
-  // Filter Query supplement by name, supplier, date, month, year
-  @Get('filter')
-  async filter(@Query() filter: QuerySupplementDto, @Res() res: any) {
-    try {
-      const supplements = await this.supplementService.filter(filter);
-      return res.status(HttpStatus.OK).render('supplement', {
-        message: 'Filter data successfully',
-        supplements,
-      });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

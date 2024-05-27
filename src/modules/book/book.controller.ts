@@ -38,30 +38,14 @@ export class BookController {
   }
 
   @Get()
-  async findAll(@Res() res: any) {
-    const books = await this.bookService.findAll();
+  async findAll(@Query() req: QueryBookDto, @Res() res: any) {
+    const books = await this.bookService.findAll(req);
     const statuses = Object.values(BookStatus);
     res.status(HttpStatus.OK).render('book', {
       message: 'Get data successfully',
       books,
       statuses,
     });
-  }
-
-  @Get('filter')
-  async filter(@Query() req: QueryBookDto, @Res() res: any) {
-    try {
-      const books = await this.bookService.filter(req);
-      const statuses = Object.values(BookStatus);
-      return res.status(HttpStatus.OK).render('book', {
-        message: 'Filter data successfully',
-        books,
-        statuses,
-      });
-    } catch (error) {
-      this.logger.error(error);
-      return res.status(error.status).send(error.message);
-    }
   }
 
   @Get(':id')

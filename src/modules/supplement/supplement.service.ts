@@ -37,11 +37,53 @@ export class SupplementService {
     return this.supplementRepository.save(supplement);
   }
 
-  async findAll(): Promise<Supplement[]> {
-    return await this.supplementRepository.find({
-      order: { created_at: 'DESC' },
-      relations: ['supplement_details', 'supplement_details.books'],
-    });
+  async findAll(req: QuerySupplementDto): Promise<Supplement[]> {
+    const filter = new QuerySupplementDto(req);
+    const query = this.supplementRepository.createQueryBuilder('supplement');
+
+    Maybe.fromFalsy(filter.name).ifJust((name) =>
+      query.andWhere('supplement.name LIKE :name', {
+        name: `%${name}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.supplier).ifJust((supplier) =>
+      query.andWhere('supplement.supplier LIKE :supplier', {
+        supplier: `%${supplier}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.date).ifJust((date) =>
+      query.andWhere('supplement.date::text LIKE :date', {
+        date: `%${date}%`,
+      }),
+    );
+
+    Maybe.fromFalsy(filter.month).ifJust((month) =>
+      query.andWhere('EXTRACT(MONTH FROM supplement.date) = :month', {
+        month: parseInt(month),
+      }),
+    );
+
+    Maybe.fromFalsy(filter.year).ifJust((year) =>
+      query.andWhere('EXTRACT(YEAR FROM supplement.date) = :year', {
+        year: parseInt(year),
+      }),
+    );
+
+    Maybe.fromFalsy(filter.sort).ifJust((sort) =>
+      query.orderBy(`supplement.${filter.orderByName}`, sort),
+    );
+    Maybe.fromFalsy(filter.offset).ifJust((offset) => query.offset(offset));
+    Maybe.fromFalsy(filter.limit).ifJust((limit) => query.limit(limit));
+
+    query.leftJoinAndSelect(
+      'supplement.supplement_details',
+      'supplement_details',
+    );
+    query.leftJoinAndSelect('supplement_details.books', 'books');
+
+    return await query.getMany();
   }
 
   async findOne(id: string): Promise<Supplement | Error> {
@@ -207,58 +249,5 @@ export class SupplementService {
     );
     await this.supplementRepository.save(supplement);
     // await this.supplementDetailRepository.remove(supplementDetail);
-  }
-
-  async filter(filter: QuerySupplementDto): Promise<Supplement[]> {
-    const query = this.supplementRepository.createQueryBuilder('supplement');
-
-    Maybe.fromFalsy(filter.name).ifJust((name) =>
-      query.andWhere('supplement.name LIKE :name', {
-        name: `%${name}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.supplier).ifJust((supplier) =>
-      query.andWhere('supplement.supplier LIKE :supplier', {
-        supplier: `%${supplier}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.date).ifJust((date) =>
-      query.andWhere('supplement.date::text LIKE :date', {
-        date: `%${date}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.month).ifJust((month) =>
-      query.andWhere('EXTRACT(MONTH FROM supplement.date) = :month', {
-        month: parseInt(month),
-      }),
-    );
-
-    Maybe.fromFalsy(filter.year).ifJust((year) =>
-      query.andWhere('EXTRACT(YEAR FROM supplement.date) = :year', {
-        year: parseInt(year),
-      }),
-    );
-
-    return await query.getMany();
-
-    /*
-    return await this.supplementRepository
-      .createQueryBuilder('supplement')
-      .where('supplement.name LIKE :name', { name: `%${filter.name}%` })
-      .where('supplement.supplier LIKE :supplier', {
-        supplier: `%${filter.supplier}%`,
-      })
-      .where('supplement.date::text LIKE :date', { date: `%${filter.date}%` })
-      .where('EXTRACT(MONTH FROM supplement.date) = :month', {
-        month: parseInt(filter.month),
-      })
-      .where('EXTRACT(YEAR FROM supplement.date) = :year', {
-        year: parseInt(filter.year),
-      })
-      .getMany();
-      */
   }
 }

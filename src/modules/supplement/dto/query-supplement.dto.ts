@@ -1,6 +1,7 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
 import { IsDate, IsNumberString, IsString } from 'class-validator';
-export class QuerySupplementDto {
+import { CommonDto } from '../../../shared/dto/common.dto';
+export class QuerySupplementDto extends CommonDto {
   @IsString()
   @ApiPropertyOptional()
   readonly name?: string;
@@ -20,4 +21,13 @@ export class QuerySupplementDto {
   @IsNumberString()
   @ApiPropertyOptional()
   readonly year?: string;
+
+  @IsString()
+  @ApiPropertyOptional()
+  readonly orderByName?: string = 'id';
+
+  constructor(partial: Partial<QuerySupplementDto>) {
+    super();
+    Object.assign(this, partial);
+  }
 }
