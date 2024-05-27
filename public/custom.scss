@@ -90,3 +90,9 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     height: auto;
     object-fit: cover;
 }
+
+.icon-invert {
+  width: 32;
+  height: 32;
+  filter: invert(1);
+}
