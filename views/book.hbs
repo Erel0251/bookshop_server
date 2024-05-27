@@ -5,7 +5,7 @@
   <div class="d-flex justify-content-between align-items-center m-4">
     <h2 class="text-left">Book Inventory</h2>
     <div class="d-flex justify-content-evenly gap-3">
-      <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createSupplement">Create</div>
+      <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createBook">Create</div>
       <div class="btn btn-outline-success">Import</div>
     </div>
   </div>
@@ -29,7 +29,7 @@
         <label for="filterStatus">Status</label>
         <select id="filterStatus" name="status" form="queryBook" class="form-select">
           {{#each statuses}}
-            <option value="{{this}}">{{formatName this}}</option>
+          <option value="{{this}}">{{formatName this}}</option>
           {{/each}}
         </select>
       </div>
@@ -49,6 +49,7 @@
           <th>Status</th>
           <th>Currency</th>
           <th>Inventory</th>
+          <th>Action</th>
         </tr>
       </thead>
       <tbody id="bookTable">
@@ -65,18 +66,25 @@
         </tr>
         <!-- Add more rows as needed -->
         {{#each books}}
-        <tr>
-          <td><img src="{{img_urls.[0]}}" class="img-thumbnail" style="width: 150px; height: auto" alt="Book Image"></td>
-          <td>{{formatName title}}</td>
-          <td>{{formatName publisher}}</td>
-          <td>{{isbn}}</td>
-          <td>{{formatPrice price}}</td>
-          <td>{{formatName status}}</td>
-          <td>{{currency}}</td>
+        <tr data-book-id="{{id}}">
+          <td><img src="{{img_urls.[0]}}" class="img-thumbnail cover-image" alt="Book Image"></td>
+          <td class="editable">{{formatName title}}</td>
+          <td class="editable">{{formatName publisher}}</td>
+          <td class="editable">{{isbn}}</td>
+          <td class="editable" data-price="{{price}}">{{formatPrice price currency}}</td>
+          <td class="editable">{{formatName status}}</td>
+          <td class="editable">{{currency}}</td>
           <td>{{inventory}}</td>
+          <td>
+            <button class="btn btn-primary editBtn">Edit</button>
+            <button class="btn btn-success saveBtn" disabled>Save</button>
+          </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
   </div>
 </div>
+
+{{> createBook}}
+{{> editBook}}

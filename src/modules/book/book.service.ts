@@ -46,7 +46,8 @@ export class BookService {
   }
 
   async update(id: string, updateBookDto: UpdateBookDto): Promise<void> {
-    updateBookDto.title = updateBookDto.title.toLowerCase();
+    updateBookDto.title =
+      updateBookDto.title ?? updateBookDto.title.toLowerCase();
     await this.book.update(id, updateBookDto);
   }
 

@@ -37,6 +37,7 @@ type Book {
   is_deleted: Boolean!
   buy_count: Int!
   inventory: Int!
+  is_published: Boolean!
   category: Category!
   authors: [Author!]!
   reviews: [Review!]!

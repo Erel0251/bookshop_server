@@ -84,3 +84,9 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
       background-color: #bee5eb;
     }
 }
+
+.cover-image {
+    width: 150px; 
+    height: auto;
+    object-fit: cover;
+}

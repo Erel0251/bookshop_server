@@ -28,6 +28,6 @@ export const formatName = (name: string) => {
     .join(' ');
 };
 
-export const formatPrice = (price: any) => {
-  return price.toLocaleString('vi-VN', { style: 'currency', currency: 'VND' });
+export const formatPrice = (price: any = 0, currency: string = 'VND') => {
+  return price.toLocaleString('vi-VN', { style: 'currency', currency });
 };

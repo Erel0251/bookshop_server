@@ -76,12 +76,11 @@ export class BookController {
   }
 
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateBookDto: UpdateBookDto,
   ) {
-    console.log(updateBookDto);
-    console.log(id);
+    await this.bookService.update(id, updateBookDto);
   }
 
   @Get('total')

@@ -47,7 +47,7 @@ export class Book extends CommonEntity {
   price: number;
 
   @Field()
-  @Column({ type: 'text', default: BookStatus.AVAILABLE })
+  @Column({ type: 'text', default: BookStatus.COMING_SOON })
   status: BookStatus;
 
   @Field()
@@ -69,6 +69,10 @@ export class Book extends CommonEntity {
   @Field(() => Int)
   @Column({ type: 'integer', default: 0 })
   inventory: number;
+
+  @Field(() => Boolean)
+  @Column({ type: 'boolean', default: false })
+  is_published: boolean;
 
   @Field(() => Category)
   @ManyToOne(() => Category, (category) => category.books)

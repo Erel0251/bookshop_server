@@ -37,15 +37,15 @@ export class CreateBookDto {
   status: BookStatus;
 
   @IsString()
-  @ApiProperty()
+  @ApiProperty({ default: 'VND' })
   currency: string;
 
   @IsBoolean()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ default: false })
   is_recommended?: boolean;
 
   @IsNumber()
-  @ApiPropertyOptional()
+  @ApiPropertyOptional({ default: 0 })
   inventory?: number;
 
   @IsString()

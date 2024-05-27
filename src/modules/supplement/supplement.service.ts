@@ -113,18 +113,26 @@ export class SupplementService {
       where: { id },
     });
     const book = await this.bookService.findOne(bookUpdate.id);
+
     if (!supplement) {
       throw new Error('Supplement not found');
     }
     if (!book) {
       throw new Error('Book not found');
     }
+
     book.inventory += bookUpdate.supplement_detail?.quantity;
     const detail = this.supplementDetailRepository.create(
       bookUpdate.supplement_detail,
     );
     detail.books = book;
     detail.supplements = supplement;
+
+    supplement.total_quantity += bookUpdate.supplement_detail?.quantity;
+    supplement.total_price += bookUpdate.supplement_detail?.price;
+    supplement.supplement_details.push(detail);
+
+    await this.supplementRepository.save(supplement);
     await this.supplementDetailRepository.save(detail);
     await this.bookService.update(book.id, book);
 

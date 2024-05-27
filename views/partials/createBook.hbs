@@ -1,0 +1,87 @@
+<!-- Modal -->
+<div class="modal fade" id="createBook" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Submit Book Information</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="bookForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="imageUrl" class="form-label">URL of Images</label>
+            <input type="url" class="form-control" id="imageUrl" required>
+          </div>
+          <div class="mb-3">
+            <label for="publisher" class="form-label">Publisher Name</label>
+            <input type="text" class="form-control" id="publisher" required>
+          </div>
+          <div class="mb-3">
+            <label for="overview" class="form-label">Overview (optional)</label>
+            <textarea class="form-control" id="overview" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="isbn" class="form-label">ISBN</label>
+            <input type="text" class="form-control" id="isbn">
+          </div>
+          <div class="mb-3">
+            <label for="price" class="form-label">Price</label>
+            <input type="number" class="form-control" id="price" required>
+          </div>
+          <div class="mb-3">
+            <label for="currency" class="form-label">Currency (optional)</label>
+            <input type="text" class="form-control" id="currency">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+document.getElementById('submitForm').addEventListener('click', function() {
+    const name = document.getElementById('name').value;
+    const imageUrl = document.getElementById('imageUrl').value;
+    const publisher = document.getElementById('publisher').value;
+    const overview = document.getElementById('overview').value;
+    const isbn = document.getElementById('isbn').value;
+    const price = document.getElementById('price').value;
+    const currency = document.getElementById('currency').value;
+
+    const data = {
+        title: name,
+        img_urls: [imageUrl],
+        publisher: publisher,
+        overview: overview,
+        isbn: isbn,
+        price: price,
+        currency: currency || 'VND'
+    };
+
+    fetch('/book', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        // Optionally close the modal after successful submission
+        var myModalEl = document.getElementById('exampleModal');
+        var modal = bootstrap.Modal.getInstance(myModalEl);
+        modal.hide();
+    })
+    .catch((error) => {
+        console.error('Error:', error);
+    });
+});
+</script>
