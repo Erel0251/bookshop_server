@@ -36,7 +36,9 @@ export class CategoryController {
   async create(@Body() createCategoryDto: CreateCategoryDto, @Res() res: any) {
     try {
       await this.categoryService.create(createCategoryDto);
-      return res.status(HttpStatus.CREATED).send();
+      return res
+        .status(HttpStatus.CREATED)
+        .send({ message: 'Create category successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -79,7 +81,9 @@ export class CategoryController {
   ) {
     try {
       await this.categoryService.update(id, updateCategoryDto);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Update category successfully' });
     } catch (error) {
       if (error.message === 'children exist') {
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);
@@ -94,7 +98,9 @@ export class CategoryController {
   async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       await this.categoryService.remove(id);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Delete category successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -126,7 +132,9 @@ export class CategoryController {
     try {
       const book = await this.bookService.findOne(bookId);
       await this.categoryService.addBookToCategory(id, book);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Add book to category successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -143,7 +151,9 @@ export class CategoryController {
     try {
       const book = await this.bookService.findOne(bookId);
       await this.categoryService.removeBookFromCategory(id, book);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Remove book from category successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

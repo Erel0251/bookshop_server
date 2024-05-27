@@ -25,15 +25,16 @@ export class BookController {
 
   private readonly logger = new Logger(BookController.name);
 
-  // TODO: Remove or comment, book only created when supplement is created or updated
   @Post()
   async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
     try {
       await this.bookService.create(createBookDto);
-      res.status(HttpStatus.CREATED).send();
+      res
+        .status(HttpStatus.CREATED)
+        .send({ message: 'Create book successfully' });
     } catch (error) {
       this.logger.error(error);
-      res.status(error.status).send();
+      res.status(error.status).send({ message: error.message });
     }
   }
 

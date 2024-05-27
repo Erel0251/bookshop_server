@@ -39,7 +39,9 @@ export class SupplementController {
   ) {
     try {
       await this.supplementService.create(createSupplementDto);
-      return res.status(HttpStatus.CREATED).send();
+      return res
+        .status(HttpStatus.CREATED)
+        .send({ message: 'Create supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -66,7 +68,9 @@ export class SupplementController {
   async import(@Res() res: any) {
     try {
       //await this.supplementService.import();
-      return res.status(HttpStatus.CREATED).send();
+      return res
+        .status(HttpStatus.NOT_IMPLEMENTED)
+        .send({ message: 'Not implemented' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -99,7 +103,9 @@ export class SupplementController {
   ) {
     try {
       await this.supplementService.update(id, updateSupplementDto);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Update supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -111,7 +117,9 @@ export class SupplementController {
   async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       await this.supplementService.remove(id);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Delete supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -127,7 +135,9 @@ export class SupplementController {
   ) {
     try {
       await this.supplementService.createBookInSupplement(id, book);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Create book in supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -143,7 +153,9 @@ export class SupplementController {
   ) {
     try {
       await this.supplementService.addBook(id, book);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Add book to supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -159,7 +171,9 @@ export class SupplementController {
   ) {
     try {
       await this.supplementService.updateBook(id, book);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Update book in supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -175,7 +189,9 @@ export class SupplementController {
   ) {
     try {
       await this.supplementService.removeBook(id, bookId);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Remove book from supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

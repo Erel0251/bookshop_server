@@ -10,7 +10,9 @@ import * as hbs from 'hbs';
 import { registerHelpers } from './utils/handlebars-helpder';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    bufferLogs: true,
+  });
   const configService = app.get(ConfigService);
   const config = new DocumentBuilder()
     .setTitle('Bookshop API')
@@ -43,6 +45,7 @@ async function bootstrap() {
     logger.log(
       `GraphQL is running on http://localhost:${configService.get('PORT')}/graphql`,
     );
+    logger.log(`Redis is running on port: ${configService.get('redis.port')} `);
   });
 }
 bootstrap();

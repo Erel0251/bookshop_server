@@ -80,7 +80,7 @@ export class UserController {
   ) {
     try {
       await this.userService.addBookToCart(id, product);
-      return res.status(HttpStatus.OK).send();
+      return res.status(HttpStatus.OK).send({ message: 'Item added to cart' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -96,7 +96,7 @@ export class UserController {
   ) {
     try {
       await this.userService.updateCartItem(id, product);
-      return res.status(HttpStatus.OK).send();
+      return res.status(HttpStatus.OK).send({ message: 'Cart updated' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -112,7 +112,9 @@ export class UserController {
   ) {
     try {
       await this.userService.removeCartItem(id, productId);
-      return res.status(HttpStatus.OK).send();
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Item removed from cart' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

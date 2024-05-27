@@ -78,7 +78,7 @@ export class AuthorController {
   ) {
     try {
       await this.authorService.update(id, author);
-      res.status(HttpStatus.ACCEPTED).send();
+      res.status(HttpStatus.ACCEPTED).send({ message: 'Author updated' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -89,7 +89,7 @@ export class AuthorController {
   async delete(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       await this.authorService.delete(id);
-      res.status(HttpStatus.ACCEPTED).send();
+      res.status(HttpStatus.ACCEPTED).send({ message: 'Author deleted' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);

@@ -36,7 +36,9 @@ export class PromotionController {
   ) {
     try {
       this.promotionService.create(createPromotionDto);
-      res.status(HttpStatus.CREATED).send();
+      res
+        .status(HttpStatus.CREATED)
+        .send({ message: 'Create promotion successfully' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -80,7 +82,9 @@ export class PromotionController {
   ) {
     try {
       this.promotionService.update(id, updatePromotionDto);
-      res.status(HttpStatus.OK).send();
+      res
+        .status(HttpStatus.OK)
+        .send({ message: 'Update promotion successfully' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -92,7 +96,9 @@ export class PromotionController {
   async delete(@Param('id') id: string, @Res() res: any) {
     try {
       await this.promotionService.delete(id);
-      res.status(HttpStatus.OK).send();
+      res
+        .status(HttpStatus.OK)
+        .send({ message: 'Delete promotion successfully' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -113,7 +119,9 @@ export class PromotionController {
         bookId,
         createPromotionBookDto,
       );
-      res.status(HttpStatus.CREATED).send();
+      res
+        .status(HttpStatus.CREATED)
+        .send({ message: 'Add book to promotion successfully' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -129,7 +137,9 @@ export class PromotionController {
   ) {
     try {
       this.promotionService.updatePromotionBook(id, promotionBook);
-      res.status(HttpStatus.OK).send();
+      res
+        .status(HttpStatus.OK)
+        .send({ message: 'Update promotion book successfully' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -145,7 +155,9 @@ export class PromotionController {
   ) {
     try {
       this.promotionService.deletePromotionBook(id, bookId);
-      res.status(HttpStatus.OK).send();
+      res
+        .status(HttpStatus.OK)
+        .send({ message: 'Delete promotion book successfully' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
