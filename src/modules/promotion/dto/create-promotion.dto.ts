@@ -1,6 +1,7 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsDate, IsObject, IsString } from 'class-validator';
+import { IsDate, IsEnum, IsObject, IsString } from 'class-validator';
 import { UpdatePromotionBookDto } from './update-promotion-book.dto';
+import { PromotionType } from '../constants/promotion-type.enum';
 
 export class CreatePromotionDto {
   @IsString()
@@ -10,6 +11,10 @@ export class CreatePromotionDto {
   @IsString()
   @ApiPropertyOptional()
   description?: string;
+
+  @IsEnum(PromotionType)
+  @ApiProperty()
+  type: PromotionType;
 
   @IsDate()
   @ApiProperty()

@@ -172,7 +172,6 @@ export class SupplementService {
 
     supplement.total_quantity += bookUpdate.supplement_detail?.quantity;
     supplement.total_price += bookUpdate.supplement_detail?.price;
-    supplement.supplement_details.push(detail);
 
     await this.supplementRepository.save(supplement);
     await this.supplementDetailRepository.save(detail);

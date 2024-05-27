@@ -3,7 +3,7 @@
 
   <div class="d-flex justify-content-between align-items-center  m-4">
     <h2 class="text-left">Promotion</h2>
-    <div class="btn btn-outline-success ">Create</div>
+    <div class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#createPromotion">Create</div>
   </div>
 
   <div class="card m-4">
@@ -45,13 +45,9 @@
             <div class="col-md-8">
               <select class="form-control" data-val="true" data-val-required="The Discount type field is required."
                 id="SearchDiscountTypeId" name="SearchDiscountTypeId">
-                <option selected="selected" value="0">All</option>
-                <option value="1">Assigned to order total</option>
-                <option value="2">Assigned to products</option>
-                <option value="5">Assigned to categories</option>
-                <option value="6">Assigned to manufacturers</option>
-                <option value="10">Assigned to shipping</option>
-                <option value="20">Assigned to order subtotal</option>
+                <option value="" selected>All</option>
+                <option value="sale">Sale</option>
+                <option value="recommend">Recommend</option>
               </select>
             </div>
           </div>
@@ -115,55 +111,66 @@
 
   <div class="card m-4">
     <div class="card-body">
-      <table class="table table-bordered table-hover table-striped">
-        <thead>
+      <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
           <tr>
-            <th>Name</th>
-            <th>Promotion type</th>
-            <th>Discount</th>
-            <th>Start date</th>
-            <th>End date</th>
-            <th>Is active</th>
-            <th>Edit</th>
+            <th scope="col">Name</th>
+            <th scope="col">Description</th>
+            <th scope="col">Type</th>
+            <th scope="col">From</th>
+            <th scope="col">To</th>
+            <th scope="col">Number of Books</th>
+            <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody>
           <tr>
-            <td>Assigned to order total</td>
-            <td>sale</td>
-            <td>20%</td>
-            <td>01/01/2010 12:00:00 AM</td>
-            <td>01/01/2020 12:00:00 AM</td>
-            <td class="  text-center"><i class="fas fa-check true-icon" nop-value="true"></i>
+            <td>Summer Sale</td>
+            <td>Discounts on all summer reads</td>
+            <td>Sale</td>
+            <td>2024-06-01</td>
+            <td>2024-06-30</td>
+            <td>100</td>
+            <td>
+              <button class="btn btn-sm btn-primary">Edit</button>
+              <button class="btn btn-sm btn-info">View Detail</button>
+              <button class="btn btn-sm btn-danger">Delete</button>
             </td>
-            <td class="  button-column"><a class="btn btn-default" href="Edit/2"><i
-                  class="fas fa-pencil-alt"></i>Edit</a></td>
           </tr>
           <tr>
-            <td>Sample discount with coupon code</td>
-            <td>recommend</td>
-            <td>10 USD</td>
-            <td></td>
-            <td></td>
-            <td class="  text-center">
-              X
-            </td>
-            <td class="  button-column">
-              <a class="btn btn-default" href="Edit/1">Edit</a>
+            <td>Recommended Reads</td>
+            <td>Top picks by our staff</td>
+            <td>Recommend</td>
+            <td>2024-05-01</td>
+            <td>2024-12-31</td>
+            <td>50</td>
+            <td>
+              <button class="btn btn-sm btn-primary">Edit</button>
+              <button class="btn btn-sm btn-info">View Detail</button>
+              <button class="btn btn-sm btn-danger">Delete</button>
             </td>
           </tr>
+          <!-- Additional rows as needed -->
+          {{#each promotions}}
+          <tr>
+            <td>{{formatName name}}</td>
+            <td>{{description}}</td>
+            <td>{{formatName type}}</td>
+            <td>{{from}}</td>
+            <td>{{to}}</td>
+            <td>{{promotion_books.length}}</td>
+            <td>
+              <button class="btn btn-sm btn-primary">Edit</button>
+              <a class="btn btn-sm btn-info" href="/promotion/{{id}}">View</a>
+              <button class="btn btn-sm btn-danger">Delete</button>
+            </td>
+          </tr>
+          {{/each}}
         </tbody>
       </table>
-
-
-
-
-
-
-
-
-
     </div>
 
   </div>
 </div>
+
+{{> promotion/createPromotion}}

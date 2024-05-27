@@ -26,7 +26,9 @@ export class PromotionService {
   }
 
   async findAll(): Promise<Promotion[] | Error> {
-    return await this.promotion.find();
+    return await this.promotion.find({
+      relations: ['promotion_books', 'promotion_books.book'],
+    });
   }
 
   async findOne(id: string): Promise<Promotion | Error> {
@@ -72,6 +74,7 @@ export class PromotionService {
       throw new Error('Promotion not found');
     }
     const book = await Book.findOne({ where: { id: bookId } });
+    promotionBook.price = book.price;
     await this.promotionBook.save({ ...promotionBook, promotion, book });
   }
 

@@ -1,0 +1,124 @@
+<div class="col container">
+
+  <!-- Form Section -->
+
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Detail Promotion</div>
+    <div class="card-body p-4">
+      <p>Name: {{promotion.name}}</p>
+      <p>Type: {{formatName promotion.type}}</p>
+      <p>Description: {{promotion.description}}</p>
+      <p>From Date: {{formatDate promotion.from}}</p>
+      <p>To Date: {{formatDate promotion.to}}</p>
+    </div>
+  </div>
+
+
+  <!-- Add Book Section -->
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Add Book</div>
+    <div class="card-body">
+      <form id="add-book-form p-3">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="book-name" class="form-label">Book Name</label>
+            <input type="text" class="form-control" id="book-name" name="title" list="books" required>
+            <datalist id="books">
+              {{#each books}}
+              <option value="{{lowerCase this.title}}" data-id="{{this.id}}">{{formatName this.title}}</option>
+              {{/each}}
+            </datalist>
+          </div>
+          <div class="col-md-2">
+            <label for="book-quantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="book-quantity" name="bookQuantity" required>
+          </div>
+          <div class="col-md-2">
+            <label for="book-discount" class="form-label">Discount (%)</label>
+            <input type="number" class="form-control" id="book-discount" name="bookDiscount"
+              min="1" max="100" required>
+          </div>
+        </div>
+        <div class="row m-1">
+          <button type="button" class="btn btn-success" onclick="addPromotionBook()">Add Stored Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- List of Promotion Books -->
+  <div class="card m-3 p-4">
+    <h2>Promotion Books</h2>
+    <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Name</th>
+          <th scope="col">Price</th>
+          <th scope="col">Quantity</th>
+          <th scope="col">Discount</th>
+          <th scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody id="book-list">
+        {{#each promotion.promotion_books}}
+        <tr>
+          <th scope="row">{{inc @index}}</th>
+          <td>{{this.book.title}}</td>
+          <td>{{formatPrice this.price this.book.currency}}</td>
+          <td>{{this.quantity}}</td>
+          <td>{{formatDiscount this.discount}}</td>
+          <td><button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button></td>
+        </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+
+  function addPromotionBook() {
+    const bookName = document.getElementById('book-name').value;
+    const selectedOption = document.querySelector(`option[value="${bookName}"]`);
+    const bookId = selectedOption.getAttribute('data-id');
+    const bookQuantity = document.getElementById('book-quantity').value;
+    const bookDiscount = document.getElementById('book-discount').value;
+
+    const supplementDetail = {
+      quantity: bookQuantity,
+      discount: bookDiscount,
+    }
+
+    const url = '/promotion/{{promotion.id}}/book/' + bookId;
+
+    fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(supplementDetail),
+    })
+      .then(response => response.json())
+      .then(() => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  }
+
+
+  function editBook(index) {
+    /*
+    const book = books[index];
+    document.getElementById('book-name').value = book.name;
+    document.getElementById('book-quantity').value = book.quantity;
+    document.getElementById('book-price').value = book.price;
+
+    // Remove the book from the list for re-adding
+    books.splice(index, 1);
+    */
+  }
+</script>

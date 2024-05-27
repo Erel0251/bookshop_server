@@ -16,11 +16,15 @@ import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { CreatePromotionBookDto } from './dto/create-promotion-book.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { BookService } from '../book/book.service';
 
 @Controller('promotion')
 @ApiTags('Promotion')
 export class PromotionController {
-  constructor(private readonly promotionService: PromotionService) {}
+  constructor(
+    private readonly promotionService: PromotionService,
+    private readonly bookService: BookService,
+  ) {}
 
   private readonly logger = new Logger(PromotionController.name);
 
@@ -43,7 +47,7 @@ export class PromotionController {
   @Get()
   async findAll(@Res() res: any) {
     try {
-      const promotions = this.promotionService.findAll();
+      const promotions = await this.promotionService.findAll();
       res.status(HttpStatus.OK).render('promotion', { promotions });
     } catch (error) {
       this.logger.error(error);
@@ -55,8 +59,12 @@ export class PromotionController {
   @Get(':id')
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
-      const promotion = this.promotionService.findOne(id);
-      res.status(HttpStatus.OK).send(promotion);
+      const promotion = await this.promotionService.findOne(id);
+      const books = await this.bookService.findAll();
+      res.status(HttpStatus.OK).render('detailPromotion', {
+        promotion,
+        books,
+      });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);

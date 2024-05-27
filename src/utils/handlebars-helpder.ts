@@ -1,26 +1,16 @@
-export const showNum = (value?: number) => {
-  return value ? '0' : value;
-};
+import * as hbs from 'hbs';
 
-export const indexOne = (index: number) => {
-  return index + 1;
-};
-
-export const formatDate = (date: Date) => {
+const formatDate = (req: Date) => {
   // Format date to dd/mm/yyyy
+  const date = new Date(req);
   const day = date.getDate().toString().padStart(2, '0');
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
   const year = date.getFullYear();
   return `${day}/${month}/${year}`;
 };
 
-export const absoluteUrl = () => {
-  const req = window.location;
-  return `${req.protocol}:${req.port}//`;
-};
-
 // Format name to normal: '   nguyen van a  ' => 'Nguyen Van A'
-export const formatName = (name: string) => {
+const formatName = (name: string) => {
   return name
     .replace(/_/g, ' ')
     .split(' ')
@@ -28,13 +18,27 @@ export const formatName = (name: string) => {
     .join(' ');
 };
 
-export const formatPrice = (price: any = 0, currency: string = 'VND') => {
+const formatPrice = (price: any = 0, currency: string = 'VND') => {
   return price.toLocaleString('vi-VN', { style: 'currency', currency });
 };
 
-export const formatCategory = (children: string, parent?: string) => {
+const formatCategory = (children: string, parent?: string) => {
   if (!parent) {
     return children;
   }
   return `${parent} > ${children}`;
 };
+
+export function registerHelpers() {
+  hbs.registerHelper('showNum', (value) => (value ? value : '0'));
+  hbs.registerHelper('inc', (index) => index + 1);
+  hbs.registerHelper('formatDate', formatDate);
+  hbs.registerHelper('lowerCase', (str: string) => str.toLowerCase());
+  hbs.registerHelper('formatName', formatName);
+  hbs.registerHelper('json', (context) => JSON.stringify(context));
+  hbs.registerHelper('formatPrice', formatPrice);
+  hbs.registerHelper('formatCategory', formatCategory);
+  hbs.registerHelper('formatDiscount', (discount) =>
+    discount ? discount + '%' : '0%',
+  );
+}

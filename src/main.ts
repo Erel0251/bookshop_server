@@ -7,15 +7,7 @@ import { join } from 'path';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppModule } from './app.module';
 import * as hbs from 'hbs';
-import {
-  absoluteUrl,
-  formatCategory,
-  formatDate,
-  formatName,
-  formatPrice,
-  indexOne,
-  showNum,
-} from './utils/handlebars-helpder';
+import { registerHelpers } from './utils/handlebars-helpder';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -37,15 +29,7 @@ async function bootstrap() {
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
   app.setViewEngine('hbs');
-  hbs.registerHelper('showNum', showNum);
-  hbs.registerHelper('inc', indexOne);
-  hbs.registerHelper('formatDate', formatDate);
-  hbs.registerHelper('absoluteUrl', absoluteUrl);
-  hbs.registerHelper('lowerCase', (str: string) => str.toLowerCase());
-  hbs.registerHelper('formatName', formatName);
-  hbs.registerHelper('json', (context: any) => JSON.stringify(context));
-  hbs.registerHelper('formatPrice', formatPrice);
-  hbs.registerHelper('formatCategory', formatCategory);
+  registerHelpers();
 
   await app.listen(configService.get('PORT'), () => {
     const logger = app.get(Logger);
