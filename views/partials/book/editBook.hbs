@@ -110,9 +110,8 @@
         body: JSON.stringify(data)
       })
         .then(response => response.json())
-        .then(data => {
-          const editModal = new bootstrap.Modal(document.getElementById('editModal'));
-          editModal.hide();
+        .then(() => {
+          window.location.reload();
         })
         .catch((error) => {
           console.error('Error:', error);

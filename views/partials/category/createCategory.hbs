@@ -36,7 +36,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+        <button type="button" class="btn btn-primary" id="submitButton">Save changes</button>
       </div>
     </div>
   </div>
@@ -44,8 +44,8 @@
 
 <script>
   document.addEventListener('DOMContentLoaded', function () {
-    const saveChangesBtn = document.getElementById('saveChangesBtn');
-    saveChangesBtn.addEventListener('click', function () {
+    const submitBtn = document.getElementById('submitButton');
+    submitBtn.addEventListener('click', function () {
       const name = document.getElementById('categoryName').value;
       const description = document.getElementById('categoryDescription').value;
       const isPublished = document.getElementById('isPublished').value;

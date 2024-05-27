@@ -1,0 +1,105 @@
+<!-- Edit Category Modal -->
+
+<div class="modal fade" id="editCategory" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="categoryEditForm">
+          <div class="mb-3">
+            <label for="editName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="editName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="editDescription" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="editPublished" class="form-label">Published</label>
+            <select class="form-select" id="editPublished" required>
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editParent" class="form-label">Parent Category</label>
+            <select class="form-select" id="editParent">
+              <option value="">None</option>
+              {{#each categories}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.editBtn');
+    let currentRow = null;
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        currentRow = button.closest('tr');
+        const name = currentRow.children[1].innerText.replace(/.*\> /, ' ').trim();
+        const description = currentRow.children[2].innerText;
+        const isPublished = currentRow.children[3].innerText;
+        const parent = currentRow.children[1].innerText.indexOf('>') > -1 ? currentRow.children[1].innerText.replace(/ \>.*/, ' ').trim() : 'None';
+
+        //document.getElementById('editName').value = name;
+        document.getElementById('editName').value = name;
+        document.getElementById('editDescription').value = description;
+
+        const publishedSelect = document.getElementById('editPublished');
+        for (let i = 0; i < publishedSelect.options.length; i++) {
+          if (publishedSelect.options[i].innerText.toLowerCase() === isPublished) {
+            publishedSelect.selectedIndex = i;
+            break;
+          }
+        }
+
+        const parentSelect = document.getElementById('editParent');
+        for (let i = 0; i < parentSelect.options.length; i++) {
+          if (parentSelect.options[i].innerText === parent) {
+            parentSelect.selectedIndex = i;
+            break;
+          }
+        }
+      });
+    });
+
+    document.getElementById('saveChangesBtn').addEventListener('click', function () {
+      const categoryId = currentRow.getAttribute('data-category-id');
+      const data = {
+        name: document.getElementById('editName').value,
+        description: document.getElementById('editDescription').value,
+        is_published: document.getElementById('editPublished').value === 'true',
+        father_id: document.getElementById('editParent').value
+      };
+
+      fetch(`category/${categoryId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data =>{ window.location.reload();})
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+  });
+</script>

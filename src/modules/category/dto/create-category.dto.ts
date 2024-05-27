@@ -1,5 +1,11 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsObject,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class CreateCategoryDto {
   @IsString()
@@ -17,6 +23,10 @@ export class CreateCategoryDto {
   @IsUUID()
   @ApiPropertyOptional()
   father_id?: string;
+
+  @IsObject()
+  @ApiPropertyOptional()
+  father?: CreateCategoryDto;
 
   @IsArray()
   @ApiPropertyOptional({ type: () => [CreateCategoryDto] })

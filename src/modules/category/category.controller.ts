@@ -72,13 +72,14 @@ export class CategoryController {
 
   // Update a category
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
     @Res() res: any,
   ) {
     try {
-      return this.categoryService.update(id, updateCategoryDto);
+      await this.categoryService.update(id, updateCategoryDto);
+      return res.status(HttpStatus.OK).send();
     } catch (error) {
       if (error.message === 'children exist') {
         return res.status(HttpStatus.BAD_REQUEST).send(error.message);

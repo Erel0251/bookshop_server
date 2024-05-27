@@ -42,6 +42,13 @@ export class CategoryService {
     id: string,
     updateCategoryDto: UpdateCategoryDto,
   ): Promise<void | Error> {
+    if (updateCategoryDto.father_id) {
+      const father = await this.category.findOne({
+        where: { id: updateCategoryDto.father_id },
+      });
+      updateCategoryDto.father = father;
+    }
+    updateCategoryDto.father_id = undefined;
     await this.category.update(id, updateCategoryDto);
   }
 
