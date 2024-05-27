@@ -47,7 +47,7 @@
 </div>
 
 <script>
-document.getElementById('submitForm').addEventListener('click', function() {
+  document.getElementById('submitForm').addEventListener('click', function () {
     const name = document.getElementById('name').value;
     const imageUrl = document.getElementById('imageUrl').value;
     const publisher = document.getElementById('publisher').value;
@@ -57,31 +57,33 @@ document.getElementById('submitForm').addEventListener('click', function() {
     const currency = document.getElementById('currency').value;
 
     const data = {
-        title: name,
-        img_urls: [imageUrl],
-        publisher: publisher,
-        overview: overview,
-        isbn: isbn,
-        price: price,
-        currency: currency || 'VND'
+      title: name,
+      img_urls: [imageUrl],
+      publisher: publisher,
+      overview: overview,
+      isbn: isbn,
+      price: price,
+      currency: currency || 'VND'
     };
 
     fetch('/book', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     })
-    .then(response => response.json())
-    .then(data => {
-        // Optionally close the modal after successful submission
-        var myModalEl = document.getElementById('exampleModal');
-        var modal = bootstrap.Modal.getInstance(myModalEl);
-        modal.hide();
-    })
-    .catch((error) => {
+      .then(response => response.json())
+      .then(data => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch((error) => {
         console.error('Error:', error);
-    });
-});
+      });
+    // Optionally close the modal after successful submission
+    var myModalEl = document.getElementById('createBook');
+    var modal = bootstrap.Modal.getInstance(myModalEl);
+    modal.hide();
+  });
 </script>
