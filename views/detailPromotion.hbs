@@ -18,11 +18,11 @@
   <div class="card m-3">
     <div class="card-header h3 p-3">Add Book</div>
     <div class="card-body">
-      <form id="add-book-form p-3">
+      <form id="addBook" class="p-3">
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="book-name" class="form-label">Book Name</label>
-            <input type="text" class="form-control" id="book-name" name="title" list="books" required>
+            <input type="text" class="form-control" id="book-name" name="title" list="books" required />
             <datalist id="books">
               {{#each books}}
               <option value="{{lowerCase this.title}}" data-id="{{this.id}}">{{formatName this.title}}</option>
@@ -31,54 +31,81 @@
           </div>
           <div class="col-md-2">
             <label for="book-quantity" class="form-label">Quantity</label>
-            <input type="number" class="form-control" id="book-quantity" name="bookQuantity" required>
+            <input type="number" class="form-control" id="book-quantity" name="bookQuantity" required />
           </div>
           <div class="col-md-2">
             <label for="book-discount" class="form-label">Discount (%)</label>
-            <input type="number" class="form-control" id="book-discount" name="bookDiscount"
-              min="1" max="100" required>
+            <input type="number" class="form-control" id="book-discount" name="bookDiscount" min="1" max="100" required />
           </div>
         </div>
         <div class="row m-1">
-          <button type="button" class="btn btn-success" onclick="addPromotionBook()">Add Stored Book</button>
+          <button type="submit" class="btn btn-success" onclick="addPromotionBook()">Add Stored Book</button>
         </div>
       </form>
     </div>
   </div>
 
   <!-- List of Promotion Books -->
-  <div class="card m-3 p-4">
-    <h2>Promotion Books</h2>
-    <table class="table">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th scope="col">Name</th>
-          <th scope="col">Price</th>
-          <th scope="col">Quantity</th>
-          <th scope="col">Discount</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody id="book-list">
-        {{#each promotion.promotion_books}}
-        <tr>
-          <th scope="row">{{inc @index}}</th>
-          <td>{{this.book.title}}</td>
-          <td>{{formatPrice this.price this.book.currency}}</td>
-          <td>{{this.quantity}}</td>
-          <td>{{formatDiscount this.discount}}</td>
-          <td><button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button></td>
-        </tr>
-        {{/each}}
-      </tbody>
-    </table>
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Promotion Books</div>
+    <div class="m-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Quantity</th>
+            <th scope="col">Discount</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="book-list">
+          {{#each promotion.promotion_books}}
+          <tr>
+            <th scope="row">{{inc @index}}</th>
+            <td>{{this.book.title}}</td>
+            <td>{{formatPrice this.price this.book.currency}}</td>
+            <td>{{this.quantity}}</td>
+            <td>{{formatDiscount this.discount}}</td>
+            <td>
+              <button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
+              <button class="btn btn-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
+                data-bs-target="#confirmModal" data-book-id="{{this.book.id}}">Remove</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    </div>
   </div>
 </div>
 
+<div class="modal" tabindex="-1" id="confirmModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Remove Book</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are your sure you want to remove out of this promotion?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" id="confirmRemove">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
 
-  function addPromotionBook() {
+  document.getElementById('addBook').addEventListener('submit', function() {
+    event.preventDefault();
+    
     const bookName = document.getElementById('book-name').value;
     const selectedOption = document.querySelector(`option[value="${bookName}"]`);
     const bookId = selectedOption.getAttribute('data-id');
@@ -107,7 +134,7 @@
       .catch(error => {
         console.error('Error:', error);
       });
-  }
+  });
 
 
   function editBook(index) {
@@ -121,4 +148,30 @@
     books.splice(index, 1);
     */
   }
+
+  let bookId = null;
+  document.querySelectorAll('.removeBtn').forEach(button => {
+    button.addEventListener('click', function () {
+      bookId = button.getAttribute('data-book-id');
+      console.log(bookId);
+    });
+  });
+
+  const confirmRemoveBtn = document.getElementById('confirmRemove');
+  confirmRemoveBtn.addEventListener('click', function() {
+    fetch('/promotion/{{promotion.id}}/book/' + bookId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(() => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  })
 </script>

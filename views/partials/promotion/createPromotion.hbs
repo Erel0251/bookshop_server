@@ -1,81 +1,81 @@
-  <!-- The Modal -->
+<!-- The Modal -->
 <div class="modal fade" id="createPromotion" tabindex="-1" aria-labelledby="promotionModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="promotionModalLabel">Create New Promotion</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form id="promotionForm">
-            <div class="mb-3">
-              <label for="name" class="form-label">Name</label>
-              <input type="text" class="form-control" id="name" required>
-            </div>
-            <div class="mb-3">
-              <label for="description" class="form-label">Description</label>
-              <textarea class="form-control" id="description" rows="3"></textarea>
-            </div>
-            <div class="mb-3">
-              <label for="type" class="form-label">Type</label>
-              <select class="form-select" id="type" required>
-                <option value="sale" selected>Sale</option>
-                <option value="recommend">Recommend</option>
-              </select>
-            </div>
-            <div class="mb-3">
-              <label for="fromDate" class="form-label">From Date</label>
-              <input type="date" class="form-control" id="fromDate" required>
-            </div>
-            <div class="mb-3">
-              <label for="toDate" class="form-label">To Date</label>
-              <input type="date" class="form-control" id="toDate" required>
-            </div>
-            <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-              <button type="submit" class="btn btn-primary">Save</button>
-            </div>
-          </form>
-        </div>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="promotionModalLabel">Create New Promotion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="promotionForm">
+          <div class="mb-3">
+            <label for="name" class="form-label">Name</label>
+            <input type="text" class="form-control" id="name" required>
+          </div>
+          <div class="mb-3">
+            <label for="description" class="form-label">Description</label>
+            <textarea class="form-control" id="description" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="type" class="form-label">Type</label>
+            <select class="form-select" id="type" required>
+              <option value="sale" selected>Sale</option>
+              <option value="recommend">Recommend</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="fromDate" class="form-label">From Date</label>
+            <input type="date" class="form-control" id="fromDate" required>
+          </div>
+          <div class="mb-3">
+            <label for="toDate" class="form-label">To Date</label>
+            <input type="date" class="form-control" id="toDate" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Save</button>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
 <script>
-document.getElementById('promotionForm').addEventListener('submit', function(event) {
-  event.preventDefault();
+  document.getElementById('promotionForm').addEventListener('submit', function (event) {
+    event.preventDefault();
 
-  const name = document.getElementById('name').value;
-  const description = document.getElementById('description').value;
-  const type = document.getElementById('type').value.toUpperCase();
-  const fromDate = document.getElementById('fromDate').value;
-  const toDate = document.getElementById('toDate').value;
+    const name = document.getElementById('name').value;
+    const description = document.getElementById('description').value;
+    const type = document.getElementById('type').value.toUpperCase();
+    const fromDate = document.getElementById('fromDate').value;
+    const toDate = document.getElementById('toDate').value;
 
-  const promotionData = {
-    name: name,
-    description: description,
-    type: type,
-    from: fromDate,
-    to: toDate
-  };
+    const promotionData = {
+      name: name,
+      description: description,
+      type: type,
+      from: fromDate,
+      to: toDate
+    };
 
-  fetch('promotion', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(promotionData)
-  })
-  .then(response => response.json())
-  .then(data => {
-    console.log('Promotion created:', data);
-    // Optionally, you can close the modal and clear the form here
-    var promotionModal = new bootstrap.Modal(document.getElementById('promotionModal'));
-    promotionModal.hide();
-    document.getElementById('promotionForm').reset();
-  })
-  .catch(error => {
-    console.error('There was an error creating the promotion!', error);
+    fetch('promotion', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(promotionData)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log('Promotion created:', data);
+        // Optionally, you can close the modal and clear the form here
+        var promotionModal = new bootstrap.Modal(document.getElementById('promotionModal'));
+        promotionModal.hide();
+        document.getElementById('promotionForm').reset();
+      })
+      .catch(error => {
+        console.error('There was an error creating the promotion!', error);
+      });
   });
-});
 </script>
