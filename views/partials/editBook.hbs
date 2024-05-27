@@ -1,0 +1,122 @@
+<!-- Edit Modal -->
+<div class="modal fade" id="editBook" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editModalLabel">Edit Book</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="editForm">
+          <div class="mb-3">
+            <label for="editName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="editName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editURL" class="form-label">URL Images</label>
+            <input type="url" class="form-control" id="editURL" required>
+          </div>
+          <div class="mb-3">
+            <label for="editPublisher" class="form-label">Publisher Name</label>
+            <input type="text" class="form-control" id="editPublisher" required>
+          </div>
+          <div class="mb-3">
+            <label for="editOverview" class="form-label">Overview</label>
+            <textarea class="form-control" id="editOverview" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="editISBN" class="form-label">ISBN</label>
+            <input type="text" class="form-control" id="editISBN">
+          </div>
+          <div class="mb-3">
+            <label for="editPrice" class="form-label">Price</label>
+            <input type="number" class="form-control" id="editPrice" required>
+          </div>
+          <div class="mb-3">
+            <label for="editStatus" class="form-label">Status</label>
+            <select class="form-control" id="editStatus" required>
+              <option value="AVAILABLE">Available</option>
+              <option value="OUT_OF_STOCK">Out of Stock</option>
+              <option value="COMING_SOON">Coming Soon</option>
+              <option value="DISCOUNTINUED">Discountinued</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="editCurrency" class="form-label">Currency</label>
+            <input type="text" class="form-control" id="editCurrency">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Book Modal -->
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.editBtn');
+    let currentRow = null;
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        currentRow = button.closest('tr');
+        const url = currentRow.children[0].children[0].getAttribute('src');
+        const name = currentRow.children[1].innerText;
+        const publisher = currentRow.children[2].innerText;
+        const isbn = currentRow.children[3].innerText;
+        const price = currentRow.children[4].getAttribute('data-price');
+        const status = currentRow.children[5].innerText;
+        const currency = currentRow.children[6].innerText;
+
+        document.getElementById('editName').value = name;
+        document.getElementById('editURL').value = url;
+        document.getElementById('editPublisher').value = publisher;
+        document.getElementById('editISBN').value = isbn;
+        document.getElementById('editPrice').value = price;
+        document.getElementById('editCurrency').value = currency;
+
+        const statusSelect = document.getElementById('editStatus');
+        for (let i = 0; i < statusSelect.options.length; i++) {
+          if (statusSelect.options[i].innerText === status) {
+            statusSelect.selectedIndex = i;
+            break;
+          }
+        }
+      });
+    });
+
+    document.getElementById('saveChanges').addEventListener('click', function () {
+      const bookId = currentRow.getAttribute('data-book-id');
+      const data = {
+        title: document.getElementById('editName').value,
+        img_urls: [document.getElementById('editURL').value],
+        publisher: document.getElementById('editPublisher').value,
+        overview: document.getElementById('editOverview').value,
+        isbn: document.getElementById('editISBN').value,
+        price: document.getElementById('editPrice').value,
+        status: document.getElementById('editStatus').value,
+        currency: document.getElementById('editCurrency').value
+      };
+
+      fetch(`book/${bookId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => {
+          const editModal = new bootstrap.Modal(document.getElementById('editModal'));
+          editModal.hide();
+        })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+  });
+</script>

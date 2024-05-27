@@ -13,6 +13,7 @@ type Author {
 type Category {
   name: String!
   description: String
+  is_published: Boolean!
   books: [Book!]
   father: Category
   children: [Category!]
@@ -37,7 +38,6 @@ type Book {
   is_deleted: Boolean!
   buy_count: Int!
   inventory: Int!
-  is_published: Boolean!
   category: Category!
   authors: [Author!]!
   reviews: [Review!]!
