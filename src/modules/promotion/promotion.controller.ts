@@ -89,9 +89,9 @@ export class PromotionController {
 
   // Delete specific promotion event
   @Delete(':id')
-  async remove(@Param('id') id: string, @Res() res: any) {
+  async delete(@Param('id') id: string, @Res() res: any) {
     try {
-      this.promotionService.remove(id);
+      await this.promotionService.delete(id);
       res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);

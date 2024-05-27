@@ -82,6 +82,7 @@
   </div>
 </div>
 
+<!-- Confirm remove modal -->
 <div class="modal" tabindex="-1" id="confirmModal">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
@@ -153,7 +154,6 @@
   document.querySelectorAll('.removeBtn').forEach(button => {
     button.addEventListener('click', function () {
       bookId = button.getAttribute('data-book-id');
-      console.log(bookId);
     });
   });
 

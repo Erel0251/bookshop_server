@@ -27,6 +27,7 @@ export class PromotionService {
 
   async findAll(): Promise<Promotion[] | Error> {
     return await this.promotion.find({
+      where: { is_deleted: false },
       relations: ['promotion_books', 'promotion_books.book'],
     });
   }
@@ -55,13 +56,17 @@ export class PromotionService {
     }
   }
 
-  async remove(id: string): Promise<void | Error> {
-    const promotion = await this.promotion.findOne({ where: { id } });
+  async delete(id: string): Promise<void | Error> {
+    const promotion = await this.promotion.findOne({
+      where: { id },
+      relations: ['promotion_books'],
+    });
     if (!promotion) {
       throw new Error('Promotion not found');
     }
-    promotion.is_deleted = true;
-    await this.promotion.save(promotion);
+    for (const book of promotion.promotion_books)
+      await this.promotionBook.delete(book.id);
+    await this.promotion.delete(id);
   }
 
   async createPromotionBook(
