@@ -18,7 +18,7 @@
   <div class="card m-3">
     <div class="card-header h3 p-3">Add Stored Book</div>
     <div class="card-body">
-      <form id="add-book-form p-3">
+      <form id="addBook">
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="book-name" class="form-label">Book Name</label>
@@ -39,7 +39,7 @@
           </div>
         </div>
         <div class="row m-1">
-          <button type="button" class="btn btn-success" onclick="addBook()">Add Stored Book</button>
+          <button type="submit" class="btn btn-success">Add Stored Book</button>
         </div>
       </form>
     </div>
@@ -75,7 +75,9 @@
 
 <script>
 
-  function addBook() {
+  document.getElementById('addBook').addEventListener('submit', function(){
+    event.preventDefault();
+
     const bookName = document.getElementById('book-name').value;
     const selectedOption = document.querySelector(`option[value="${bookName}"]`);
     const bookId = selectedOption.getAttribute('data-id');
@@ -113,7 +115,7 @@
       .catch(error => {
         console.error('Error:', error);
       });
-  }
+  });
 
 
   function editBook(index) {

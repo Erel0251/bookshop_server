@@ -40,14 +40,16 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="submitForm">Submit</button>
+        <button type="submit" class="btn btn-primary" form="bookForm">Submit</button>
       </div>
     </div>
   </div>
 </div>
 
 <script>
-  document.getElementById('submitForm').addEventListener('click', function () {
+  document.getElementById('bookForm').addEventListener('submit', function () {
+    event.preventDefault();
+    
     const name = document.getElementById('name').value;
     const imageUrl = document.getElementById('imageUrl').value;
     const publisher = document.getElementById('publisher').value;

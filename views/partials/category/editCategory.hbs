@@ -37,7 +37,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+        <button type="submit" class="btn btn-primary" form="categoryEditForm">Save changes</button>
       </div>
     </div>
   </div>
@@ -79,7 +79,9 @@
       });
     });
 
-    document.getElementById('saveChangesBtn').addEventListener('click', function () {
+    document.getElementById('categoryEditForm').addEventListener('submit', function () {
+      event.preventDefault();
+
       const categoryId = currentRow.getAttribute('data-category-id');
       const data = {
         name: document.getElementById('editName').value,
@@ -96,7 +98,7 @@
         body: JSON.stringify(data)
       })
         .then(response => response.json())
-        .then(data =>{ window.location.reload();})
+        .then(data => { window.location.reload(); })
         .catch((error) => {
           console.error('Error:', error);
         });
