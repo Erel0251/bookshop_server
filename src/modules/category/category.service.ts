@@ -14,14 +14,21 @@ export class CategoryService {
     private category: Repository<Category>,
   ) {}
 
-  async create(
-    createCategoryDto: CreateCategoryDto,
-  ): Promise<Category | Error> {
-    return await this.category.save(createCategoryDto);
+  async create(createCategoryDto: CreateCategoryDto): Promise<void | Error> {
+    const category = this.category.create(createCategoryDto);
+    if (createCategoryDto.father_id) {
+      const father = await this.category.findOne({
+        where: { id: createCategoryDto.father_id },
+      });
+      category.father = father;
+    }
+    await this.category.save(category);
   }
 
   async findAll(): Promise<Category[]> {
-    return await this.category.find();
+    return await this.category.find({
+      relations: ['father'],
+    });
   }
 
   async findOne(id: string): Promise<Category | Error> {

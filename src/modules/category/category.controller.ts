@@ -35,8 +35,8 @@ export class CategoryController {
   @Post()
   async create(@Body() createCategoryDto: CreateCategoryDto, @Res() res: any) {
     try {
-      const category = await this.categoryService.create(createCategoryDto);
-      return res.status(HttpStatus.CREATED).send(category);
+      await this.categoryService.create(createCategoryDto);
+      return res.status(HttpStatus.CREATED).send();
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -48,7 +48,10 @@ export class CategoryController {
   async findAll(@Res() res: any) {
     try {
       const categories = await this.categoryService.findAll();
-      return res.status(HttpStatus.OK).send(categories);
+      return res.status(HttpStatus.OK).render('category', {
+        message: 'Get data successfully',
+        categories,
+      });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

@@ -31,3 +31,10 @@ export const formatName = (name: string) => {
 export const formatPrice = (price: any = 0, currency: string = 'VND') => {
   return price.toLocaleString('vi-VN', { style: 'currency', currency });
 };
+
+export const formatCategory = (children: string, parent?: string) => {
+  if (!parent) {
+    return children;
+  }
+  return `${parent} > ${children}`;
+};

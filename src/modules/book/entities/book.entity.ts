@@ -70,10 +70,6 @@ export class Book extends CommonEntity {
   @Column({ type: 'integer', default: 0 })
   inventory: number;
 
-  @Field(() => Boolean)
-  @Column({ type: 'boolean', default: false })
-  is_published: boolean;
-
   @Field(() => Category)
   @ManyToOne(() => Category, (category) => category.books)
   @JoinColumn({ name: 'category_id' })

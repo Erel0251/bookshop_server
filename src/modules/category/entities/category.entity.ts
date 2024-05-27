@@ -14,6 +14,10 @@ export class Category extends CommonEntity {
   @Column({ type: 'text', nullable: true })
   description?: string;
 
+  @Field(() => Boolean)
+  @Column({ type: 'boolean', default: false })
+  is_published: boolean;
+
   @Field(() => [Book], { nullable: true })
   @OneToMany(() => Book, (book) => book.category, { nullable: true })
   books?: Book[];

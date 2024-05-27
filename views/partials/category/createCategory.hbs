@@ -1,0 +1,90 @@
+<!-- Modal -->
+<div class="modal fade" id="createCategory" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editCategoryModalLabel">Create Category</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="categoryForm">
+          <div class="mb-3">
+            <label for="categoryName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="categoryName" required>
+          </div>
+          <div class="mb-3">
+            <label for="categoryDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="isPublished" class="form-label">Published</label>
+            <select class="form-select" id="isPublished" required>
+              <option value="true">True</option>
+              <option value="false">False</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label for="parent" class="form-label">Parent Category</label>
+            <select class="form-select" id="parent">
+              <option value="">None</option>
+              {{#each categories}}
+              <option value="{{id}}">{{name}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="saveChangesBtn">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const saveChangesBtn = document.getElementById('saveChangesBtn');
+    saveChangesBtn.addEventListener('click', function () {
+      const name = document.getElementById('categoryName').value;
+      const description = document.getElementById('categoryDescription').value;
+      const isPublished = document.getElementById('isPublished').value;
+      const parent = document.getElementById('parent').value;
+
+      const formData = {
+        name: name,
+        description: description,
+        is_published: isPublished === 'true', // Convert to boolean
+        father_id: parent
+      };
+
+      fetch('category', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      })
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Network response was not ok');
+          }
+          return response.json();
+        })
+        .then(data => {
+
+          // Reload the page after form submission
+          window.location.reload();
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          // Handle error here
+        });
+      // Optionally, you can close the modal here
+      const modal = bootstrap.Modal.getInstance(document.getElementById('createCategory'));
+      modal.hide();
+      // Clear form fields if needed
+      document.getElementById('categoryForm').reset();
+    });
+  });
+</script>
