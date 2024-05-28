@@ -1,0 +1,91 @@
+<!-- Edit Supplement Modal -->
+
+<div class="modal fade" id="editSupplement" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editSupplementModalLabel">Edit Supplement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="supplementEditForm">
+          <div class="mb-3">
+            <label for="editName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="editName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editSupplier" class="form-label">Supplier</label>
+            <input type="text" class="form-control" id="editSupplier" rows="3" required></input>
+          </div>
+          <div class="mb-3">
+            <label for="editQuantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="editQuantity" rows="3" min="1"></input>
+          </div>
+          <div class="mb-3">
+            <label for="editPrice" class="form-label">Price</label>
+            <input type="number" class="form-control" id="editPrice" rows="3" min="0" required></input>
+          </div>
+          <div class="mb-3">
+            <label for="editDate" class="form-label">Date</label>
+            <input type="date" class="form-control" id="editDate" rows="3" required></input>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="supplementEditForm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.editBtn');
+    let currentRow = null;
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        currentRow = button.closest('tr');
+        const name = currentRow.children[1].innerText;
+        const supplier = currentRow.children[2].innerText;
+        const quantity = parseInt(currentRow.children[3].innerText);
+        const price = currentRow.children[4].getAttribute('data-price');
+        const date = currentRow.children[5].innerText;
+
+        document.getElementById('editName').value = name;
+        document.getElementById('editSupplier').value = supplier;
+        document.getElementById('editQuantity').value = quantity;
+        document.getElementById('editPrice').value = price;
+        document.getElementById('editDate').value = new Date(date).toISOString().split('T')[0];
+      });
+    });
+
+    document.getElementById('supplementEditForm').addEventListener('submit', function () {
+      event.preventDefault();
+
+      const supplementId = currentRow.getAttribute('data-supplement-id');
+      const data = {
+        name: document.getElementById('editName').value,
+        supplier: document.getElementById('editSupplier').value,
+        total_quantity: parseInt(document.getElementById('editQuantity').value),
+        total_price: parseInt(document.getElementById('editPrice').value),
+        date: document.getElementById('editDate').value
+      };
+
+      fetch(`supplement/${supplementId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => { window.location.reload(); })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+  });
+</script>

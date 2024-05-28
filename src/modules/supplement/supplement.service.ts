@@ -74,7 +74,6 @@ export class SupplementService {
     );
 
     // BUG: typeORM made a mistake here, it should be is_deleted is true/false instead of is_deleted IS NULL
-    console.log(filter.is_deleted);
     Maybe.fromFalsy(filter.is_deleted).ifJust((is_deleted) =>
       query.andWhere('supplement.is_deleted is :is_deleted', {
         is_deleted,

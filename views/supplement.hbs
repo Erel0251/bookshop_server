@@ -60,17 +60,17 @@
 
         {{#each supplements}}
         <!-- Supplement -->
-        <tr>
+        <tr data-supplement-id="{{id}}">
           <td>{{inc @index}}</td>
           <td>{{name}}</td>
           <td>{{supplier}}</td>
           <td>{{showNum total_quantity}}</td>
-          <td>{{formatPrice total_price currency}}</td>
+          <td data-price="{{total_price}}">{{formatPrice total_price currency}}</td>
           <td>{{formatDate date}}</td>
           <td>
-            <a class="btn btn-outline-info py-0" href="/supplement/{{id}}">Detail</a>
-            <div class="btn btn-outline-warning py-0">Edit</div>
-            <button class="btn btn-outline-danger py-0 deleteBtn" data-id="{{id}}" data-bs-toggle="modal"
+            <a class="btn btn-outline-info btn-sm" href="/supplement/{{id}}">Detail</a>
+            <button class="btn btn-outline-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editSupplement">Edit</button>
+            <button class="btn btn-outline-danger btn-sm deleteBtn" data-id="{{id}}" data-bs-toggle="modal"
               data-bs-target="#confirmModal">Delete</button>
           </td>
         </tr>
@@ -130,3 +130,4 @@
 
 
 {{> supplement/createSupplement}}
+{{> supplement/editSupplement}}

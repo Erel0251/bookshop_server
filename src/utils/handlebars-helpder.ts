@@ -41,4 +41,7 @@ export function registerHelpers() {
   hbs.registerHelper('formatDiscount', (discount) =>
     discount ? discount + '%' : '0%',
   );
+  hbs.registerHelper('parentName', (parent) =>
+    parent ? parent.name : 'No parent',
+  );
 }
