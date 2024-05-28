@@ -1,9 +1,18 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 
 @Injectable()
 export class LoggerMiddleware {
+  private readonly logger = new Logger(LoggerMiddleware.name);
+
   use(req: any, res: any, next: () => void) {
-    console.log(`Request Info: ${req.method} ${req.url}`);
+    this.logger.log(`Request Info: ${req.method} ${req.url}`);
+
+    res.on('finish', () => {
+      this.logger.log(
+        `Response Info: ${res.statusCode} ${res.statusMessage} ${res.message}`,
+      );
+    });
+
     next();
   }
 }
