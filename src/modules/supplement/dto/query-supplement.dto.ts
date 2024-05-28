@@ -24,7 +24,7 @@ export class QuerySupplementDto extends CommonDto {
 
   @IsString()
   @ApiPropertyOptional()
-  readonly orderByName?: string = 'id';
+  readonly orderByName?: string = 'updated_at';
 
   constructor(partial: Partial<QuerySupplementDto>) {
     super();

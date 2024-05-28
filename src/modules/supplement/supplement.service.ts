@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Supplement } from './entities/supplement.entity';
 import { Repository } from 'typeorm';
@@ -24,6 +24,8 @@ export class SupplementService {
 
     private readonly bookService: BookService,
   ) {}
+
+  private readonly logger = new Logger(SupplementService.name);
 
   async create(
     createSupplementDto: CreateSupplementDto,
@@ -71,6 +73,14 @@ export class SupplementService {
       }),
     );
 
+    // BUG: typeORM made a mistake here, it should be is_deleted is true/false instead of is_deleted IS NULL
+    console.log(filter.is_deleted);
+    Maybe.fromFalsy(filter.is_deleted).ifJust((is_deleted) =>
+      query.andWhere('supplement.is_deleted is :is_deleted', {
+        is_deleted,
+      }),
+    );
+
     Maybe.fromFalsy(filter.sort).ifJust((sort) =>
       query.orderBy(`supplement.${filter.orderByName}`, sort),
     );
@@ -81,9 +91,10 @@ export class SupplementService {
       'supplement.supplement_details',
       'supplement_details',
     );
-    query.leftJoinAndSelect('supplement_details.books', 'books');
 
-    return await query.getMany();
+    return (await query.getMany()).filter(
+      (supplement) => !supplement.is_deleted,
+    );
   }
 
   async findOne(id: string): Promise<Supplement | Error> {
@@ -242,11 +253,10 @@ export class SupplementService {
     // update book inventory
     const book = await this.bookService.findOne(bookId);
     book.inventory -= supplementDetail.quantity;
+    supplement.total_quantity -= supplementDetail.quantity;
+    supplement.total_price -= supplementDetail.price;
     await this.bookService.update(bookId, book);
-    supplement.supplement_details = supplement.supplement_details.filter(
-      (detail) => detail.id !== supplementDetail.id,
-    );
     await this.supplementRepository.save(supplement);
-    // await this.supplementDetailRepository.remove(supplementDetail);
+    await this.supplementDetailRepository.remove(supplementDetail);
   }
 }

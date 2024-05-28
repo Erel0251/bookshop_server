@@ -212,6 +212,8 @@
           <td>
             <a class="btn btn-outline-info py-0" href="/supplement/{{id}}">Detail</a>
             <div class="btn btn-outline-warning py-0">Edit</div>
+            <button class="btn btn-outline-danger py-0 deleteBtn" data-id="{{id}}" data-bs-toggle="modal"
+              data-bs-target="#confirmModal">Delete</button>
           </td>
         </tr>
         {{/each}}
@@ -219,5 +221,54 @@
     </table>
   </div>
 </div>
+
+
+<!-- Confirm remove modal -->
+<div class="modal" tabindex="-1" id="confirmModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Delete Supplement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are your sure you want to delete this supplement?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" id="confirmDelete">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let supplementId = null;
+  document.querySelectorAll('.deleteBtn').forEach(btn => {
+    btn.addEventListener('click', function () {
+      supplementId = btn.getAttribute('data-id');
+    })
+  })
+
+  const deleteBtn = document.getElementById('confirmDelete');
+  deleteBtn.addEventListener('click', function () {
+    fetch('/supplement/' + supplementId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(() => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  })
+
+</script>
+
 
 {{> supplement/createSupplement}}

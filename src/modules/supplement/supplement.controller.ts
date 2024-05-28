@@ -181,10 +181,10 @@ export class SupplementController {
   }
 
   // Remove book from supplement
-  @Patch(':id/remove-book')
+  @Delete(':id/remove-book/:bookId')
   async removeBook(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body('bookId', ParseUUIDPipe) bookId: string,
+    @Param('bookId', ParseUUIDPipe) bookId: string,
     @Res() res: any,
   ) {
     try {

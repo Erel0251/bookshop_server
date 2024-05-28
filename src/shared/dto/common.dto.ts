@@ -1,20 +1,25 @@
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEnum, IsInt, IsOptional } from 'class-validator';
+import { IsBoolean, IsEnum, IsInt, IsOptional } from 'class-validator';
 import { Order } from '../constants/order.enum';
 
 export class CommonDto {
   @IsOptional()
   @IsEnum(['asc', 'desc'])
-  @ApiPropertyOptional({ required: false })
+  @ApiPropertyOptional()
   sort?: Order = Order.DESC;
 
   @IsInt()
   @IsOptional()
-  @ApiPropertyOptional({ required: false })
+  @ApiPropertyOptional()
   offset?: number = 0;
 
   @IsInt()
   @IsOptional()
-  @ApiPropertyOptional({ required: false })
+  @ApiPropertyOptional()
   limit?: number = 10;
+
+  @IsBoolean()
+  @IsOptional()
+  @ApiPropertyOptional()
+  is_deleted?: boolean = false;
 }

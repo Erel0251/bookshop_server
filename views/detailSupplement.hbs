@@ -65,11 +65,36 @@
           <td>{{this.books.title}}</td>
           <td>{{this.quantity}}</td>
           <td>{{formatPrice this.price this.currency}}</td>
-          <td><button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button></td>
+          <td>
+            <button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
+
+            <button class="btn btn-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
+                data-bs-target="#confirmModal" data-book-id="{{this.books.id}}">Remove</button>
+ 
+            </td>
         </tr>
         {{/each}}
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- Confirm remove modal -->
+<div class="modal" tabindex="-1" id="confirmModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Remove Book</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are your sure you want to remove this book out of supplement?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" id="confirmRemove">Yes</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -86,21 +111,19 @@
 
     const newBook = {
       name: bookName,
-      quantity: bookQuantity,
-      price: bookPrice
+      quantity: +bookQuantity,
+      price: +bookPrice
     };
 
     const supplementDetail = {
       id: bookId,
       supplement_detail: {
-        quantity: bookQuantity,
-        price: bookPrice
+        quantity: +bookQuantity,
+        price: +bookPrice
       }
-    }
+    };
 
-    const url = '/supplement/{{supplement.id}}/add-book';
-
-    fetch(url, {
+    fetch('/supplement/{{supplement.id}}/add-book', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -129,4 +152,29 @@
     books.splice(index, 1);
     */
   }
+
+  let bookId = null;
+  document.querySelectorAll('.removeBtn').forEach(button => {
+    button.addEventListener('click', function () {
+      bookId = button.getAttribute('data-book-id');
+    });
+  });
+
+  const confirmRemoveBtn = document.getElementById('confirmRemove');
+  confirmRemoveBtn.addEventListener('click', function() {
+    fetch('/supplement/{{supplement.id}}/remove-book/' + bookId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(() => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  })
 </script>
