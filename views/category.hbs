@@ -49,9 +49,9 @@
           <td class="editable">{{books.length}}</td>
           <td class="editable">{{is_published}}</td>
           <td>
-            <button class="btn btn-outline-primary py-1 editBtn" data-bs-toggle="modal" data-bs-target="#editCategory">Edit</button>
-            <a class="btn btn-outline-info py-1" href="/category/{{id}}">Detail</a>
-            <button class="btn btn-outline-danger py-1" >Delete</button>
+            <a class="btn btn-outline-info btn-sm" href="/category/{{id}}">Detail</a>
+            <button class="btn btn-outline-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editCategory">Edit</button>
+            <button class="btn btn-outline-danger btn-sm" >Delete</button>
           </td>
         </tr>
         {{/each}}

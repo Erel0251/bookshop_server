@@ -1,6 +1,6 @@
 <!-- Edit Category Modal -->
 
-<div class="modal fade" id="editCategory" tabindex="-1" aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+<div class="modal fade" id="editCategory" tabindex="-1" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered">
     <div class="modal-content">
       <div class="modal-header">
@@ -57,7 +57,6 @@
         const isPublished = currentRow.children[3].innerText;
         const parent = currentRow.children[1].innerText.indexOf('>') > -1 ? currentRow.children[1].innerText.replace(/ \>.*/, ' ').trim() : 'None';
 
-        //document.getElementById('editName').value = name;
         document.getElementById('editName').value = name;
         document.getElementById('editDescription').value = description;
 
