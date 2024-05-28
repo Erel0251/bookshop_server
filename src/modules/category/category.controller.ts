@@ -65,7 +65,12 @@ export class CategoryController {
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const category = await this.categoryService.findOne(id);
-      return res.status(HttpStatus.OK).send(category);
+      const books = await this.bookService.findAll();
+      return res.status(HttpStatus.OK).render('detailCategory', {
+        message: 'Get data successfully',
+        category,
+        books,
+      });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

@@ -27,14 +27,14 @@ export class CategoryService {
 
   async findAll(): Promise<Category[]> {
     return await this.category.find({
-      relations: ['father'],
+      relations: ['books', 'father'],
     });
   }
 
   async findOne(id: string): Promise<Category | Error> {
     return await this.category.findOne({
       where: { id },
-      relations: ['children', 'book'],
+      relations: ['children', 'books'],
     });
   }
 

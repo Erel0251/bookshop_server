@@ -1,0 +1,146 @@
+<div class="col container">
+
+  <!-- Form Section -->
+
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Detail Category</div>
+    <div class="card-body p-4">
+      <p>Name: {{category.name}}</p>
+      <p>Description: {{category.description}}</p>
+      <p>Is Published: {{category.is_published}}</p>
+      <p>Parent Category: {{parentName category.father}}</p>
+    </div>
+  </div>
+
+
+  <!-- Add Book Section -->
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Add Book</div>
+    <div class="card-body">
+      <form id="addBook" class="p-3">
+        <div class="row mb-3">
+          <div class="col-md-4">
+            <label for="book-name" class="form-label">Book Name</label>
+            <select name="book name" id="book-name" class="form-control form-control-chosen"
+              data-placeholder="SelectBook">
+              {{#each books}}
+              <option value="{{lowerCase title}}" data-id="{{id}}">{{formatName title}}</option>
+              {{/each}}
+            </select>
+          </div>
+        </div>
+        <div class="row m-1">
+          <button type="submit" class="btn btn-success" onclick="addPromotionBook()">Add Stored Book</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- List of Promotion Books -->
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Category Books</div>
+    <div class="m-3">
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Cover</th>
+            <th scope="col">Title</th>
+            <th scope="col">Price</th>
+            <th scope="col">Inventory</th>
+            <th scope="col">Status</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody id="book-list">
+          {{#each category.books}}
+          <tr>
+            <th scope="row">{{inc @index}}</th>
+            <td><img src="{{img_urls.[0]}}" class="img-thumbnail cover-image" alt="Book Image"></td>
+            <td>{{this.title}}</td>
+            <td>{{formatPrice this.price this.currency}}</td>
+            <td>{{showNum this.inventory}}</td>
+            <td>{{formatName this.status}}</td>
+            <td>
+              <button class="btn btn-outline-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
+                data-bs-target="#confirmModal" data-book-id="{{id}}">Remove</button>
+            </td>
+          </tr>
+          {{/each}}
+        </tbody>
+      </table>
+
+    </div>
+  </div>
+</div>
+
+<!-- Confirm remove modal -->
+<div class="modal" tabindex="-1" id="confirmModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Remove Book</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>Are your sure you want to remove out of this promotion?</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</button>
+        <button type="button" class="btn btn-primary" id="confirmRemove">Yes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+
+  document.getElementById('addBook').addEventListener('submit', function () {
+    event.preventDefault();
+
+    const bookName = document.getElementById('book-name').value;
+    const selectedOption = document.querySelector(`option[value="${bookName}"]`);
+    const bookId = selectedOption.getAttribute('data-id');
+
+    fetch('/category/{{category.id}}/book/' + bookId, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(() => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  });
+
+  let bookId = null;
+  document.querySelectorAll('.removeBtn').forEach(button => {
+    button.addEventListener('click', function () {
+      bookId = button.getAttribute('data-book-id');
+    });
+  });
+
+  const confirmRemoveBtn = document.getElementById('confirmRemove');
+  confirmRemoveBtn.addEventListener('click', function () {
+    fetch('/category/{{category.id}}/book/' + bookId, {
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(() => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+  })
+</script>
