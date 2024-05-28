@@ -34,6 +34,7 @@
           <th>#</th>
           <th>Name</th>
           <th>Description</th>
+          <th>Books</th>
           <th>Published</th>
           <th>Actions</th>
         </tr>
@@ -45,9 +46,12 @@
           <td>{{inc @index}}</td>
           <td class="editable">{{formatCategory name father.name}}</td>
           <td class="editable">{{formatName description}}</td>
+          <td class="editable">{{books.length}}</td>
           <td class="editable">{{is_published}}</td>
           <td>
-            <button class="btn btn-primary editBtn" data-bs-toggle="modal" data-bs-target="#editCategory">Edit</button>
+            <button class="btn btn-outline-primary py-1 editBtn" data-bs-toggle="modal" data-bs-target="#editCategory">Edit</button>
+            <a class="btn btn-outline-info py-1" href="/category/{{id}}">Detail</a>
+            <button class="btn btn-outline-danger py-1" >Delete</button>
           </td>
         </tr>
         {{/each}}

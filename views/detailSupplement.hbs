@@ -66,9 +66,9 @@
           <td>{{this.quantity}}</td>
           <td>{{formatPrice this.price this.currency}}</td>
           <td>
-            <button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
+            <button class="btn btn-outline-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
 
-            <button class="btn btn-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
+            <button class="btn btn-outline-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
                 data-bs-target="#confirmModal" data-book-id="{{this.books.id}}">Remove</button>
  
             </td>

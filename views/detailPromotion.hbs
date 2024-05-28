@@ -69,8 +69,8 @@
             <td>{{this.quantity}}</td>
             <td>{{formatDiscount this.discount}}</td>
             <td>
-              <button class="btn btn-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
-              <button class="btn btn-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
+              <button class="btn btn-outline-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
+              <button class="btn btn-outline-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
                 data-bs-target="#confirmModal" data-book-id="{{this.book.id}}">Remove</button>
             </td>
           </tr>
