@@ -1,0 +1,103 @@
+<!-- Edit Promotion Modal -->
+
+<div class="modal fade" id="editPromotion" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editPromotionModalLabel">Edit Promotion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="promotionEditForm">
+          <div class="mb-3">
+            <label for="editName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="editName" required>
+          </div>
+          <div class="mb-3">
+            <label for="editDescription" class="form-label">Description</label>
+            <textarea class="form-control" id="editDescription" rows="3"></textarea>
+          </div>
+          <div class="mb-3">
+            <label for="editType" class="form-label">Type</label>
+            <select class="form-select" id="editType" required>
+              <option value="sale">Sale</option>
+              <option value="recommend">Recommend</option>
+            </select>
+          </div>
+          <div class="mb-3 row">
+            <div class="col">
+              <label for="editDateFrom" class="form-label">From</label>
+              <input type="date" class="form-control" id="editDateFrom" required></input>
+            </div>
+            <div class="col">
+              <label for="editDateTo" class="form-label">To</label>
+              <input type="date" class="form-control" id="editDateTo" required></input>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="promotionEditForm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.editBtn');
+    let currentRow = null;
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        currentRow = button.closest('tr');
+        const name = currentRow.children[0].innerText;
+        const description = currentRow.children[1].innerText;
+        const type = currentRow.children[2].innerText;
+        const from = currentRow.children[3].innerText;
+        const to = currentRow.children[4].innerText;
+
+        document.getElementById('editName').value = name;
+        document.getElementById('editDescription').value = description;
+        document.getElementById('editDateFrom').value = new Date(from).toISOString().split('T')[0];
+        document.getElementById('editDateTo').value = new Date(to).toISOString().split('T')[0];
+
+        const typeSelect = document.getElementById('editType');
+        for (let i = 0; i < typeSelect.options.length; i++) {
+          if (typeSelect.options[i].innerText === type) {
+            typeSelect.selectedIndex = i;
+            break;
+          }
+        }
+      });
+    });
+
+    document.getElementById('promotionEditForm').addEventListener('submit', function () {
+      event.preventDefault();
+
+      const promotionId = currentRow.getAttribute('data-promotion-id');
+      const data = {
+        name: document.getElementById('editName').value,
+        description: document.getElementById('editDescription').value,
+        type: document.getElementById('editType').value.toUpperCase(),
+        from: document.getElementById('editDateFrom').value,
+        to: document.getElementById('editDateTo').value
+      };
+
+      fetch(`promotion/${promotionId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => { window.location.reload(); })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+  });
+</script>

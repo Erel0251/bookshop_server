@@ -17,6 +17,7 @@ import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { CreatePromotionBookDto } from './dto/create-promotion-book.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from '../book/book.service';
+import { UpdatePromotionBookDto } from './dto/update-promotion-book.dto';
 
 @Controller('promotion')
 @ApiTags('Promotion')
@@ -129,13 +130,15 @@ export class PromotionController {
   }
 
   // Update specific promotion book
-  @Patch(':id/book')
+  @Patch(':id/book/:bookId')
   async updatePromotionBook(
     @Param('id') id: string,
-    @Body() promotionBook: any,
+    @Param('bookId') bookId: string,
+    @Body() promotionBook: UpdatePromotionBookDto,
     @Res() res: any,
   ) {
     try {
+      promotionBook.id = bookId;
       this.promotionService.updatePromotionBook(id, promotionBook);
       res
         .status(HttpStatus.OK)

@@ -79,8 +79,13 @@ export class PromotionService {
       throw new Error('Promotion not found');
     }
     const book = await Book.findOne({ where: { id: bookId } });
-    promotionBook.price = book.price;
-    await this.promotionBook.save({ ...promotionBook, promotion, book });
+    promotionBook.price = book.price * (1 - promotionBook.discount / 100);
+    // if the quantity is greater than the inventory, set the quantity to the inventory
+    // if the quantity is zero or undefined, set the quantity to inventory
+    promotionBook.quantity = !promotionBook.quantity
+      ? book.inventory
+      : Math.min(promotionBook.quantity, book.inventory);
+    await this.promotionBook.save(promotionBook);
   }
 
   async updatePromotionBook(
@@ -93,6 +98,11 @@ export class PromotionService {
     if (!promotionBookEntity) {
       throw new Error('Promotion book not found');
     }
+    const book = await Book.findOne({ where: { id: promotionBook.id } });
+    promotionBookEntity.price = book.price * (1 - promotionBook.discount / 100);
+    promotionBookEntity.quantity = !promotionBook.quantity
+      ? book.inventory
+      : Math.min(promotionBook.quantity, book.inventory);
     await this.promotionBook.update(id, promotionBook);
   }
 

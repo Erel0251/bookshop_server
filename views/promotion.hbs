@@ -126,16 +126,16 @@
         <tbody>
           <!-- data rows as needed -->
           {{#each promotions}}
-          <tr>
+          <tr data-promotion-id="{{id}}">
             <td>{{formatName name}}</td>
             <td>{{description}}</td>
             <td>{{formatName type}}</td>
-            <td>{{from}}</td>
-            <td>{{to}}</td>
+            <td>{{formatDate from}}</td>
+            <td>{{formatDate to}}</td>
             <td>{{promotion_books.length}}</td>
             <td>
-              <button class="btn btn-sm btn-outline-primary">Edit</button>
               <a class="btn btn-sm btn-outline-info" href="/promotion/{{id}}">Detail</a>
+              <button class="btn btn-sm btn-outline-warning editBtn" data-bs-toggle="modal" data-bs-target="#editPromotion">Edit</button>
               <button class="btn btn-sm btn-outline-danger deleteBtn" data-id="{{id}}" data-bs-toggle="modal"
                 data-bs-target="#confirmModal">Delete</button>
             </td>
@@ -196,3 +196,4 @@
 </script>
 
 {{> promotion/createPromotion}}
+{{> promotion/editPromotion}}
