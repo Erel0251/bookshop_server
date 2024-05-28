@@ -114,13 +114,11 @@
     const bookDiscount = document.getElementById('book-discount').value;
 
     const supplementDetail = {
-      quantity: bookQuantity,
-      discount: bookDiscount,
+      quantity: +bookQuantity,
+      discount: +bookDiscount,
     }
 
-    const url = '/promotion/{{promotion.id}}/book/' + bookId;
-
-    fetch(url, {
+    fetch('/promotion/{{promotion.id}}/book/' + bookId, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
