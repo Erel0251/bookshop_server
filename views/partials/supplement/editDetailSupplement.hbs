@@ -1,0 +1,77 @@
+<!-- Edit Detail Supplement Modal -->
+
+<div class="modal fade" id="editDetailSupplement" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editDetailSupplementModalLabel">Edit Detail Supplement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="detailSupplementEditForm">
+          <div class="mb-3">
+            <label for="editName" class="form-label">Name</label>
+            <input type="text" class="form-control" id="editName" disabled>
+          </div>
+          <div class="mb-3">
+            <label for="editQuantity" class="form-label">Quantity</label>
+            <input type="number" class="form-control" id="editQuantity" rows="3" min="1"></input>
+          </div>
+          <div class="mb-3">
+            <label for="editPrice" class="form-label">Price</label>
+            <input type="number" class="form-control" id="editPrice" rows="3" min="0" required></input>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="submit" class="btn btn-primary" form="detailSupplementEditForm">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    const editButtons = document.querySelectorAll('.editBtn');
+    let currentRow = null;
+
+    editButtons.forEach(button => {
+      button.addEventListener('click', function () {
+        currentRow = button.closest('tr');
+        const name = currentRow.children[1].innerText;
+        const quantity = parseInt(currentRow.children[2].innerText);
+        const price = currentRow.children[3].getAttribute('data-price');
+
+        document.getElementById('editName').value = name;
+        document.getElementById('editQuantity').value = quantity;
+        document.getElementById('editPrice').value = price;
+      });
+    });
+
+    document.getElementById('detailSupplementEditForm').addEventListener('submit', function () {
+      event.preventDefault();
+
+      const detailId = currentRow.getAttribute('data-detail-id');
+      const data = {
+        name: document.getElementById('editName').value,
+        quantity: parseInt(document.getElementById('editQuantity').value),
+        price: parseInt(document.getElementById('editPrice').value)
+      };
+
+      fetch('/supplement/{{supplement.id}}/book/' + detailId, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+      })
+        .then(response => response.json())
+        .then(data => { window.location.reload(); })
+        .catch((error) => {
+          console.error('Error:', error);
+        });
+    });
+  });
+</script>

@@ -16,10 +16,10 @@ import { SupplementService } from './supplement.service';
 import { CreateSupplementDto } from './dto/create-supplement.dto';
 import { UpdateSupplementDto } from './dto/update-supplement.dto';
 import { ApiTags } from '@nestjs/swagger';
-import { CreateBookDto } from '../book/dto/create-book.dto';
 import { UpdateBookDto } from '../book/dto/update-book.dto';
 import { QuerySupplementDto } from './dto/query-supplement.dto';
 import { BookService } from '../book/book.service';
+import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
 
 @ApiTags('Supplement')
 @Controller('supplement')
@@ -126,26 +126,8 @@ export class SupplementController {
     }
   }
 
-  // Create book in supplement
-  @Patch(':id/create-book')
-  async createBook(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() book: CreateBookDto,
-    @Res() res: any,
-  ) {
-    try {
-      await this.supplementService.createBookInSupplement(id, book);
-      return res
-        .status(HttpStatus.OK)
-        .send({ message: 'Create book in supplement successfully' });
-    } catch (error) {
-      this.logger.error(error);
-      return res.status(error.status).send(error.message);
-    }
-  }
-
   // Add book to supplement
-  @Patch(':id/add-book')
+  @Patch(':id/book')
   async addBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() book: UpdateBookDto, // book entities
@@ -162,18 +144,20 @@ export class SupplementController {
     }
   }
 
-  // Update book in supplement
-  @Patch(':id/update-book')
+  // Update detail in supplement
+  @Patch(':id/book/:detailId')
   async updateBook(
     @Param('id', ParseUUIDPipe) id: string,
-    @Body() book: UpdateBookDto,
+    @Param('detailId', ParseUUIDPipe) detailId: string,
+    @Body() detail: UpdateSupplementDeatailDto,
     @Res() res: any,
   ) {
     try {
-      await this.supplementService.updateBook(id, book);
+      detail.id = detailId;
+      await this.supplementService.updateDetail(id, detail);
       return res
         .status(HttpStatus.OK)
-        .send({ message: 'Update book in supplement successfully' });
+        .send({ message: 'Update detail supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);
@@ -181,7 +165,7 @@ export class SupplementController {
   }
 
   // Remove book from supplement
-  @Delete(':id/remove-book/:bookId')
+  @Delete(':id/book/:bookId')
   async removeBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('bookId', ParseUUIDPipe) bookId: string,

@@ -60,16 +60,19 @@
       </thead>
       <tbody id="book-list">
         {{#each supplement.supplement_details}}
-        <tr>
+        <tr data-detail-id="{{this.id}}">
           <th scope="row">{{inc @index}}</th>
           <td>{{this.books.title}}</td>
           <td>{{this.quantity}}</td>
-          <td>{{formatPrice this.price this.currency}}</td>
+          <td data-price="{{this.price}}">{{formatPrice this.price this.currency}}</td>
           <td>
-            <button class="btn btn-outline-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
+            <button class="btn btn-outline-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editDetailSupplement">
+              Edit
+            </button>
 
             <button class="btn btn-outline-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
-                data-bs-target="#confirmModal" data-book-id="{{this.books.id}}">Remove</button>
+                data-bs-target="#confirmModal" data-book-id="{{this.books.id}}">Remove
+            </button>
  
             </td>
         </tr>
@@ -123,7 +126,7 @@
       }
     };
 
-    fetch('/supplement/{{supplement.id}}/add-book', {
+    fetch('/supplement/{{supplement.id}}/book', {
       method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
@@ -140,19 +143,6 @@
       });
   });
 
-
-  function editBook(index) {
-    /*
-    const book = books[index];
-    document.getElementById('book-name').value = book.name;
-    document.getElementById('book-quantity').value = book.quantity;
-    document.getElementById('book-price').value = book.price;
-
-    // Remove the book from the list for re-adding
-    books.splice(index, 1);
-    */
-  }
-
   let bookId = null;
   document.querySelectorAll('.removeBtn').forEach(button => {
     button.addEventListener('click', function () {
@@ -162,7 +152,7 @@
 
   const confirmRemoveBtn = document.getElementById('confirmRemove');
   confirmRemoveBtn.addEventListener('click', function() {
-    fetch('/supplement/{{supplement.id}}/remove-book/' + bookId, {
+    fetch('/supplement/{{supplement.id}}/book/' + bookId, {
       method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
@@ -178,3 +168,5 @@
       });
   })
 </script>
+
+{{> supplement/editDetailSupplement}}

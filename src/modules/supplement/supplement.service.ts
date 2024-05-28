@@ -7,11 +7,11 @@ import { UpdateSupplementDto } from './dto/update-supplement.dto';
 import { SupplementDetail } from './entities/supplement-detail.entity';
 import { BookService } from '../book/book.service';
 import { CreateSupplementDetailDto } from './dto/create-supplement-detail.dto';
-import { CreateBookDto } from '../book/dto/create-book.dto';
 import { UpdateBookDto } from '../book/dto/update-book.dto';
 import { QuerySupplementDto } from './dto/query-supplement.dto';
 
 import { Maybe } from 'purify-ts/Maybe';
+import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
 
 @Injectable()
 export class SupplementService {
@@ -144,22 +144,6 @@ export class SupplementService {
     await this.supplementRepository.save(supplement);
   }
 
-  async createBookInSupplement(
-    id: string,
-    book: CreateBookDto,
-  ): Promise<void | Error> {
-    const supplement = await this.supplementRepository.findOne({
-      where: { id },
-    });
-    if (!supplement) {
-      throw new Error('Supplement not found');
-    }
-    book.inventory += book.supplement_detail?.quantity;
-    await this.bookService.create(book);
-    this.supplementDetailRepository.create(book.supplement_detail);
-    await this.supplementRepository.save(supplement);
-  }
-
   async addBook(id: string, bookUpdate: UpdateBookDto): Promise<void | Error> {
     const supplement = await this.supplementRepository.findOne({
       where: { id },
@@ -231,6 +215,34 @@ export class SupplementService {
     this.supplementDetailRepository.save(book.supplement_details);
     await this.supplementRepository.save(supplement);
     */
+  }
+
+  async updateDetail(
+    id: string,
+    detail: UpdateSupplementDeatailDto,
+  ): Promise<void | Error> {
+    const supplementDetail = await this.supplementDetailRepository.findOne({
+      where: { id: detail.id },
+      relations: ['books', 'supplements'],
+    });
+    if (!supplementDetail) {
+      throw new Error('Supplement detail not found');
+    }
+    supplementDetail.books.inventory +=
+      detail.quantity - supplementDetail.quantity;
+    supplementDetail.supplements.total_quantity +=
+      detail.quantity - supplementDetail.quantity;
+    supplementDetail.supplements.total_price +=
+      detail.price - supplementDetail.price;
+    await this.bookService.update(
+      supplementDetail.books.id,
+      supplementDetail.books,
+    );
+    await this.supplementRepository.save(supplementDetail.supplements);
+
+    supplementDetail.price = detail.price;
+    supplementDetail.quantity = detail.quantity;
+    await this.supplementDetailRepository.save(supplementDetail);
   }
 
   async removeBook(
