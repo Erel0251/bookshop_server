@@ -32,7 +32,12 @@
       </div>
       <div class="col-md-6">
         <label for="supplier" class="form-label">Supplier</label>
-        <input type="text" class="form-control" id="supplier" name="supplier">
+        <input type="text" class="form-control" id="supplier" name="supplier" list="suggestions">
+        <datalist id="suggestions">
+          {{#each supplements}}
+          <option value="{{supplier}}">
+          {{/each}}
+        </datalist>
       </div>
     </div>
     <button type="submit" class="btn btn-primary">Search</button>
