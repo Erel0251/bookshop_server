@@ -24,12 +24,12 @@ export class CreateUserDto {
   @ApiPropertyOptional()
   phone?: string;
 
-  @IsEnum(Role)
+  @IsEnum(Role, { each: true })
   @ApiProperty({
     enum: Role,
     description: 'Role of the user',
   })
-  role: Role;
+  role: Role[];
 
   @IsString()
   @ApiProperty({

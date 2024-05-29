@@ -9,6 +9,7 @@ import { User } from '../user/entities/user.entity';
 import { AccessTokenStrategy } from './strategies/access-token.strategy';
 import { RefreshTokenStrategy } from './strategies/refresh-token.strategy';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -31,6 +32,7 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
     AccessTokenStrategy,
     RefreshTokenStrategy,
     JwtAuthGuard,
+    RolesGuard,
   ],
   exports: [PassportModule],
 })

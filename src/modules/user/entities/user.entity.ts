@@ -3,6 +3,7 @@ import { Order } from 'src/modules/order/entities/order.entity';
 import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Review } from '../../review/entities/review.entity';
+import { Role } from '../constants/role.enum';
 
 @Entity()
 export class User extends CommonEntity {
@@ -18,8 +19,8 @@ export class User extends CommonEntity {
   @Column({ type: 'text', nullable: true })
   phone?: string;
 
-  @Column({ type: 'text', default: 'user' })
-  role: string;
+  @Column({ type: 'enum', enum: Role, array: true, default: [Role.USER] })
+  roles: Role[];
 
   @Column({ type: 'text' })
   password: string;

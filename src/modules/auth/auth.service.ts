@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { ConfigService } from '@nestjs/config';
 import { CreateUserDto } from '../user/dto/create-user.dto';
+import { Role } from '../user/constants/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -31,7 +32,7 @@ export class AuthService {
 
     signUpDto.password = await bcrypt.hash(signUpDto.password, 10);
     const user = await this.userRepository.save(signUpDto);
-    const tokens = await this.getTokens(user.id, user.email);
+    const tokens = await this.getTokens(user.id, user.email, user.roles);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
@@ -50,7 +51,7 @@ export class AuthService {
     if (!isPasswordValid) {
       throw new UnauthorizedException('Invalid email or password');
     }
-    const tokens = await this.getTokens(user.id, user.email);
+    const tokens = await this.getTokens(user.id, user.email, user.roles);
     await this.updateRefreshToken(user.id, tokens.refreshToken);
     return tokens;
   }
@@ -70,17 +71,17 @@ export class AuthService {
     );
   }
 
-  async getTokens(userId: string, email: string) {
+  async getTokens(sub: string, email: string, roles: Role[] = [Role.USER]) {
     const [accessToken, refreshToken] = await Promise.all([
       this.jwtService.signAsync(
-        { sub: userId, email },
+        { sub, email, roles },
         {
           secret: this.configService.get<string>('JWT_ACCESS_SECRET'),
           expiresIn: this.configService.get<string>('JWT_ACCESS_EXPIRES'),
         },
       ),
       this.jwtService.signAsync(
-        { sub: userId, email },
+        { sub, email, roles },
         {
           secret: this.configService.get<string>('JWT_REFRESH_SECRET'),
           expiresIn: this.configService.get<string>('JWT_REFRESH_EXPIRES'),

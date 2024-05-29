@@ -50,8 +50,8 @@ export class AuthController {
     await this.authService.logout(email);
     res
       .status(HttpStatus.OK)
-      .clearCookie('accessToken')
-      .clearCookie('refreshToken')
+      .clearCookie('accessToken', { httpOnly: true })
+      .clearCookie('refreshToken', { httpOnly: true })
       .send({ message: 'User logged out' });
   }
 

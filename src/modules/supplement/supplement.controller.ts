@@ -22,10 +22,13 @@ import { QuerySupplementDto } from './dto/query-supplement.dto';
 import { BookService } from '../book/book.service';
 import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../user/constants/role.enum';
 
 @ApiTags('Supplement')
 @Controller('supplement')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class SupplementController {
   constructor(
     private readonly supplementService: SupplementService,
@@ -83,6 +86,7 @@ export class SupplementController {
 
   // Get a supplement by id
   @Get(':id')
+  @Roles(Role.ADMIN)
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const supplement = await this.supplementService.findOne(id);
