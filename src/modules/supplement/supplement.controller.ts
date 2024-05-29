@@ -11,6 +11,7 @@ import {
   ParseUUIDPipe,
   Logger,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { SupplementService } from './supplement.service';
 import { CreateSupplementDto } from './dto/create-supplement.dto';
@@ -20,9 +21,11 @@ import { UpdateBookDto } from '../book/dto/update-book.dto';
 import { QuerySupplementDto } from './dto/query-supplement.dto';
 import { BookService } from '../book/book.service';
 import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
+import { AuthGuard } from '@nestjs/passport';
 
 @ApiTags('Supplement')
 @Controller('supplement')
+@UseGuards(AuthGuard('jwt'))
 export class SupplementController {
   constructor(
     private readonly supplementService: SupplementService,
