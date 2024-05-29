@@ -47,12 +47,12 @@ export class AuthController {
 
   @Get('logout')
   async logout(@Req() email: string, @Res() res: any) {
-    await this.authService.logout(email);
+    //await this.authService.logout(email);
     res
       .status(HttpStatus.OK)
       .clearCookie('accessToken', { httpOnly: true })
       .clearCookie('refreshToken', { httpOnly: true })
-      .send({ message: 'User logged out' });
+      .redirect('/');
   }
 
   @Get('refresh')

@@ -1,11 +1,25 @@
-import { Controller, Get, Res } from '@nestjs/common';
+import { Controller, Get, Req, Res } from '@nestjs/common';
 
 @Controller()
 export class AppController {
   constructor() {}
 
   @Get()
-  root(@Res() res: any) {
-    return res.render('login', { message: 'Hello world!', title: 'Login' });
+  root(@Req() req: any, @Res() res: any) {
+    if (!req.user) {
+      res.redirect('login');
+    } else {
+      res.redirect('/book');
+    }
+  }
+
+  @Get('login')
+  login(@Res() res: any) {
+    res.render('login', { message: 'Please login', title: 'Login' });
+  }
+
+  @Get('signup')
+  signup(@Res() res: any) {
+    res.render('signup', { message: 'Please signup', title: 'Signup' });
   }
 }

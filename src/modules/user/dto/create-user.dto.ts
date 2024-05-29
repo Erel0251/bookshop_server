@@ -29,7 +29,7 @@ export class CreateUserDto {
     enum: Role,
     description: 'Role of the user',
   })
-  role: Role[];
+  roles: Role[];
 
   @IsString()
   @ApiProperty({
