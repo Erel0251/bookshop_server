@@ -6,6 +6,6 @@ export class AppController {
 
   @Get()
   root(@Res() res: any) {
-    return res.render('temp', { message: 'Hello world!' });
+    return res.render('login', { message: 'Hello world!', title: 'Login' });
   }
 }

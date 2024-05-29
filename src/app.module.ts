@@ -3,6 +3,7 @@ import { MiddlewareConsumer, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { GraphQLModule } from '@nestjs/graphql';
+//import { RedisModule } from '@liaoliaots/nestjs-redis';
 import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { join } from 'path';
 import { DataSource } from 'typeorm';
@@ -10,6 +11,7 @@ import { LoggerModule } from 'nestjs-pino';
 
 import configuration from './config/configuration';
 import { PostgreConfigService } from './database/factories/postgre.typeorm-options.factory';
+//import { RedisConfigService } from './database/factories/redis-options.factory';
 //import { MongoConfigService } from './database/factories/mongo.typeorm-options.factory';
 import { LoggerMiddleware } from './middleware/logger.middleware';
 
@@ -63,6 +65,9 @@ import { AppController } from './app.controller';
       autoSchemaFile: join(process.cwd(), 'src/database/schema/schema.gql'),
       playground: true,
     }),
+    // RedisModule.forRootAsync({
+    //   useClass: RedisConfigService,
+    // }),
     UserModule,
     AuthModule,
     AuthorModule,
