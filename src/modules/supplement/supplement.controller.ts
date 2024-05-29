@@ -21,11 +21,11 @@ import { UpdateBookDto } from '../book/dto/update-book.dto';
 import { QuerySupplementDto } from './dto/query-supplement.dto';
 import { BookService } from '../book/book.service';
 import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Supplement')
 @Controller('supplement')
-@UseGuards(AuthGuard('jwt'))
+@UseGuards(JwtAuthGuard)
 export class SupplementController {
   constructor(
     private readonly supplementService: SupplementService,

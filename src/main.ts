@@ -7,6 +7,7 @@ import { join } from 'path';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppModule } from './app.module';
 import * as hbs from 'hbs';
+import * as cookieParser from 'cookie-parser';
 import { registerHelpers } from './utils/handlebars-helpder';
 
 async function bootstrap() {
@@ -24,6 +25,7 @@ async function bootstrap() {
   SwaggerModule.setup('api', app, document);
 
   app.enableCors();
+  app.use(cookieParser());
 
   app.useGlobalFilters(new HttpExceptionFilter());
   app.useLogger(app.get(Logger));

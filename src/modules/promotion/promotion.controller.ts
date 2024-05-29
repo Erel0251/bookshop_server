@@ -10,6 +10,7 @@ import {
   Res,
   HttpStatus,
   ParseUUIDPipe,
+  UseGuards,
 } from '@nestjs/common';
 import { PromotionService } from './promotion.service';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
@@ -18,9 +19,11 @@ import { CreatePromotionBookDto } from './dto/create-promotion-book.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from '../book/book.service';
 import { UpdatePromotionBookDto } from './dto/update-promotion-book.dto';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('promotion')
 @ApiTags('Promotion')
+@UseGuards(JwtAuthGuard)
 export class PromotionController {
   constructor(
     private readonly promotionService: PromotionService,

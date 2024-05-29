@@ -12,15 +12,18 @@ import {
   Inject,
   forwardRef,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { BookService } from '../book/book.service';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @ApiTags('Category')
 @Controller('category')
+@UseGuards(JwtAuthGuard)
 export class CategoryController {
   constructor(
     private readonly categoryService: CategoryService,

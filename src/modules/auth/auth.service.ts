@@ -57,7 +57,7 @@ export class AuthService {
 
   async logout(email: string) {
     await this.userRepository.update({ email }, { refresh_token: null });
-    return { message: 'User logged out' };
+    return;
   }
 
   async updateRefreshToken(email: string, refreshToken: string) {
