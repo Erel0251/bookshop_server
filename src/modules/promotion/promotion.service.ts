@@ -41,19 +41,6 @@ export class PromotionService {
 
   async update(id: string, update: UpdatePromotionDto): Promise<void | Error> {
     await this.promotion.update(id, update);
-    if (update.promotion_books) {
-      for (const promotionBook of update.promotion_books) {
-        if (promotionBook.id) {
-          await this.updatePromotionBook(promotionBook.id, promotionBook);
-        } else {
-          await this.createPromotionBook(
-            id,
-            promotionBook.book.id,
-            promotionBook,
-          );
-        }
-      }
-    }
   }
 
   async delete(id: string): Promise<void | Error> {
@@ -72,20 +59,24 @@ export class PromotionService {
   async createPromotionBook(
     id: string,
     bookId: string,
-    promotionBook: CreatePromotionBookDto,
+    detailPromotion: CreatePromotionBookDto,
   ): Promise<void | Error> {
     const promotion = await this.promotion.findOne({ where: { id } });
     if (!promotion) {
       throw new Error('Promotion not found');
     }
     const book = await Book.findOne({ where: { id: bookId } });
-    promotionBook.price = book.price * (1 - promotionBook.discount / 100);
+    detailPromotion.price = book.price * (1 - detailPromotion.discount / 100);
     // if the quantity is greater than the inventory, set the quantity to the inventory
     // if the quantity is zero or undefined, set the quantity to inventory
-    promotionBook.quantity = !promotionBook.quantity
+    detailPromotion.quantity = !detailPromotion.quantity
       ? book.inventory
-      : Math.min(promotionBook.quantity, book.inventory);
-    await this.promotionBook.save(promotionBook);
+      : Math.min(detailPromotion.quantity, book.inventory);
+
+    const detail = await this.promotionBook.create(detailPromotion);
+    detail.promotion = promotion;
+    detail.book = book;
+    await this.promotionBook.save(detail);
   }
 
   async updatePromotionBook(

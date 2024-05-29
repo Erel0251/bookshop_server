@@ -121,7 +121,7 @@ export class PromotionController {
     @Res() res: any,
   ) {
     try {
-      this.promotionService.createPromotionBook(
+      await this.promotionService.createPromotionBook(
         id,
         bookId,
         createPromotionBookDto,

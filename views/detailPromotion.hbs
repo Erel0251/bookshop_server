@@ -55,22 +55,26 @@
           <tr>
             <th scope="col">#</th>
             <th scope="col">Name</th>
-            <th scope="col">Price</th>
             <th scope="col">Quantity</th>
+            <th scope="col">Original Price</th>
             <th scope="col">Discount</th>
+            <th scope="col">Sale Price</th>
             <th scope="col">Actions</th>
           </tr>
         </thead>
         <tbody id="book-list">
           {{#each promotion.promotion_books}}
-          <tr>
+          <tr data-detail-id="{{id}}">
             <th scope="row">{{inc @index}}</th>
             <td>{{this.book.title}}</td>
-            <td>{{formatPrice this.price this.book.currency}}</td>
             <td>{{this.quantity}}</td>
+            <td>{{formatPrice this.book.price this.book.currency}}</td>
             <td>{{formatDiscount this.discount}}</td>
+            <td>{{formatPrice this.price this.book.currency}}</td>
             <td>
-              <button class="btn btn-outline-warning btn-sm" onclick="editBook({{@index}})">Edit</button>
+              <button class="btn btn-outline-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editDetailPromotion">
+                Edit
+              </button>
               <button class="btn btn-outline-danger btn-sm removeBtn" type="button" data-bs-toggle="modal"
                 data-bs-target="#confirmModal" data-book-id="{{this.book.id}}">Remove</button>
             </td>
@@ -136,19 +140,6 @@
       });
   });
 
-
-  function editBook(index) {
-    /*
-    const book = books[index];
-    document.getElementById('book-name').value = book.name;
-    document.getElementById('book-quantity').value = book.quantity;
-    document.getElementById('book-price').value = book.price;
-
-    // Remove the book from the list for re-adding
-    books.splice(index, 1);
-    */
-  }
-
   let bookId = null;
   document.querySelectorAll('.removeBtn').forEach(button => {
     button.addEventListener('click', function () {
@@ -174,3 +165,5 @@
       });
   })
 </script>
+
+{{> promotion/editDetailPromotion}}
