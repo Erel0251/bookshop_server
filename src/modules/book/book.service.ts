@@ -1,4 +1,4 @@
-import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Repository } from 'typeorm';
@@ -9,7 +9,6 @@ import { UpdateBookDto } from './dto/update-book.dto';
 import { Book } from './entities/book.entity';
 import { AuthorService } from '../author/author.service';
 import { Author } from '../author/entities/author.entity';
-import { CategoryService } from '../category/category.service';
 import { Category } from '../category/entities/category.entity';
 import { BookStatus } from './constants/status.enum';
 import { generateISBN } from './helpers/helper';
@@ -30,9 +29,6 @@ export class BookService {
     private readonly authorService: AuthorService,
     private readonly reviewService: ReviewService,
     private readonly promotionService: PromotionService,
-
-    @Inject(forwardRef(() => CategoryService))
-    private readonly categoryService: CategoryService,
   ) {}
 
   private readonly logger = new Logger(BookService.name);
@@ -42,12 +38,16 @@ export class BookService {
     createBookDto.isbn = createBookDto.isbn || generateISBN();
     // lower case name
     createBookDto.title = createBookDto.title.toLowerCase();
+    createBookDto.author = createBookDto.author.toLowerCase();
+    //const author = await this.authorService.saveOne(createBookDto.author);
     return await this.book.save(createBookDto);
   }
 
   async update(id: string, updateBookDto: UpdateBookDto): Promise<void> {
     updateBookDto.title =
       updateBookDto.title ?? updateBookDto.title.toLowerCase();
+    updateBookDto.author =
+      updateBookDto.author ?? updateBookDto.author.toLowerCase();
     await this.book.update(id, updateBookDto);
   }
 

@@ -27,6 +27,10 @@ export class Book extends CommonEntity {
   title: string;
 
   @Field()
+  @Column({ type: 'text', nullable: true })
+  author?: string;
+
+  @Field()
   @Column({ type: 'text', nullable: false })
   publisher: string;
 

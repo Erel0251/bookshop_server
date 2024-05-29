@@ -14,6 +14,10 @@ export class QueryBookDto extends CommonDto {
 
   @IsString()
   @ApiPropertyOptional()
+  author?: string;
+
+  @IsString()
+  @ApiPropertyOptional()
   publisher?: string;
 
   @IsString()

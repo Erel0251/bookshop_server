@@ -13,17 +13,21 @@
 
   <form action="/book" method="get" class="card p-4 m-4" id="queryBook">
     <div class="row">
-      <div class="col-md-6 mb-3">
+      <div class="col-md-4 mb-3">
         <label for="filterTitle">Title</label>
         <input type="text" id="filterTitle" class="form-control" placeholder="Search by Title" name="title">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="filterAuthor">Author</label>
+        <input type="text" id="filterAuthor" class="form-control" placeholder="Search by Author" name="publisher">
+      </div>
+      <div class="col-md-4 mb-3">
+        <label for="filterPublisher">Publisher</label>
+        <input type="text" id="filterPublisher" class="form-control" placeholder="Search by Publisher" name="publisher">
       </div>
       <div class="col-md-6 mb-3">
         <label for="filterISBN">ISBN</label>
         <input type="text" id="filterISBN" class="form-control" placeholder="Search by ISBN" name="isbn">
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="filterPublisher">Publisher</label>
-        <input type="text" id="filterPublisher" class="form-control" placeholder="Search by Publisher" name="publisher">
       </div>
       <div class="col-md-6 mb-3">
         <label for="filterStatus">Status</label>
@@ -43,6 +47,7 @@
         <tr>
           <th>Image</th>
           <th>Title</th>
+          <th>Author</th>
           <th>Publisher</th>
           <th>ISBN</th>
           <th>Price</th>
@@ -58,6 +63,7 @@
         <tr data-book-id="{{id}}">
           <td><img src="{{img_urls.[0]}}" class="img-thumbnail cover-image" alt="Book Image"></td>
           <td class="editable">{{formatName title}}</td>
+          <td class="editable">{{formatName author}}</td>
           <td class="editable">{{formatName publisher}}</td>
           <td class="editable">{{isbn}}</td>
           <td class="editable" data-price="{{price}}">{{formatPrice price currency}}</td>

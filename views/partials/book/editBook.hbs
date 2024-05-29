@@ -17,6 +17,10 @@
             <input type="url" class="form-control" id="editURL" required>
           </div>
           <div class="mb-3">
+            <label for="editAuthor" class="form-label">Author Name</label>
+            <input type="text" class="form-control" id="editAuthor" required>
+          </div>
+          <div class="mb-3">
             <label for="editPublisher" class="form-label">Publisher Name</label>
             <input type="text" class="form-control" id="editPublisher" required>
           </div>
@@ -66,14 +70,16 @@
         currentRow = button.closest('tr');
         const url = currentRow.children[0].children[0].getAttribute('src');
         const name = currentRow.children[1].innerText;
-        const publisher = currentRow.children[2].innerText;
-        const isbn = currentRow.children[3].innerText;
-        const price = currentRow.children[4].getAttribute('data-price');
-        const status = currentRow.children[5].innerText;
-        const currency = currentRow.children[6].innerText;
+        const author = currentRow.children[2].innerText;
+        const publisher = currentRow.children[3].innerText;
+        const isbn = currentRow.children[4].innerText;
+        const price = currentRow.children[5].getAttribute('data-price');
+        const status = currentRow.children[6].innerText;
+        const currency = currentRow.children[7].innerText;
 
         document.getElementById('editName').value = name;
         document.getElementById('editURL').value = url;
+        document.getElementById('editAuthor').value = author;
         document.getElementById('editPublisher').value = publisher;
         document.getElementById('editISBN').value = isbn;
         document.getElementById('editPrice').value = price;
@@ -94,6 +100,7 @@
       const data = {
         title: document.getElementById('editName').value,
         img_urls: [document.getElementById('editURL').value],
+        author: document.getElementById('editAuthor').value,
         publisher: document.getElementById('editPublisher').value,
         overview: document.getElementById('editOverview').value,
         isbn: document.getElementById('editISBN').value,

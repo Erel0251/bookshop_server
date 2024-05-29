@@ -12,6 +12,10 @@ export class CreateBookDto {
   title: string;
 
   @IsString()
+  @ApiPropertyOptional()
+  author?: string;
+
+  @IsString()
   @ApiProperty()
   publisher: string;
 

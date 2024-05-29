@@ -11,11 +11,14 @@ const formatDate = (req: Date) => {
 
 // Format name to normal: '   nguyen van a  ' => 'Nguyen Van A'
 const formatName = (name: string) => {
-  return name
-    .replace(/_/g, ' ')
-    .split(' ')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
-    .join(' ');
+  return (
+    name &&
+    name
+      .replace(/_/g, ' ')
+      .split(' ')
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ')
+  );
 };
 
 const formatPrice = (price: any = 0, currency: string = 'VND') => {

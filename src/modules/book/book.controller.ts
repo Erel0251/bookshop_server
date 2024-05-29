@@ -64,8 +64,10 @@ export class BookController {
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateBookDto: UpdateBookDto,
+    @Res() res: any,
   ) {
     await this.bookService.update(id, updateBookDto);
+    res.status(HttpStatus.OK).send({ message: 'Update book successfully' });
   }
 
   @Get('total')
