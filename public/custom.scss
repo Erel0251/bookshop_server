@@ -19,6 +19,7 @@ $custom-colors: (
 
 $theme-colors: map-merge($theme-colors, $custom-colors); 
 
+.out_of_stock,
 .pending {
     background-color: #fff3cd;
     color: #856404;
@@ -32,6 +33,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     }
 }
 
+.available,
 .accepted {
     background-color: #d4edda;
     color: #155724;
@@ -45,6 +47,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     }
 }
 
+.discontinued,
 .rejected {
     background-color: #f8d7da;
     color: #721c24;
@@ -72,6 +75,7 @@ $theme-colors: map-merge($theme-colors, $custom-colors);
     }
 }
 
+.coming_soon,
 .delivered {
     background-color: #d1ecf1;
     color: #0c5460;
