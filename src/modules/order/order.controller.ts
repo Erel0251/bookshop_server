@@ -29,7 +29,7 @@ export class OrderController {
   @Get()
   findAll(@Res() res: any) {
     const orders = this.orderService.findAll();
-    res.status(HttpStatus.OK).render('order', { orders });
+    res.status(HttpStatus.OK).render('order', { orders, title: 'Order' });
   }
 
   // Get an order by id

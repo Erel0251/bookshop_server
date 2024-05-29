@@ -54,6 +54,7 @@ export class SupplementController {
     try {
       const supplements = await this.supplementService.findAll(query);
       res.status(HttpStatus.OK).render('supplement', {
+        title: 'Supplement',
         message: 'Get data successfully',
         supplements,
       });
@@ -84,6 +85,7 @@ export class SupplementController {
       const supplement = await this.supplementService.findOne(id);
       const books = await this.bookService.findAll();
       res.status(HttpStatus.OK).render('detailSupplement', {
+        title: 'Supplement Detail',
         message: 'Get data successfully',
         supplement,
         books,

@@ -51,7 +51,9 @@ export class PromotionController {
   async findAll(@Res() res: any) {
     try {
       const promotions = await this.promotionService.findAll();
-      res.status(HttpStatus.OK).render('promotion', { promotions });
+      res
+        .status(HttpStatus.OK)
+        .render('promotion', { promotions, title: 'Promotion' });
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
@@ -65,6 +67,7 @@ export class PromotionController {
       const promotion = await this.promotionService.findOne(id);
       const books = await this.bookService.findAll();
       res.status(HttpStatus.OK).render('detailPromotion', {
+        title: 'Promotion Detail',
         promotion,
         books,
       });

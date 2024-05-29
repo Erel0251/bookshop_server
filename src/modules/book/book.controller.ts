@@ -43,6 +43,7 @@ export class BookController {
     const books = await this.bookService.findAll(req);
     const statuses = Object.values(BookStatus);
     res.status(HttpStatus.OK).render('book', {
+      title: 'Book',
       message: 'Get data successfully',
       books,
       statuses,

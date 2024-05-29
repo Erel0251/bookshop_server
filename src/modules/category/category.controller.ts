@@ -51,6 +51,7 @@ export class CategoryController {
     try {
       const categories = await this.categoryService.findAll();
       return res.status(HttpStatus.OK).render('category', {
+        title: 'Category',
         message: 'Get data successfully',
         categories,
       });
@@ -67,6 +68,7 @@ export class CategoryController {
       const category = await this.categoryService.findOne(id);
       const books = await this.bookService.findAll();
       return res.status(HttpStatus.OK).render('detailCategory', {
+        title: 'Category Detail',
         message: 'Get data successfully',
         category,
         books,
