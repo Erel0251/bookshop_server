@@ -7,10 +7,10 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { User } from '../user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { JwtService } from '@nestjs/jwt';
-import { SignUpDto } from './dto/sign-up.dto';
 import * as bcrypt from 'bcrypt';
 import { LoginDto } from './dto/login.dto';
 import { ConfigService } from '@nestjs/config';
+import { CreateUserDto } from '../user/dto/create-user.dto';
 
 @Injectable()
 export class AuthService {
@@ -21,7 +21,7 @@ export class AuthService {
     private configService: ConfigService,
   ) {}
 
-  async signUp(signUpDto: SignUpDto) {
+  async signUp(signUpDto: CreateUserDto) {
     const userExists = await this.userRepository.findOne({
       where: { email: signUpDto.email },
     });
@@ -41,14 +41,14 @@ export class AuthService {
       where: { email: loginDto.email },
     });
     if (!user) {
-      throw new UnauthorizedException('Invalid email');
+      throw new UnauthorizedException('Invalid email or password');
     }
     const isPasswordValid = await bcrypt.compare(
       loginDto.password,
       user.password,
     );
     if (!isPasswordValid) {
-      throw new UnauthorizedException('Invalid password');
+      throw new UnauthorizedException('Invalid email or password');
     }
     const tokens = await this.getTokens(user.id, user.email);
     await this.updateRefreshToken(user.id, tokens.refreshToken);

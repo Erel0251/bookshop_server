@@ -6,26 +6,26 @@ import { Review } from '../../review/entities/review.entity';
 
 @Entity()
 export class User extends CommonEntity {
-  @Column({ type: 'text' })
-  first_name: string;
+  @Column({ type: 'text', nullable: true })
+  first_name?: string;
 
-  @Column({ type: 'text' })
-  last_name: string;
+  @Column({ type: 'text', nullable: true })
+  last_name?: string;
 
   @Column({ type: 'text', unique: true })
   email: string;
 
   @Column({ type: 'text', nullable: true })
-  phone: string;
+  phone?: string;
 
   @Column({ type: 'text', default: 'user' })
   role: string;
 
-  @Column({ type: 'text', nullable: false })
+  @Column({ type: 'text' })
   password: string;
 
-  @Column({ type: 'text' })
-  refresh_token: string;
+  @Column({ type: 'text', nullable: true })
+  refresh_token?: string;
 
   @Column({ type: 'integer', default: 0 })
   cart_count: number;

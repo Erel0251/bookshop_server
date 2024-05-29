@@ -13,7 +13,6 @@ import {
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
-import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateCartDto } from '../cart/dto/create-cart.dto';
 import { UpdateCartDto } from '../cart/dto/update-cart.dto';
@@ -24,12 +23,6 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   private readonly logger = new Logger(UserController.name);
-
-  // Create a new user
-  @Post()
-  create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
 
   // Get all users
   @Get()
