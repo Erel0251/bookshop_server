@@ -1,18 +1,21 @@
 import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
 import { Book } from 'src/modules/book/entities/book.entity';
-import { ObjectType } from '@nestjs/graphql';
+import { Field, ObjectType } from '@nestjs/graphql';
 import { Promotion } from './promotion.entity';
 
 @Entity({ name: 'promotion_book' })
 @ObjectType()
 export class PromotionBook extends CommonEntity {
+  @Field({ nullable: true })
   @Column({ type: 'integer', nullable: true })
   quantity?: number;
 
+  @Field({ nullable: true })
   @Column({ type: 'integer', nullable: true })
   price: number;
 
+  @Field({ nullable: true })
   @Column({ type: 'integer', nullable: true })
   discount: number;
 

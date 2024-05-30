@@ -1,5 +1,6 @@
 import {
   Args,
+  Float,
   ID,
   Parent,
   Query,
@@ -45,5 +46,10 @@ export class BookResolver {
   @ResolveField(() => ID, { name: 'id' })
   resolveId(@Parent() book: Book): string {
     return book.id;
+  }
+
+  @ResolveField(() => Float, { name: 'sale_price', nullable: true })
+  async salePrice(@Parent() book: Book): Promise<number> {
+    return await this.bookService.getCurrentSalePrice(book);
   }
 }

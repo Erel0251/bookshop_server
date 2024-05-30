@@ -16,7 +16,6 @@ import { SupplementDetail } from '../supplement/entities/supplement-detail.entit
 import { ReviewService } from '../review/review.service';
 import { Review } from '../review/entities/review.entity';
 import { PromotionService } from '../promotion/promotion.service';
-import { Promotion } from '../promotion/entities/promotion.entity';
 import { QueryBookDto } from './dto/query-book.dto';
 import { Maybe } from 'purify-ts/Maybe';
 
@@ -105,11 +104,6 @@ export class BookService {
     return book.category;
   }
 
-  async findPromotionInfoByBookId(id: string): Promise<Promotion> {
-    const book = await this.book.findOne({ where: { id } });
-    return await this.promotionService.findPromotionByBook(book);
-  }
-
   async getCountTotal(): Promise<number> {
     return await this.book.count();
   }
@@ -138,5 +132,11 @@ export class BookService {
     const book = await this.book.findOne({ where: { id } });
     book.is_deleted = true;
     await this.book.save(book);
+  }
+
+  async getCurrentSalePrice(book: Book): Promise<number> {
+    const promotion =
+      await this.promotionService.findDetailPromotionByBook(book);
+    return promotion ? promotion.price : undefined;
   }
 }

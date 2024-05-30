@@ -3,11 +3,12 @@ import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Promotion } from './entities/promotion.entity';
-import { Repository } from 'typeorm';
+import { LessThanOrEqual, MoreThanOrEqual, Repository } from 'typeorm';
 import { PromotionBook } from './entities/promotion-book.entity';
 import { Book } from '../book/entities/book.entity';
 import { CreatePromotionBookDto } from './dto/create-promotion-book.dto';
 import { UpdatePromotionBookDto } from './dto/update-promotion-book.dto';
+import { PromotionType } from './constants/promotion-type.enum';
 
 @Injectable()
 export class PromotionService {
@@ -25,18 +26,47 @@ export class PromotionService {
     return await this.promotion.save(createPromotionDto);
   }
 
-  async findAll(): Promise<Promotion[] | Error> {
+  async findAll(): Promise<Promotion[]> {
     return await this.promotion.find({
       where: { is_deleted: false },
       relations: ['promotion_books', 'promotion_books.book'],
     });
   }
 
-  async findOne(id: string): Promise<Promotion | Error> {
+  async findOne(id: string): Promise<Promotion> {
     return await this.promotion.findOne({
       where: { id },
       relations: ['promotion_books', 'promotion_books.book'],
     });
+  }
+
+  async findType(type?: PromotionType): Promise<Promotion[]> {
+    const date = new Date();
+    return await this.promotion.find({
+      where: {
+        type,
+        is_deleted: false,
+        from: LessThanOrEqual(date),
+        to: MoreThanOrEqual(date),
+      },
+      relations: ['promotion_books', 'promotion_books.book'],
+    });
+  }
+
+  async findDetailPromotion(id: string): Promise<PromotionBook[]> {
+    const promotion = await this.promotion.findOne({
+      where: { id },
+      relations: ['promotion_books', 'promotion_books.book'],
+    });
+    return promotion.promotion_books;
+  }
+
+  async findBookByPromotionBookId(id: string): Promise<Book> {
+    const promotionBook = await this.promotionBook.findOne({
+      where: { id },
+      relations: ['book'],
+    });
+    return promotionBook.book;
   }
 
   async update(id: string, update: UpdatePromotionDto): Promise<void | Error> {
@@ -97,12 +127,36 @@ export class PromotionService {
     await this.promotionBook.update(id, promotionBook);
   }
 
-  async findPromotionByBook(book: Book): Promise<Promotion> {
-    const promotionBook = await this.promotionBook.findOne({
-      where: { book },
-      relations: ['promotion'],
-    });
-    return promotionBook.promotion;
+  async findDetailPromotionByBook(book: Book): Promise<PromotionBook> {
+    // get the detail promotion where current date between from and to
+    const date = new Date();
+    const promotions = await this.promotion
+      .createQueryBuilder('promotion')
+      .where('promotion.from <= :date', { date })
+      .andWhere('promotion.to >= :date', { date })
+      .leftJoinAndSelect('promotion.promotion_books', 'promotion_books')
+      .leftJoinAndSelect('promotion_books.book', 'book')
+      .andWhere('book.id = :bookId', { bookId: book.id })
+      .getMany();
+
+    // if no promotion, return the original price
+    if (promotions.length === 0) {
+      return null;
+    }
+
+    // get min price of all promotions
+    let minPrice = book.price;
+    let detailPromotion: PromotionBook;
+    for (const promotion of promotions) {
+      for (const promotionBook of promotion.promotion_books) {
+        minPrice = Math.min(minPrice, promotionBook.price);
+        if (minPrice === promotionBook.price) {
+          detailPromotion = promotionBook;
+        }
+      }
+    }
+
+    return detailPromotion;
   }
 
   async deletePromotionBook(

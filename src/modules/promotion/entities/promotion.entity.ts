@@ -11,7 +11,7 @@ export class Promotion extends CommonEntity {
   @Column({ type: 'text', nullable: false })
   name: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   description?: string;
 
@@ -19,11 +19,11 @@ export class Promotion extends CommonEntity {
   @Column({ default: PromotionType.SALE })
   type: PromotionType;
 
-  @Field()
+  @Field(() => Date)
   @Column({ type: 'date', nullable: true })
   from: Date;
 
-  @Field()
+  @Field(() => Date)
   @Column({ type: 'date', nullable: true })
   to: Date;
 
@@ -32,5 +32,6 @@ export class Promotion extends CommonEntity {
   is_deleted: boolean;
 
   @OneToMany(() => PromotionBook, (promotionBook) => promotionBook.promotion)
+  @Field(() => [PromotionBook], { nullable: true })
   promotion_books: PromotionBook[];
 }

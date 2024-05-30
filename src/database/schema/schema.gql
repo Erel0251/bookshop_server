@@ -17,6 +17,33 @@ type Review {
   rating: Int!
 }
 
+type Promotion {
+  name: String!
+  description: String
+  type: String!
+  from: DateTime!
+  to: DateTime!
+  is_deleted: Boolean!
+  promotion_books: [PromotionBook!]!
+  id: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type PromotionBook {
+  quantity: Float
+  price: Float!
+  discount: Float
+  id: String!
+  book_id: String!
+  name: String!
+  author: String
+  publisher: String
+}
+
 type Book {
   title: String!
   author: String
@@ -34,6 +61,7 @@ type Book {
   category: Category!
   reviews: [Review!]!
   id: ID!
+  sale_price: Float
 }
 
 type Query {
@@ -41,4 +69,7 @@ type Query {
   category(id: String!): Category!
   books(offset: Float = 0, limit: Float = 20): [Book!]!
   book(id: String!): Book!
+  promotions: [Promotion!]!
+  promotionType(type: String): [Promotion!]!
+  promotion: Promotion!
 }

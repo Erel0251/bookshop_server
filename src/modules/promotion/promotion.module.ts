@@ -6,6 +6,8 @@ import { Promotion } from './entities/promotion.entity';
 import { PromotionBook } from './entities/promotion-book.entity';
 import { BookModule } from '../book/book.module';
 import { AuthModule } from '../auth/auth.module';
+import { PromotionResolver } from './promotion.resolver';
+import { PromotionBookResolver } from './promotion-book.resolver';
 
 @Module({
   imports: [
@@ -14,7 +16,7 @@ import { AuthModule } from '../auth/auth.module';
     AuthModule,
   ],
   controllers: [PromotionController],
-  providers: [PromotionService],
+  providers: [PromotionService, PromotionResolver, PromotionBookResolver],
   exports: [PromotionService],
 })
 export class PromotionModule {}
