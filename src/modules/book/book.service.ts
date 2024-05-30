@@ -7,8 +7,8 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 
 import { Book } from './entities/book.entity';
-import { AuthorService } from '../author/author.service';
-import { Author } from '../author/entities/author.entity';
+//import { AuthorService } from '../author/author.service';
+//import { Author } from '../author/entities/author.entity';
 import { Category } from '../category/entities/category.entity';
 import { BookStatus } from './constants/status.enum';
 import { generateISBN } from './helpers/helper';
@@ -26,7 +26,7 @@ export class BookService {
     @InjectRepository(Book)
     private book: Repository<Book>,
 
-    private readonly authorService: AuthorService,
+    //private readonly authorService: AuthorService,
     private readonly reviewService: ReviewService,
     private readonly promotionService: PromotionService,
   ) {}
@@ -90,20 +90,6 @@ export class BookService {
     return await this.book.findOne({
       where: { id },
     });
-  }
-
-  async findBooksByAuthorId(id: string): Promise<Book[]> {
-    try {
-      const author = await this.authorService.findOne(id);
-      return await this.book.find({ where: { authors: author as Author } });
-    } catch (error) {
-      this.logger.error(error);
-      return [];
-    }
-  }
-
-  async findAuthorByBookId(id: string): Promise<Author[]> {
-    return await this.authorService.findAuthorByBookId(id);
   }
 
   async findReviewByBook(id: string): Promise<Review[]> {

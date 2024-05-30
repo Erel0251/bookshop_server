@@ -6,7 +6,6 @@ import { BookController } from './book.controller';
 import { BookResolver } from './book.resolver';
 import { Book } from './entities/book.entity';
 
-import { AuthorModule } from '../author/author.module';
 import { CategoryModule } from '../category/category.module';
 import { ReviewModule } from '../review/review.module';
 import { PromotionModule } from '../promotion/promotion.module';
@@ -14,7 +13,6 @@ import { PromotionModule } from '../promotion/promotion.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Book]),
-    AuthorModule,
     ReviewModule,
     CategoryModule,
     PromotionModule,

@@ -1,17 +1,9 @@
-import {
-  Column,
-  Entity,
-  JoinColumn,
-  ManyToMany,
-  ManyToOne,
-  OneToMany,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany } from 'typeorm';
 import { Field, Float, Int, ObjectType } from '@nestjs/graphql';
 
 import { CommonEntity } from 'src/shared/entites/common.entity';
 import { BookStatus } from '../constants/status.enum';
 
-import { Author } from 'src/modules/author/entities/author.entity';
 import { Category } from 'src/modules/category/entities/category.entity';
 import { OrderDetail } from 'src/modules/order/entities/order-detail.entity';
 import { SupplementDetail } from 'src/modules/supplement/entities/supplement-detail.entity';
@@ -26,7 +18,7 @@ export class Book extends CommonEntity {
   @Column({ type: 'text', nullable: false, unique: true })
   title: string;
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   author?: string;
 
@@ -38,7 +30,7 @@ export class Book extends CommonEntity {
   @Column({ type: 'text', array: true, default: [] })
   img_urls: string[];
 
-  @Field()
+  @Field({ nullable: true })
   @Column({ type: 'text', nullable: true })
   overview?: string;
 
@@ -79,9 +71,9 @@ export class Book extends CommonEntity {
   @JoinColumn({ name: 'category_id' })
   category: Category;
 
-  @Field(() => [Author])
-  @ManyToMany(() => Author, (author) => author.books)
-  authors: Author[];
+  // @Field(() => [Author])
+  // @ManyToMany(() => Author, (author) => author.books)
+  // authors: Author[];
 
   @Field(() => [Review])
   @OneToMany(() => Review, (review) => review.book)

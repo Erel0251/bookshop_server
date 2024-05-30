@@ -18,7 +18,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BookModule } from './modules/book/book.module';
-import { AuthorModule } from './modules/author/author.module';
+//import { AuthorModule } from './modules/author/author.module';
 import { CartModule } from './modules/cart/cart.module';
 import { CategoryModule } from './modules/category/category.module';
 import { OrderModule } from './modules/order/order.module';
@@ -70,7 +70,7 @@ import { AppController } from './app.controller';
     // }),
     UserModule,
     AuthModule,
-    AuthorModule,
+    //AuthorModule,
     ReviewModule,
     CartModule,
     CategoryModule,

@@ -34,11 +34,4 @@ export class AuthorService {
   async delete(id: string): Promise<void> {
     await this.author.delete(id);
   }
-
-  async findAuthorByBookId(id: string): Promise<Author[]> {
-    return await this.author.find({
-      where: { books: { id } },
-      relations: ['books'],
-    });
-  }
 }

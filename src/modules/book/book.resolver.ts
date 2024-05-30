@@ -1,7 +1,13 @@
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Args,
+  ID,
+  Parent,
+  Query,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { Book } from './entities/book.entity';
 import { BookService } from './book.service';
-import { Author } from '../author/entities/author.entity';
 import { Category } from '../category/entities/category.entity';
 import { ParseUUIDPipe } from '@nestjs/common';
 import { Review } from '../review/entities/review.entity';
@@ -31,13 +37,13 @@ export class BookResolver {
     return await this.bookService.findCategoryByBookId(book.id);
   }
 
-  @ResolveField(() => [Author], { name: 'authors' })
-  async authors(@Parent() book: Book): Promise<Author[]> {
-    return await this.bookService.findAuthorByBookId(book.id);
-  }
-
   @ResolveField(() => [Review], { name: 'reviews' })
   async reviews(@Parent() book: Book): Promise<Review[]> {
     return await this.bookService.findReviewByBook(book.id);
+  }
+
+  @ResolveField(() => ID, { name: 'id' })
+  resolveId(@Parent() book: Book): string {
+    return book.id;
   }
 }

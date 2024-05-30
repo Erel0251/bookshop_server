@@ -62,8 +62,8 @@ export class AuthorController {
     @Res() res: any,
   ) {
     try {
-      const authors = await this.authorService.findAuthorByBookId(id);
-      res.status(HttpStatus.OK).send(authors);
+      //const authors = await this.authorService.findAuthorByBookId(id);
+      res.status(HttpStatus.OK).send();
     } catch (error) {
       this.logger.error(error);
       res.status(error.status).send(error.message);
