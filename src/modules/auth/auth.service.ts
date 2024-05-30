@@ -61,14 +61,11 @@ export class AuthService {
     return;
   }
 
-  async updateRefreshToken(email: string, refreshToken: string) {
+  async updateRefreshToken(id: string, refreshToken: string) {
     const hashedRefreshToken = await bcrypt.hash(refreshToken, 10);
-    await this.userRepository.update(
-      { email },
-      {
-        refresh_token: hashedRefreshToken,
-      },
-    );
+    await this.userRepository.update(id, {
+      refresh_token: hashedRefreshToken,
+    });
   }
 
   async getTokens(sub: string, email: string, roles: Role[] = [Role.USER]) {

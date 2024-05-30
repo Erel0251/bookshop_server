@@ -54,10 +54,4 @@ export class AuthController {
       .clearCookie('refreshToken', { httpOnly: true })
       .redirect('/');
   }
-
-  @Get('refresh')
-  refresh() {}
-
-  @Get('users')
-  getUsers() {}
 }
