@@ -56,18 +56,24 @@ type Book {
   currency: String!
   is_recommended: Boolean!
   is_deleted: Boolean!
+  keyword: String!
   buy_count: Int!
   inventory: Int!
-  category: Category!
-  reviews: [Review!]!
+  category: Category
+  reviews: [Review!]
   id: ID!
   sale_price: Float
+}
+
+type BooksResponse {
+  total: Int!
+  data: [Book!]!
 }
 
 type Query {
   categories: [Category!]!
   category(id: String!): Category!
-  books(offset: Float = 0, limit: Float = 20): [Book!]!
+  books(search: String, category: String, rating: Float, fromPrice: Float, toPrice: Float, offset: Float = 0, limit: Float = 20, sortBy: String = "updated_at", order: String = "DESC"): BooksResponse!
   book(id: String!): Book!
   promotions: [Promotion!]!
   promotionType(type: String): [Promotion!]!

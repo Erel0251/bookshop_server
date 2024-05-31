@@ -58,6 +58,10 @@ export class Book extends CommonEntity {
   @Column({ type: 'boolean', default: false })
   is_deleted: boolean;
 
+  @Field()
+  @Column({ type: 'text', nullable: true })
+  keyword?: string;
+
   @Field(() => Int)
   @Column({ type: 'integer', default: 0 })
   buy_count: number;
@@ -66,7 +70,7 @@ export class Book extends CommonEntity {
   @Column({ type: 'integer', default: 0 })
   inventory: number;
 
-  @Field(() => Category)
+  @Field(() => Category, { nullable: true })
   @ManyToOne(() => Category, (category) => category.books)
   @JoinColumn({ name: 'category_id' })
   category: Category;
@@ -75,7 +79,7 @@ export class Book extends CommonEntity {
   // @ManyToMany(() => Author, (author) => author.books)
   // authors: Author[];
 
-  @Field(() => [Review])
+  @Field(() => [Review], { nullable: true })
   @OneToMany(() => Review, (review) => review.book)
   reviews?: Review[];
 

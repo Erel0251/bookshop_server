@@ -56,6 +56,8 @@ export class CreateBookDto {
   @ApiPropertyOptional()
   category_id?: string;
 
+  keyword: string;
+
   @IsArray()
   @ApiPropertyOptional({ type: () => UpdateCategoryDto })
   categories?: UpdateCategoryDto;

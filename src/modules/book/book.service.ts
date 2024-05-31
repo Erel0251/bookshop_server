@@ -38,7 +38,9 @@ export class BookService {
     // lower case name
     createBookDto.title = createBookDto.title.toLowerCase();
     createBookDto.author = createBookDto.author.toLowerCase();
+    createBookDto.publisher = createBookDto.publisher.toLowerCase();
     //const author = await this.authorService.saveOne(createBookDto.author);
+    createBookDto.keyword = `${createBookDto.title}-${createBookDto.author}-${createBookDto.publisher}-${createBookDto.isbn}`;
     return await this.book.save(createBookDto);
   }
 
@@ -54,21 +56,9 @@ export class BookService {
     const filter = new QueryBookDto(req);
     const query = this.book.createQueryBuilder('book');
 
-    Maybe.fromFalsy(filter.title).ifJust((title) =>
-      query.andWhere('book.title LIKE :title', {
-        title: `%${title}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.isbn).ifJust((isbn) =>
-      query.andWhere('book.isbn LIKE :isbn', {
-        isbn: `%${isbn}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.publisher).ifJust((publisher) =>
-      query.andWhere('book.publisher LIKE :publisher', {
-        publisher: `%${publisher}%`,
+    Maybe.fromFalsy(filter.keyword).ifJust((keyword) =>
+      query.andWhere('book.keyword LIKE :keyword', {
+        keyword: `%${keyword}%`,
       }),
     );
 
@@ -78,9 +68,34 @@ export class BookService {
       }),
     );
 
-    Maybe.fromFalsy(filter.offset).ifJust((offset) => query.offset(offset));
+    Maybe.fromFalsy(filter.category).ifJust((category) =>
+      query
+        .leftJoinAndSelect('book.category', 'category')
+        .andWhere('category.name LIKE :category', {
+          category: `%${category}%`,
+        }),
+    );
 
-    Maybe.fromFalsy(filter.limit).ifJust((limit) => query.limit(limit));
+    Maybe.fromFalsy(filter.rating).ifJust((rating) =>
+      query.andWhere('book.rating = :rating', { rating }),
+    );
+
+    Maybe.fromFalsy(filter.fromPrice).ifJust((fromPrice) =>
+      query.andWhere('book.price >= :fromPrice', { fromPrice }),
+    );
+
+    Maybe.fromFalsy(filter.toPrice).ifJust((toPrice) =>
+      query.andWhere('book.price <= :toPrice', { toPrice }),
+    );
+
+    // alway get non-deleted book
+    query.andWhere('book.is_deleted = :is_deleted', { is_deleted: false });
+
+    query.orderBy(filter.sortBy || 'book.created_at', filter.order || 'DESC');
+
+    query.offset(filter.offset || 0);
+
+    query.limit(filter.limit || 20);
 
     return await query.getMany();
   }
@@ -105,7 +120,7 @@ export class BookService {
   }
 
   async getCountTotal(): Promise<number> {
-    return await this.book.count();
+    return await this.book.count({ where: { is_deleted: false } });
   }
 
   async updateInventory(id: string, buy: number = 0): Promise<void> {
