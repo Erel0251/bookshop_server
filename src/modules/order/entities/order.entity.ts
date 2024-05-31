@@ -30,9 +30,6 @@ export class Order extends CommonEntity {
   @Column({ default: OrderStatus.PENDING })
   status: OrderStatus;
 
-  @Column({ type: 'real' })
-  total_price: number;
-
   @OneToMany(() => OrderDetail, (orderDetail) => orderDetail.orders)
   order_details: OrderDetail[];
 

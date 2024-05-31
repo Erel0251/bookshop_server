@@ -80,8 +80,8 @@ export class SupplementService {
       }),
     );
 
-    Maybe.fromFalsy(filter.sort).ifJust((sort) =>
-      query.orderBy(`supplement.${filter.orderByName}`, sort),
+    Maybe.fromFalsy(filter.order).ifJust((order) =>
+      query.orderBy(`supplement.${filter.orderByName}`, order),
     );
     Maybe.fromFalsy(filter.offset).ifJust((offset) => query.offset(offset));
     Maybe.fromFalsy(filter.limit).ifJust((limit) => query.limit(limit));

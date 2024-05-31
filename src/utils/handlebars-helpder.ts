@@ -27,9 +27,9 @@ const formatPrice = (price: any = 0, currency: string = 'VND') => {
 
 const formatCategory = (children: string, parent?: string) => {
   if (!parent) {
-    return children;
+    return formatName(children);
   }
-  return `${parent} > ${children}`;
+  return `${formatName(parent)} > ${formatName(children)}`;
 };
 
 export function registerHelpers() {
