@@ -27,4 +27,6 @@ export class CreatePromotionDto {
   @IsObject({ each: true })
   @ApiPropertyOptional({ type: () => [UpdatePromotionBookDto] })
   promotion_books?: UpdatePromotionBookDto[];
+
+  id: string;
 }

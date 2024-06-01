@@ -19,7 +19,7 @@ const mockBook: CreateBookDto = {
   currency: 'VND',
 };
 
-const mockBookRepository = {
+export const mockBookRepository = {
   create: jest.fn().mockResolvedValue(mockBook),
   save: jest.fn().mockResolvedValue(mockBook),
   findOne: jest.fn().mockResolvedValue(mockBook),
