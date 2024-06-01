@@ -13,4 +13,6 @@ export class CreateCartDto {
   @IsString()
   @ApiProperty()
   book_id: string;
+
+  id: string;
 }

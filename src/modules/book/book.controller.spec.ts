@@ -18,7 +18,7 @@ export const mockBook: CreateBookDto | Book = {
   currency: 'VND',
 };
 
-const mockBookService = {
+export const mockBookService = {
   create: jest.fn().mockResolvedValue(mockBook),
   findAll: jest.fn().mockResolvedValue([mockBook]),
   findOne: jest.fn().mockResolvedValue(mockBook),
