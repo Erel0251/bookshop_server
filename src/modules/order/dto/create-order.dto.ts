@@ -38,4 +38,6 @@ export class CreateOrderDto {
 
   @ApiProperty()
   order_details: CreateOrderDto[];
+
+  id: string;
 }
