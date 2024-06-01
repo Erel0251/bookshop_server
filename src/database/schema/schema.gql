@@ -9,6 +9,7 @@ type Category {
   books: [Book!]
   father: Category
   children: [Category!]
+  id: String!
 }
 
 type Review {

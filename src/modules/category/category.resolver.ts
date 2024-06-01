@@ -32,4 +32,9 @@ export class CategoryResolver {
   async books(@Parent() category: Category): Promise<Book[]> {
     return await this.categoryService.findBooksByCategory(category.id);
   }
+
+  @ResolveField(() => String, { name: 'id' })
+  resolveId(category: Category): string {
+    return category.id;
+  }
 }

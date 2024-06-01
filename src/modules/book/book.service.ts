@@ -11,13 +11,12 @@ import { Book } from './entities/book.entity';
 //import { Author } from '../author/entities/author.entity';
 import { Category } from '../category/entities/category.entity';
 import { BookStatus } from './constants/status.enum';
-import { generateISBN } from './helpers/helper';
+import { generateISBN, queryBuilder } from './helpers/helper';
 import { SupplementDetail } from '../supplement/entities/supplement-detail.entity';
 import { ReviewService } from '../review/review.service';
 import { Review } from '../review/entities/review.entity';
 import { PromotionService } from '../promotion/promotion.service';
 import { QueryBookDto } from './dto/query-book.dto';
-import { Maybe } from 'purify-ts/Maybe';
 
 @Injectable()
 export class BookService {
@@ -54,47 +53,9 @@ export class BookService {
 
   async findAll(req?: QueryBookDto): Promise<Book[]> {
     const filter = new QueryBookDto(req);
-    const query = this.book.createQueryBuilder('book');
-
-    Maybe.fromFalsy(filter.keyword).ifJust((keyword) =>
-      query.andWhere('book.keyword LIKE :keyword', {
-        keyword: `%${keyword}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.status).ifJust((status) =>
-      query.andWhere('book.status LIKE :status', {
-        status: `%${status}%`,
-      }),
-    );
-
-    Maybe.fromFalsy(filter.category).ifJust((category) =>
-      query
-        .leftJoinAndSelect('book.category', 'category')
-        .andWhere('category.name LIKE :category', {
-          category: `%${category}%`,
-        }),
-    );
-
-    Maybe.fromFalsy(filter.rating).ifJust((rating) =>
-      query.andWhere('book.rating = :rating', { rating }),
-    );
-
-    Maybe.fromFalsy(filter.fromPrice).ifJust((fromPrice) =>
-      query.andWhere('book.price >= :fromPrice', { fromPrice }),
-    );
-
-    Maybe.fromFalsy(filter.toPrice).ifJust((toPrice) =>
-      query.andWhere('book.price <= :toPrice', { toPrice }),
-    );
-
-    // alway get non-deleted book
-    query.andWhere('book.is_deleted = :is_deleted', { is_deleted: false });
-
-    query.orderBy(filter.sortBy || 'book.created_at', filter.order || 'DESC');
+    const query = queryBuilder(this.book.createQueryBuilder('book'), filter);
 
     query.offset(filter.offset || 0);
-
     query.limit(filter.limit || 20);
 
     return await query.getMany();
@@ -119,8 +80,12 @@ export class BookService {
     return book.category;
   }
 
-  async getCountTotal(): Promise<number> {
-    return await this.book.count({ where: { is_deleted: false } });
+  // CLIENT USE CASE
+  async getCountTotal(req?: QueryBookDto): Promise<number> {
+    const filter = new QueryBookDto(req);
+    const query = queryBuilder(this.book.createQueryBuilder('book'), filter);
+
+    return await query.getCount();
   }
 
   async updateInventory(id: string, buy: number = 0): Promise<void> {
