@@ -7,7 +7,7 @@ import { HttpStatus } from '@nestjs/common';
 import { Book } from './entities/book.entity';
 import { mockResponse } from '../../shared/dto/mock-response.dto';
 
-const mockBook: CreateBookDto | Book = {
+export const mockBook: CreateBookDto | Book = {
   id: 'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
   title: 'test',
   author: 'test',

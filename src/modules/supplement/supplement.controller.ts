@@ -39,7 +39,7 @@ export class SupplementController {
 
   // Create a new supplement
   @Post()
-  async asynccreate(
+  async create(
     @Body() createSupplementDto: CreateSupplementDto,
     @Res() res: any,
   ) {

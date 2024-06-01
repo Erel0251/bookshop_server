@@ -56,7 +56,7 @@ export class CreateBookDto {
   @ApiPropertyOptional()
   category_id?: string;
 
-  keyword: string;
+  keyword?: string;
 
   @IsArray()
   @ApiPropertyOptional({ type: () => UpdateCategoryDto })
@@ -73,4 +73,6 @@ export class CreateBookDto {
   @IsArray()
   @ApiPropertyOptional({ type: () => CreateSupplementDetailDto })
   supplement_detail?: CreateSupplementDetailDto;
+
+  id: string;
 }

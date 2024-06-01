@@ -34,4 +34,6 @@ export class CreateSupplementDto {
   @IsArray()
   @ApiPropertyOptional({ type: () => [CreateSupplementDetailDto] })
   supplement_details?: CreateSupplementDetailDto[];
+
+  id?: string;
 }

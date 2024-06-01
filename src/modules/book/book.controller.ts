@@ -51,9 +51,9 @@ export class BookController {
   }
 
   @Get(':id')
-  findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
+  async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
-      const book = this.bookService.findOne(id);
+      const book = await this.bookService.findOne(id);
       res.status(HttpStatus.OK).send(book);
     } catch (error) {
       this.logger.error(error);
