@@ -5,6 +5,7 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { BookStatus } from './constants/status.enum';
 import { HttpStatus } from '@nestjs/common';
 import { Book } from './entities/book.entity';
+import { mockResponse } from '../../shared/dto/mock-response.dto';
 
 const mockBook: CreateBookDto | Book = {
   id: 'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
@@ -23,16 +24,6 @@ const mockBookService = {
   findOne: jest.fn().mockResolvedValue(mockBook),
   update: jest.fn().mockResolvedValue(mockBook),
   remove: jest.fn().mockResolvedValue(true),
-};
-
-const mockResponse = () => {
-  const res = {
-    status: jest.fn().mockReturnThis(),
-    json: jest.fn().mockReturnThis(),
-    render: jest.fn().mockReturnThis(),
-    send: jest.fn().mockReturnThis(),
-  };
-  return res;
 };
 
 describe('BookController', () => {

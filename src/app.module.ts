@@ -25,7 +25,6 @@ import { OrderModule } from './modules/order/order.module';
 import { SupplementModule } from './modules/supplement/supplement.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
-import { AdminModule } from './modules/admin/admin.module';
 import { AppController } from './app.controller';
 
 @Module({
@@ -78,7 +77,6 @@ import { AppController } from './app.controller';
     OrderModule,
     BookModule,
     SupplementModule,
-    AdminModule,
   ],
   controllers: [AppController],
 })

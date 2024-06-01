@@ -36,12 +36,6 @@ const mockBookRepository = {
   })),
 };
 
-const mockCategoryService = {};
-
-const mockReviewService = {};
-
-const mockPromotionService = {};
-
 describe('BookService', () => {
   let service: BookService;
   //let repository: Repository<Book>;
@@ -56,15 +50,15 @@ describe('BookService', () => {
         },
         {
           provide: CategoryService,
-          useValue: mockCategoryService,
+          useValue: {},
         },
         {
           provide: ReviewService,
-          useValue: mockReviewService,
+          useValue: {},
         },
         {
           provide: PromotionService,
-          useValue: mockPromotionService,
+          useValue: {},
         },
       ],
     }).compile();
