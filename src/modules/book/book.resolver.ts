@@ -17,6 +17,9 @@ import { ParseUUIDPipe } from '@nestjs/common';
 import { Review } from '../review/entities/review.entity';
 import { QueryBookDto } from './dto/query-book.dto';
 import { Order } from '../../shared/constants/order.enum';
+import { QueryReviewDto } from '../review/dto/query-review.dto';
+import { ReviewService } from '../review/review.service';
+import { User } from '../user/entities/user.entity';
 
 @ObjectType()
 class BooksResponse {
@@ -29,7 +32,10 @@ class BooksResponse {
 
 @Resolver(() => Book)
 export class BookResolver {
-  constructor(private bookService: BookService) {}
+  constructor(
+    private readonly bookService: BookService,
+    private readonly reviewService: ReviewService,
+  ) {}
 
   @Query(() => BooksResponse, { name: 'books' })
   async books(
@@ -87,8 +93,36 @@ export class BookResolver {
   }
 
   @ResolveField(() => [Review], { name: 'reviews', nullable: true })
-  async reviews(@Parent() book: Book): Promise<Review[]> {
-    return await this.bookService.findReviewByBook(book.id);
+  async reviews(
+    @Parent() book: Book,
+    @Args('rating', { type: () => Number, nullable: true })
+    rating?: number,
+    @Args('offset', { type: () => Number, nullable: true, defaultValue: 0 })
+    offset?: number,
+    @Args('limit', { type: () => Number, nullable: true, defaultValue: 10 })
+    limit: number = 10,
+    @Args('sortBy', {
+      type: () => String,
+      nullable: true,
+      defaultValue: 'created_at',
+    })
+    sortBy: string = 'created_at',
+    @Args('order', {
+      type: () => String,
+      nullable: true,
+      defaultValue: Order.DESC,
+    })
+    order?: Order,
+  ): Promise<Review[]> {
+    const query = new QueryReviewDto({
+      id: book.id,
+      rating,
+      offset,
+      limit,
+      sortBy,
+      order,
+    });
+    return await this.reviewService.findBookReviews(query);
   }
 
   @ResolveField(() => ID, { name: 'id' })
@@ -99,5 +133,10 @@ export class BookResolver {
   @ResolveField(() => Float, { name: 'sale_price', nullable: true })
   async salePrice(@Parent() book: Book): Promise<number> {
     return await this.bookService.getCurrentSalePrice(book);
+  }
+
+  @ResolveField(() => User, { name: 'user', nullable: true })
+  async user(@Parent() review: Review): Promise<User> {
+    return await this.reviewService.findUserReview(review);
   }
 }

@@ -4,13 +4,17 @@ import { CommonEntity } from 'src/shared/entites/common.entity';
 import { Column, Entity, OneToMany } from 'typeorm';
 import { Review } from '../../review/entities/review.entity';
 import { Role } from '../constants/role.enum';
+import { Field, ObjectType } from '@nestjs/graphql';
 
 @Entity()
+@ObjectType()
 export class User extends CommonEntity {
   @Column({ type: 'text', nullable: true })
+  @Field(() => String, { nullable: true })
   first_name?: string;
 
   @Column({ type: 'text', nullable: true })
+  @Field(() => String, { nullable: true })
   last_name?: string;
 
   @Column({ type: 'text', unique: true })
