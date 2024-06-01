@@ -21,4 +21,6 @@ export class CreateReviewDto {
   @IsUUID()
   @ApiPropertyOptional()
   user_id?: string;
+
+  id: string;
 }
