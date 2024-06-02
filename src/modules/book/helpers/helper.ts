@@ -35,10 +35,6 @@ export const queryBuilder = (
       }),
   );
 
-  Maybe.fromFalsy(req.rating).ifJust((rating) =>
-    query.andWhere('book.rating = :rating', { rating }),
-  );
-
   Maybe.fromFalsy(req.fromPrice).ifJust((fromPrice) =>
     query.andWhere('book.price >= :fromPrice', { fromPrice }),
   );
@@ -46,6 +42,15 @@ export const queryBuilder = (
   Maybe.fromFalsy(req.toPrice).ifJust((toPrice) =>
     query.andWhere('book.price <= :toPrice', { toPrice }),
   );
+
+  // Leftjoin review then get average rating
+  if (req.rating) {
+    query
+      .leftJoinAndSelect('book.reviews', 'review')
+      .addSelect('AVG(review.rating)', 'avg_rating')
+      .groupBy('book.id')
+      .having('AVG(review.rating) >= :rating', { rating: req.rating });
+  }
 
   // alway get non-deleted book
   query.andWhere('book.is_deleted = :is_deleted', { is_deleted: false });
