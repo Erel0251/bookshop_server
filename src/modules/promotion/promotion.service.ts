@@ -91,6 +91,14 @@ export class PromotionService {
     bookId: string,
     detailPromotion: CreatePromotionBookDto,
   ): Promise<void | Error> {
+    // check if the promotion book already exists
+    const promotionBook = await this.promotionBook.findOne({
+      where: { promotion: { id }, book: { id: bookId } },
+    });
+    if (promotionBook) {
+      throw new Error('Promotion book already exists');
+    }
+
     const promotion = await this.promotion.findOne({ where: { id } });
     if (!promotion) {
       throw new Error('Promotion not found');

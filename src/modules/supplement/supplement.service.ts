@@ -121,6 +121,14 @@ export class SupplementService {
     id: string,
     detail: CreateSupplementDetailDto,
   ): Promise<void | Error> {
+    // check if the book already exists
+    const supplementDetail = await this.supplementDetailRepository.findOne({
+      where: { books: { id: detail.bookId }, supplements: { id } },
+    });
+    if (supplementDetail) {
+      throw new Error('Book already exists in supplement');
+    }
+
     const supplement = await this.supplementRepository.findOne({
       where: { id },
     });
@@ -145,6 +153,14 @@ export class SupplementService {
   }
 
   async addBook(id: string, bookUpdate: UpdateBookDto): Promise<void | Error> {
+    // check if the book already exists
+    const supplementDetail = await this.supplementDetailRepository.findOne({
+      where: { books: { id: bookUpdate.id }, supplements: { id } },
+    });
+    if (supplementDetail) {
+      throw new Error('Book already exists in supplement');
+    }
+
     const supplement = await this.supplementRepository.findOne({
       where: { id },
     });
@@ -170,27 +186,6 @@ export class SupplementService {
     await this.supplementRepository.save(supplement);
     await this.supplementDetailRepository.save(detail);
     await this.bookService.update(book.id, book);
-
-    /*
-    const supplement = await this.supplementRepository.findOne({
-      where: { id },
-    });
-    const book = await this.bookService.findOne(bookUpdate.id);
-    if (!supplement) {
-      throw new Error('Supplement not found');
-    }
-    if (!book.id) {
-      throw new Error('Book id is required');
-    }
-    book.inventory += bookUpdate.supplement_detail?.quantity;
-    await this.bookService.update(book.id, book);
-    const detail = this.supplementDetailRepository.create(
-      bookUpdate.supplement_detail,
-    );
-    book.supplement_detail = detail;
-    supplement.supplement_details.push(detail);
-    await this.supplementRepository.save(supplement);
-    */
   }
 
   async updateBook(id: string, book: UpdateBookDto): Promise<void | Error> {

@@ -138,7 +138,11 @@ export class PromotionController {
         .send({ message: 'Add book to promotion successfully' });
     } catch (error) {
       this.logger.error(error);
-      res.status(error.status).send(error.message);
+      if (error.message === 'Promotion book already exists') {
+        res.status(HttpStatus.CONFLICT).send(error.message);
+      } else {
+        res.status(error.status).send(error.message);
+      }
     }
   }
 
@@ -178,7 +182,11 @@ export class PromotionController {
         .send({ message: 'Delete promotion book successfully' });
     } catch (error) {
       this.logger.error(error);
-      res.status(error.status).send(error.message);
+      if (error.message === 'Promotion book not found') {
+        res.status(HttpStatus.NOT_FOUND).send(error.message);
+      } else {
+        res.status(error.status).send(error.message);
+      }
     }
   }
 }

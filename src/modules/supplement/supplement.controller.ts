@@ -155,7 +155,15 @@ export class SupplementController {
         .send({ message: 'Add book to supplement successfully' });
     } catch (error) {
       this.logger.error(error);
-      return res.status(error.status).send(error.message);
+      if (error.message === 'Book already exists in supplement') {
+        return res.status(HttpStatus.CONFLICT).send(error.message);
+      } else if (error.message === 'Book not found') {
+        return res.status(HttpStatus.NOT_FOUND).send(error.message);
+      } else if (error.message === 'Supplement not found') {
+        return res.status(HttpStatus.NOT_FOUND).send(error.message);
+      } else {
+        return res.status(error.status).send(error.message);
+      }
     }
   }
 
