@@ -27,6 +27,7 @@ export class OrderController {
 
   // Create a new order
   @Post()
+  @Roles(Role.USER)
   async create(@Body() createOrderDto: CreateOrderDto) {
     return await this.orderService.create(createOrderDto);
   }

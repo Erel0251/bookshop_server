@@ -6,18 +6,25 @@ import {
   Res,
   HttpStatus,
   Post,
+  UseGuards,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../user/constants/role.enum';
 
 @Controller('review')
 @ApiTags('Review')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ReviewController {
   constructor(private readonly reviewService: ReviewService) {}
 
   // Create a new review
   @Post()
+  @Roles(Role.USER)
   async create(createReview: CreateReviewDto, @Res() res: any) {
     await this.reviewService.create(createReview);
     res
@@ -27,6 +34,7 @@ export class ReviewController {
 
   // Update a review
   @Post(':id')
+  @Roles(Role.USER)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     updateReview: CreateReviewDto,
@@ -37,6 +45,7 @@ export class ReviewController {
   }
 
   @Delete(':id')
+  @Roles(Role.USER)
   async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     await this.reviewService.remove(id);
     return res
