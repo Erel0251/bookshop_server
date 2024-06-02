@@ -8,14 +8,20 @@ import {
   ParseUUIDPipe,
   Res,
   HttpStatus,
+  UseGuards,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { UpdateOrderDto } from './dto/update-order.dto';
 import { ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../user/constants/role.enum';
 
 @ApiTags('Order')
 @Controller('order')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class OrderController {
   constructor(private readonly orderService: OrderService) {}
 
@@ -27,6 +33,7 @@ export class OrderController {
 
   // Get all orders
   @Get()
+  @Roles(Role.ADMIN)
   findAll(@Res() res: any) {
     const orders = this.orderService.findAll();
     res.status(HttpStatus.OK).render('order', { orders, title: 'Order' });

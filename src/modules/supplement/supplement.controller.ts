@@ -39,6 +39,7 @@ export class SupplementController {
 
   // Create a new supplement
   @Post()
+  @Roles(Role.ADMIN)
   async create(
     @Body() createSupplementDto: CreateSupplementDto,
     @Res() res: any,
@@ -56,6 +57,7 @@ export class SupplementController {
 
   // Get all supplements
   @Get()
+  @Roles(Role.ADMIN)
   async findAll(@Query() query: QuerySupplementDto, @Res() res: any) {
     try {
       const supplements = await this.supplementService.findAll(query);
@@ -72,6 +74,7 @@ export class SupplementController {
 
   // Import supplements from CSV or Excel file
   @Post('import')
+  @Roles(Role.ADMIN)
   async import(@Res() res: any) {
     try {
       //await this.supplementService.import();
@@ -105,6 +108,7 @@ export class SupplementController {
 
   // Update a supplement by id
   @Patch(':id')
+  @Roles(Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateSupplementDto: UpdateSupplementDto,
@@ -123,6 +127,7 @@ export class SupplementController {
 
   // Soft delete a supplement by id
   @Delete(':id')
+  @Roles(Role.ADMIN)
   async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       await this.supplementService.remove(id);
@@ -137,6 +142,7 @@ export class SupplementController {
 
   // Add book to supplement
   @Patch(':id/book')
+  @Roles(Role.ADMIN)
   async addBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() book: UpdateBookDto, // book entities
@@ -155,6 +161,7 @@ export class SupplementController {
 
   // Update detail in supplement
   @Patch(':id/book/:detailId')
+  @Roles(Role.ADMIN)
   async updateBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('detailId', ParseUUIDPipe) detailId: string,
@@ -175,6 +182,7 @@ export class SupplementController {
 
   // Remove book from supplement
   @Delete(':id/book/:bookId')
+  @Roles(Role.ADMIN)
   async removeBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('bookId', ParseUUIDPipe) bookId: string,

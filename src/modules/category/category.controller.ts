@@ -20,10 +20,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { CategoryService } from './category.service';
 import { BookService } from '../book/book.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Role } from '../user/constants/role.enum';
+import { Roles } from '../auth/decorators/roles.decorator';
 
 @ApiTags('Category')
 @Controller('category')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class CategoryController {
   constructor(
     private readonly categoryService: CategoryService,
@@ -36,6 +39,7 @@ export class CategoryController {
 
   // Create a new category
   @Post()
+  @Roles(Role.ADMIN)
   async create(@Body() createCategoryDto: CreateCategoryDto, @Res() res: any) {
     try {
       await this.categoryService.create(createCategoryDto);
@@ -50,6 +54,7 @@ export class CategoryController {
 
   // Get all categories
   @Get()
+  @Roles(Role.ADMIN)
   async findAll(@Res() res: any) {
     try {
       const categories = await this.categoryService.findAll();
@@ -66,6 +71,7 @@ export class CategoryController {
 
   // Get a category by ID
   @Get(':id')
+  @Roles(Role.ADMIN)
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const category = await this.categoryService.findOne(id);
@@ -84,6 +90,7 @@ export class CategoryController {
 
   // Update a category
   @Patch(':id')
+  @Roles(Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateCategoryDto: UpdateCategoryDto,
@@ -105,6 +112,7 @@ export class CategoryController {
 
   // Delete a category
   @Delete(':id')
+  @Roles(Role.ADMIN)
   async remove(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       await this.categoryService.remove(id);
@@ -119,6 +127,7 @@ export class CategoryController {
 
   // Get books by category
   @Get(':id/book')
+  @Roles(Role.ADMIN)
   async findBooksByCategory(
     @Param('id', ParseUUIDPipe) id: string,
     @Res() res: any,
@@ -134,6 +143,7 @@ export class CategoryController {
 
   // Add a book to a category
   @Post(':id/book/:bookId')
+  @Roles(Role.ADMIN)
   async addBookToCategory(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('bookId', ParseUUIDPipe) bookId: string,
@@ -153,6 +163,7 @@ export class CategoryController {
 
   // Remove a book from a category
   @Delete(':id/book/:bookId')
+  @Roles(Role.ADMIN)
   async removeBookFromCategory(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('bookId', ParseUUIDPipe) bookId: string,

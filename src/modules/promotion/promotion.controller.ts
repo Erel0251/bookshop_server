@@ -20,10 +20,13 @@ import { ApiTags } from '@nestjs/swagger';
 import { BookService } from '../book/book.service';
 import { UpdatePromotionBookDto } from './dto/update-promotion-book.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../user/constants/role.enum';
 
 @Controller('promotion')
 @ApiTags('Promotion')
-@UseGuards(JwtAuthGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class PromotionController {
   constructor(
     private readonly promotionService: PromotionService,
@@ -34,6 +37,7 @@ export class PromotionController {
 
   // Create a new promotion event
   @Post()
+  @Roles(Role.ADMIN)
   async create(
     @Body() createPromotionDto: CreatePromotionDto,
     @Res() res: any,
@@ -82,6 +86,7 @@ export class PromotionController {
 
   // Update specific promotion event
   @Patch(':id')
+  @Roles(Role.ADMIN)
   async update(
     @Param('id') id: string,
     @Body() updatePromotionDto: UpdatePromotionDto,
@@ -100,6 +105,7 @@ export class PromotionController {
 
   // Delete specific promotion event
   @Delete(':id')
+  @Roles(Role.ADMIN)
   async delete(@Param('id') id: string, @Res() res: any) {
     try {
       await this.promotionService.delete(id);
@@ -114,6 +120,7 @@ export class PromotionController {
 
   // Add a book to a promotion event
   @Post(':id/book/:bookId')
+  @Roles(Role.ADMIN)
   async createPromotionBook(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('bookId', ParseUUIDPipe) bookId: string,
@@ -137,6 +144,7 @@ export class PromotionController {
 
   // Update specific promotion book
   @Patch(':id/book/:bookId')
+  @Roles(Role.ADMIN)
   async updatePromotionBook(
     @Param('id') id: string,
     @Param('bookId') bookId: string,
@@ -157,6 +165,7 @@ export class PromotionController {
 
   // Delete specific promotion book
   @Delete(':id/book/:bookId')
+  @Roles(Role.ADMIN)
   async deletePromotionBook(
     @Param('id') id: string,
     @Param('bookId') bookId: string,
