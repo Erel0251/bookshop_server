@@ -5,17 +5,22 @@ import { PromotionBook } from './entities/promotion-book.entity';
 export class PromotionBookResolver {
   constructor() {}
 
-  @ResolveField(() => String, { name: 'id' })
+  @ResolveField(() => String, { name: 'detail_id' })
   resolveId(@Parent() detail: PromotionBook): string {
     return detail.id;
   }
 
-  @ResolveField(() => String, { name: 'book_id' })
+  @ResolveField(() => String, { name: 'id' })
   resolveBookId(@Parent() detail: PromotionBook): string {
     return detail.book.id;
   }
 
-  @ResolveField(() => String, { name: 'name' })
+  @ResolveField(() => [String], { name: 'img_urls' })
+  resolveBookImgUrls(@Parent() detail: PromotionBook): string[] {
+    return detail.book.img_urls;
+  }
+
+  @ResolveField(() => String, { name: 'title' })
   resolveBookName(@Parent() detail: PromotionBook): string {
     return detail.book.title;
   }
@@ -33,5 +38,15 @@ export class PromotionBookResolver {
   @ResolveField(() => Float, { name: 'price' })
   resolveBookPrice(@Parent() detail: PromotionBook): number {
     return detail.book.price;
+  }
+
+  @ResolveField(() => Float, { name: 'sale_price' })
+  resolveSalePrice(@Parent() detail: PromotionBook): number {
+    return detail.book.price * (1 - detail.discount / 100);
+  }
+
+  @ResolveField(() => String, { name: 'currency' })
+  resolveCurrency(@Parent() detail: PromotionBook): string {
+    return detail.book.currency;
   }
 }

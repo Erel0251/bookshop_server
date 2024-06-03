@@ -38,11 +38,14 @@ type PromotionBook {
   quantity: Float
   price: Float!
   discount: Float
+  detail_id: String!
   id: String!
-  book_id: String!
-  name: String!
+  img_urls: [String!]!
+  title: String!
   author: String
   publisher: String
+  sale_price: Float!
+  currency: String!
 }
 
 type Book {
@@ -83,6 +86,7 @@ type Query {
   books(search: String, categories: [String!], rating: Float, fromPrice: Float, toPrice: Float, offset: Float = 0, limit: Float = 20, sortBy: String = "updated_at", order: String = "DESC"): BooksResponse!
   book(id: String!): Book!
   promotions: [Promotion!]!
-  promotionType(type: String): [Promotion!]!
+  sale: [Promotion!]!
+  recommend: [Promotion!]!
   promotion: Promotion!
 }

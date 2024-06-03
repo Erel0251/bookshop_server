@@ -1,4 +1,4 @@
-import { Args, Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
+import { Parent, Query, ResolveField, Resolver } from '@nestjs/graphql';
 import { Promotion } from './entities/promotion.entity';
 import { PromotionService } from './promotion.service';
 import { PromotionBook } from './entities/promotion-book.entity';
@@ -13,12 +13,14 @@ export class PromotionResolver {
     return await this.promotionService.findAll();
   }
 
-  @Query(() => [Promotion], { name: 'promotionType' })
-  async promotionType(
-    @Args('type', { nullable: true })
-    type: PromotionType,
-  ): Promise<Promotion[]> {
-    return await this.promotionService.findType(type);
+  @Query(() => [Promotion], { name: 'sale' })
+  async sale(): Promise<Promotion[]> {
+    return await this.promotionService.findType(PromotionType.SALE);
+  }
+
+  @Query(() => [Promotion], { name: 'recommend' })
+  async recommend(): Promise<Promotion[]> {
+    return await this.promotionService.findType(PromotionType.RECOMMEND);
   }
 
   @Query(() => Promotion, { name: 'promotion' })

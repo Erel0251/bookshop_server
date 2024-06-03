@@ -29,9 +29,10 @@ export const queryBuilder = (
 
   if (req.categories?.length > 0) {
     query.leftJoinAndSelect('book.category', 'category');
-    req.categories.forEach((category) => {
-      query.andWhere('category.name LIKE :category', {
-        category: `%${category}%`,
+    req.categories.forEach((category, index) => {
+      const name = `category${index}`;
+      query.orWhere(`category.name LIKE :${name}`, {
+        [name]: `%${category}%`,
       });
     });
   }
