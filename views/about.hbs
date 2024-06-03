@@ -1,0 +1,27 @@
+{{> sidebar}}
+<div class="col container-fluid">
+
+  <div class="d-flex justify-content-between align-items-center m-4">
+    <h2 class="text-left">About Us Page</h2>
+    <div class="d-flex">
+    </div>
+  </div>
+
+
+  <form id="aboutForm" action="/about" method="post"
+    class="m-5 d-flex flex-column justify-content-evenly align-items-center">
+    <textarea id="summernote" style="width: 100%;" name="editordata">{{data}}</textarea>
+    <button class="btn btn-primary" type="submit">Submit</button>
+  </form>
+</div>
+
+<script>
+  $(document).ready(function () {
+    $('#summernote').summernote({
+      placeholder: 'Type your content here...',
+      tabsize: 2,
+      height: 400,
+      width: 900,
+    });
+  });
+</script>
