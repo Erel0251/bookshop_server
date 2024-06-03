@@ -27,13 +27,14 @@ export const queryBuilder = (
     }),
   );
 
-  Maybe.fromFalsy(req.category).ifJust((category) =>
-    query
-      .leftJoinAndSelect('book.category', 'category')
-      .andWhere('category.name LIKE :category', {
+  if (req.categories?.length > 0) {
+    query.leftJoinAndSelect('book.category', 'category');
+    req.categories.forEach((category) => {
+      query.andWhere('category.name LIKE :category', {
         category: `%${category}%`,
-      }),
-  );
+      });
+    });
+  }
 
   Maybe.fromFalsy(req.fromPrice).ifJust((fromPrice) =>
     query.andWhere('book.price >= :fromPrice', { fromPrice }),
@@ -43,19 +44,23 @@ export const queryBuilder = (
     query.andWhere('book.price <= :toPrice', { toPrice }),
   );
 
-  // Leftjoin review then get average rating
+  // Leftjoin review, group by book,
+  // having round avg rating of each book
+  // then filter by rating
   if (req.rating) {
     query
       .leftJoinAndSelect('book.reviews', 'review')
-      .addSelect('AVG(review.rating)', 'avg_rating')
       .groupBy('book.id')
-      .having('AVG(review.rating) >= :rating', { rating: req.rating });
+      .select('book.*')
+      .having('ROUND(AVG(review.rating)) = :rating', {
+        rating: req.rating,
+      });
   }
 
   // alway get non-deleted book
   query.andWhere('book.is_deleted = :is_deleted', { is_deleted: false });
 
-  query.orderBy(req.sortBy || 'book.created_at', req.order || 'DESC');
+  query.orderBy(`book.${req.sortBy}` || 'book.created_at', req.order || 'DESC');
 
   return query;
 };

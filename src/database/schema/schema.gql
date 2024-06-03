@@ -80,7 +80,7 @@ type BooksResponse {
 type Query {
   categories: [Category!]!
   category(id: String!): Category!
-  books(search: String, category: String, rating: Float, fromPrice: Float, toPrice: Float, offset: Float = 0, limit: Float = 20, sortBy: String = "updated_at", order: String = "DESC"): BooksResponse!
+  books(search: String, categories: [String!], rating: Float, fromPrice: Float, toPrice: Float, offset: Float = 0, limit: Float = 20, sortBy: String = "updated_at", order: String = "DESC"): BooksResponse!
   book(id: String!): Book!
   promotions: [Promotion!]!
   promotionType(type: String): [Promotion!]!

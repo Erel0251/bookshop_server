@@ -41,8 +41,8 @@ export class BookResolver {
   async books(
     @Args('search', { type: () => String, nullable: true })
     search: string,
-    @Args('category', { type: () => String, nullable: true })
-    category: string,
+    @Args('categories', { type: () => [String], nullable: true })
+    categories: string[],
     @Args('rating', { type: () => Number, nullable: true })
     rating: number,
     @Args('fromPrice', { type: () => Number, nullable: true })
@@ -68,7 +68,7 @@ export class BookResolver {
   ): Promise<BooksResponse> {
     const query = new QueryBookDto({
       keyword: search,
-      category,
+      categories,
       rating,
       fromPrice,
       toPrice,
@@ -78,7 +78,7 @@ export class BookResolver {
       order,
     });
     const data = await this.bookService.findAll(query);
-    const total = await this.bookService.getCountTotal();
+    const total = await this.bookService.getCountTotal(query);
     return { total, data };
   }
 

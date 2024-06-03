@@ -12,9 +12,9 @@ export class QueryBookDto extends CommonDto {
   @ApiPropertyOptional()
   status?: BookStatus;
 
-  @IsString()
+  @IsString({ each: true })
   @ApiPropertyOptional()
-  category?: string;
+  categories?: string[];
 
   @IsNumber()
   @ApiPropertyOptional()
