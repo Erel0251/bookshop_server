@@ -104,8 +104,8 @@
 
                 if (response.ok) {
                     // Store the token in localStorage
-                    localStorage.setItem('accessToken', result.accessToken);
-                    localStorage.setItem('refreshToken', result.refreshToken);
+                    localStorage.setItem('accessToken', result.tokens.accessToken);
+                    localStorage.setItem('refreshToken', result.tokens.refreshToken);
                     window.location.href = '/book';
                 } else {
                     alert(`Login failed: ${result.message}`);

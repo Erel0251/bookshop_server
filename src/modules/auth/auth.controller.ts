@@ -19,30 +19,30 @@ export class AuthController {
 
   @Post('signup')
   async signUp(@Body() signUpDto: CreateUserDto, @Res() res: any) {
-    const token = await this.authService.signUp(signUpDto);
+    const result = await this.authService.signUp(signUpDto);
     res
       .status(HttpStatus.CREATED)
-      .cookie('accessToken', token.accessToken, {
+      .cookie('accessToken', result.tokens.accessToken, {
         httpOnly: true,
       })
-      .cookie('refreshToken', token.refreshToken, {
+      .cookie('refreshToken', result.tokens.refreshToken, {
         httpOnly: true,
       })
-      .send(token);
+      .send(result);
   }
 
   @Post('login')
   async login(@Body() loginDto: LoginDto, @Res() res: any) {
-    const token = await this.authService.login(loginDto);
+    const result = await this.authService.login(loginDto);
     res
       .status(HttpStatus.OK)
-      .cookie('accessToken', token.accessToken, {
+      .cookie('accessToken', result.tokens.accessToken, {
         httpOnly: true,
       })
-      .cookie('refreshToken', token.refreshToken, {
+      .cookie('refreshToken', result.tokens.refreshToken, {
         httpOnly: true,
       })
-      .send(token);
+      .send(result);
   }
 
   @Get('logout')
