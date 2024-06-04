@@ -5,6 +5,7 @@ import { Column, Entity, OneToMany } from 'typeorm';
 import { Review } from '../../review/entities/review.entity';
 import { Role } from '../constants/role.enum';
 import { Field, ObjectType } from '@nestjs/graphql';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 @ObjectType()
@@ -27,6 +28,7 @@ export class User extends CommonEntity {
   roles: Role[];
 
   @Column({ type: 'text' })
+  @Exclude()
   password: string;
 
   @Column({ type: 'text', nullable: true })

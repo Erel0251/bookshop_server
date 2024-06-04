@@ -6,6 +6,7 @@ import { Order } from './entities/order.entity';
 import { Repository } from 'typeorm';
 import { OrderDetail } from './entities/order-detail.entity';
 import { validStatusTransition } from './helpers/helpers';
+import { BookService } from '../book/book.service';
 
 @Injectable()
 export class OrderService {
@@ -15,12 +16,24 @@ export class OrderService {
 
     @InjectRepository(OrderDetail)
     private orderDetailRepository: Repository<OrderDetail>,
+
+    private readonly bookService: BookService,
   ) {}
 
   private readonly logger = new Logger(OrderService.name);
 
   async create(createOrderDto: CreateOrderDto) {
-    return await this.orderRepository.save(createOrderDto);
+    const order = await this.orderRepository.save(createOrderDto);
+    if (createOrderDto.order_details) {
+      createOrderDto.order_details.forEach(async (orderDetail) => {
+        const detail = await this.orderDetailRepository.create(orderDetail);
+        const book = await this.bookService.findOne(orderDetail.book_id);
+        detail.books = book;
+        detail.orders = order;
+        await this.orderDetailRepository.save(detail);
+      });
+    }
+    return;
   }
 
   async findAll(): Promise<Order[]> {

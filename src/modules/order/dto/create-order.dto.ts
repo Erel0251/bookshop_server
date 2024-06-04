@@ -1,8 +1,13 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsEmail, IsNumber, IsNumberString, IsString } from 'class-validator';
+import { IsEmail, IsNumberString, IsString } from 'class-validator';
 import { OrderStatus } from '../constants/order-status.enum';
+import { CreateOrderDetailDto } from './create-order-detail.dto';
 
 export class CreateOrderDto {
+  @IsString()
+  @ApiProperty()
+  user_id: string;
+
   @IsString()
   @ApiProperty()
   province: string;
@@ -19,6 +24,10 @@ export class CreateOrderDto {
   @ApiProperty()
   address: string;
 
+  @IsString()
+  @ApiProperty()
+  name: string;
+
   @IsNumberString()
   @ApiProperty()
   phone: string;
@@ -30,14 +39,10 @@ export class CreateOrderDto {
 
   @IsString()
   @ApiPropertyOptional()
-  status?: OrderStatus;
+  status: OrderStatus = OrderStatus.PENDING;
 
-  @IsNumber()
-  @ApiProperty()
-  total_price: number;
-
-  @ApiProperty()
-  order_details: CreateOrderDto[];
+  @ApiProperty({ type: [CreateOrderDetailDto] })
+  order_details: CreateOrderDetailDto[];
 
   id: string;
 }

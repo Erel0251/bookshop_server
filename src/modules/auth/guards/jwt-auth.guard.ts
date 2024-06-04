@@ -10,6 +10,8 @@ import { Request } from 'express';
 export class JwtAuthGuard extends AuthGuard('jwt') {
   getRequest(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest<Request>();
+    // get accessToken from the request header
+    //request.headers.authorization = request.headers.authorization?.split(' ')[1];
     request.headers.authorization = `Bearer ${request.cookies['accessToken']}`;
     return request;
   }
