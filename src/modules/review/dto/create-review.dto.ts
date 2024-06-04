@@ -12,7 +12,7 @@ export class CreateReviewDto {
 
   @IsNumber()
   @ApiProperty()
-  rating: number;
+  rating: number = 5;
 
   @IsUUID()
   @ApiPropertyOptional()

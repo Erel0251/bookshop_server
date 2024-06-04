@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import { Book } from '../book/entities/book.entity';
 import { UpdateReviewDto } from './dto/update-review.dto';
 import { QueryReviewDto } from './dto/query-review.dto';
+import { UserService } from '../user/user.service';
 
 @Injectable()
 export class ReviewService {
@@ -15,10 +16,12 @@ export class ReviewService {
 
     @InjectRepository(Book)
     private bookRepository: Repository<Book>,
+
+    private readonly userService: UserService,
   ) {}
 
   async create(createReviewDto: CreateReviewDto) {
-    // check if the review already exists
+    /* check if the review already exists
     const review = this.reviewRepository.findOne({
       where: {
         book: { id: createReviewDto.book_id },
@@ -28,7 +31,15 @@ export class ReviewService {
     if (review) {
       return review;
     }
-    return await this.reviewRepository.save(createReviewDto);
+    */
+    const book = await this.bookRepository.findOne({
+      where: { id: createReviewDto.book_id },
+    });
+    const user = await this.userService.findOne(createReviewDto.user_id);
+    const review = await this.reviewRepository.create(createReviewDto);
+    review.book = book;
+    review.user = user;
+    await this.reviewRepository.save(review);
   }
 
   async update(id: string, updateReview: UpdateReviewDto) {

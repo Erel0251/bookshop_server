@@ -16,6 +16,8 @@ type Review {
   title: String!
   comment: String!
   rating: Int!
+  id: String!
+  created_at: String!
 }
 
 type Promotion {

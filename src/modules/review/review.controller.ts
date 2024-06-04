@@ -7,6 +7,7 @@ import {
   HttpStatus,
   Post,
   UseGuards,
+  Body,
 } from '@nestjs/common';
 import { ReviewService } from './review.service';
 import { ApiTags } from '@nestjs/swagger';
@@ -25,7 +26,7 @@ export class ReviewController {
   // Create a new review
   @Post()
   @Roles(Role.USER)
-  async create(createReview: CreateReviewDto, @Res() res: any) {
+  async create(@Body() createReview: CreateReviewDto, @Res() res: any) {
     await this.reviewService.create(createReview);
     res
       .status(HttpStatus.CREATED)
@@ -37,7 +38,7 @@ export class ReviewController {
   @Roles(Role.USER)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
-    updateReview: CreateReviewDto,
+    @Body() updateReview: CreateReviewDto,
     @Res() res: any,
   ) {
     await this.reviewService.update(id, updateReview);

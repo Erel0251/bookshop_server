@@ -19,7 +19,6 @@ import { QueryBookDto } from './dto/query-book.dto';
 import { Order } from '../../shared/constants/order.enum';
 import { QueryReviewDto } from '../review/dto/query-review.dto';
 import { ReviewService } from '../review/review.service';
-import { User } from '../user/entities/user.entity';
 
 @ObjectType()
 class BooksResponse {
@@ -133,10 +132,5 @@ export class BookResolver {
   @ResolveField(() => Float, { name: 'sale_price', nullable: true })
   async salePrice(@Parent() book: Book): Promise<number> {
     return await this.bookService.getCurrentSalePrice(book);
-  }
-
-  @ResolveField(() => User, { name: 'user', nullable: true })
-  async user(@Parent() review: Review): Promise<User> {
-    return await this.reviewService.findUserReview(review);
   }
 }
