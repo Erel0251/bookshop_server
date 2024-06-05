@@ -99,6 +99,12 @@ export class BookResolver {
     return await this.bookService.getPublisher();
   }
 
+  @Query(() => [Book], { name: 'popular' })
+  async popular(): Promise<Book[]> {
+    const result = await this.bookService.findPopular();
+    return result;
+  }
+
   @ResolveField(() => [Review], { name: 'reviews', nullable: true })
   async reviews(
     @Parent() book: Book,

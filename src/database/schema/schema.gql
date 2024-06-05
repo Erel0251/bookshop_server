@@ -82,6 +82,7 @@ type Query {
   books(search: String, categories: [String!], publishers: [String!], rating: Float, fromPrice: Float, toPrice: Float, offset: Float = 0, limit: Float = 20, sortBy: String = "updated_at", order: String = "DESC"): BooksResponse!
   book(id: String!): Book!
   publishers: [String!]!
+  popular: [Book!]!
   promotions: [Promotion!]!
   sale: [Promotion!]!
   recommend: [Promotion!]!

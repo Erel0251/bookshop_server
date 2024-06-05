@@ -127,4 +127,22 @@ export class BookService {
       .getRawMany();
     return publisher.map((p) => p.publisher);
   }
+
+  async findPopular(): Promise<Book[]> {
+    // return best seller books current month
+    const date = new Date();
+    const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+    const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+    return await this.book
+      .createQueryBuilder('book')
+      .leftJoinAndSelect('book.order_details', 'order_detail')
+      .groupBy('book.id')
+      .orderBy('COALESCE(SUM(order_detail.quantity), 0)', 'DESC')
+      .where('order_detail.created_at BETWEEN :firstDay AND :lastDay', {
+        firstDay,
+        lastDay,
+      })
+      .select(['book', 'SUM(order_detail.quantity) as total'])
+      .getMany();
+  }
 }
