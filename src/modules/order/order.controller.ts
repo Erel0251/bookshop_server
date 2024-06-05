@@ -35,8 +35,8 @@ export class OrderController {
   // Get all orders
   @Get()
   @Roles(Role.ADMIN)
-  findAll(@Res() res: any) {
-    const orders = this.orderService.findAll();
+  async findAll(@Res() res: any) {
+    const orders = await this.orderService.findAll();
     res.status(HttpStatus.OK).render('order', { orders, title: 'Order' });
   }
 
@@ -48,10 +48,12 @@ export class OrderController {
 
   // Update status of an order
   @Patch(':id')
-  update(
+  async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateOrderDto: UpdateOrderDto,
+    @Res() res: any,
   ) {
-    return this.orderService.updateStatusOrder(id, updateOrderDto);
+    await this.orderService.updateStatusOrder(id, updateOrderDto);
+    res.status(HttpStatus.OK).send({ message: 'Update status successfully'});
   }
 }

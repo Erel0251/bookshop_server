@@ -52,6 +52,9 @@ export class OrderService {
         END`,
         'ASC',
       )
+      .leftJoinAndSelect('order.order_details', 'order_details')
+      // get book name and id
+      .leftJoinAndSelect('order_details.books', 'book')
       .getMany();
   }
 

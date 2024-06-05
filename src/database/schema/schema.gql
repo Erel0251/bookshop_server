@@ -69,12 +69,6 @@ type Book {
   reviews(rating: Float, offset: Float = 0, limit: Float = 10, sortBy: String = "created_at", order: String = "DESC"): [Review!]
   id: ID!
   sale_price: Float
-  user: User
-}
-
-type User {
-  first_name: String
-  last_name: String
 }
 
 type BooksResponse {

@@ -11859,6 +11859,7 @@ textarea.form-control-lg {
 }
 
 .available,
+.confirmed,
 .accepted {
   background-color: #d4edda;
   color: #155724;
@@ -11868,6 +11869,7 @@ textarea.form-control-lg {
   padding: 5px 15px;
 }
 .available:hover,
+.confirmed:hover,
 .accepted:hover {
   background-color: #c3e6cb;
 }
