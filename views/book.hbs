@@ -43,7 +43,7 @@
   </form>
 
   <div class="m-3">
-    <table class="table table-hover">
+    <table class="table table-hover" id="book-data">
       <thead>
         <tr>
           <th>Image</th>
@@ -83,3 +83,15 @@
 
 {{> book/createBook}}
 {{> book/editBook}}
+
+<script>
+  new DataTable('#book-data', {
+    searchable: false,
+    sortable: true,
+    perPageSelect: true,
+    perPage: 10,
+    labels: {
+      placeholder: "Search by Title, Author, Publisher, ISBN, Price, Status, Currency, Inventory"
+    }
+  })
+</script>
