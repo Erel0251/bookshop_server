@@ -16,7 +16,7 @@ export class PromotionBook extends CommonEntity {
   price: number;
 
   @Field({ nullable: true })
-  @Column({ type: 'integer', nullable: true })
+  @Column({ type: 'real', nullable: true })
   discount: number;
 
   @ManyToOne(() => Promotion, (promotion) => promotion.promotion_books)

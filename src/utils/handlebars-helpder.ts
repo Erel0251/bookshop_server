@@ -1,4 +1,5 @@
 import * as hbs from 'hbs';
+import { OrderDetail } from '../modules/order/entities/order-detail.entity';
 
 const formatDate = (req: Date) => {
   // Format date to dd/mm/yyyy
@@ -32,6 +33,31 @@ const formatCategory = (children: string, parent?: string) => {
   return `${formatName(parent)} > ${formatName(children)}`;
 };
 
+const formatAddress = (
+  address: string,
+  ward: string,
+  district: string,
+  province: string,
+) => {
+  return `${address}, ${ward}, ${district}, ${province}`;
+};
+
+const totalPrice = (orderDetail: OrderDetail[]) => {
+  if (!orderDetail) {
+    return 0;
+  } else {
+    const total = orderDetail.reduce(
+      (total, item) => total + item.total_price,
+      0,
+    );
+    return formatPrice(total);
+  }
+};
+
+const formatPublished = (published: boolean) => {
+  return published ? 'Published' : 'Unpublished';
+};
+
 export function registerHelpers() {
   hbs.registerHelper('showNum', (value) => (value ? value : '0'));
   hbs.registerHelper('inc', (index) => index + 1);
@@ -42,9 +68,13 @@ export function registerHelpers() {
   hbs.registerHelper('formatPrice', formatPrice);
   hbs.registerHelper('formatCategory', formatCategory);
   hbs.registerHelper('formatDiscount', (discount) =>
-    discount ? discount + '%' : '0%',
+    discount ? discount * 100 + '%' : '0%',
   );
   hbs.registerHelper('parentName', (parent) =>
     parent ? parent.name : 'No parent',
   );
+  hbs.registerHelper('formatAddress', formatAddress);
+  hbs.registerHelper('totalPrice', totalPrice);
+  hbs.registerHelper('isPending', (status) => status === 'PENDING');
+  hbs.registerHelper('formatPublished', formatPublished);
 }

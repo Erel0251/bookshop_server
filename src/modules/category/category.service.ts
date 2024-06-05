@@ -25,10 +25,15 @@ export class CategoryService {
     await this.category.save(category);
   }
 
-  async findAll(): Promise<Category[]> {
-    return await this.category.find({
-      relations: ['books', 'father'],
-    });
+  async findAll(isAdmin: boolean = false): Promise<Category[]> {
+    const query = this.category.createQueryBuilder('category');
+    if (!isAdmin) {
+      //query.where('category.is_published = true');
+    }
+    query.leftJoinAndSelect('category.father', 'father');
+    query.leftJoinAndSelect('category.books', 'books');
+
+    return await query.getMany();
   }
 
   async findOne(id: string): Promise<Category | Error> {

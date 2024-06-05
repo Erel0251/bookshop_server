@@ -57,7 +57,7 @@ export class CategoryController {
   @Roles(Role.ADMIN)
   async findAll(@Res() res: any) {
     try {
-      const categories = await this.categoryService.findAll();
+      const categories = await this.categoryService.findAll(true);
       return res.status(HttpStatus.OK).render('category', {
         title: 'Category',
         message: 'Get data successfully',

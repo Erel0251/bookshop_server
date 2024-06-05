@@ -17,7 +17,18 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    return await this.userRepository.find();
+    // return list user from database
+    // based on list of roles of them
+    // with order admin -> manager (if has) -> user
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .orderBy(
+        `CASE
+          WHEN 'admin' = ANY(user.roles) THEN 1
+          ELSE 2
+        `,
+      )
+      .getMany();
   }
 
   async findOne(email: string) {

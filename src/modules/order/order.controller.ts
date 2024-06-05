@@ -54,6 +54,6 @@ export class OrderController {
     @Res() res: any,
   ) {
     await this.orderService.updateStatusOrder(id, updateOrderDto);
-    res.status(HttpStatus.OK).send({ message: 'Update status successfully'});
+    res.status(HttpStatus.OK).send({ message: 'Update status successfully' });
   }
 }
