@@ -17,10 +17,10 @@
             <textarea class="form-control" id="categoryDescription" rows="3"></textarea>
           </div>
           <div class="mb-3">
-            <label for="isPublished" class="form-label">Published</label>
+            <label for="isPublished" class="form-label">Status</label>
             <select class="form-select" id="isPublished" required>
-              <option value="true">True</option>
-              <option value="false">False</option>
+              <option value="true">Published</option>
+              <option value="false">Unpublished</option>
             </select>
           </div>
           <div class="mb-3">
@@ -78,7 +78,7 @@
           window.location.reload();
         })
         .catch(error => {
-          console.error('Error:', error);
+          alert(error.message);
           // Handle error here
         });
       // Optionally, you can close the modal here

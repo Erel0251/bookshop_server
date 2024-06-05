@@ -111,7 +111,7 @@
                     alert(`Login failed: ${result.message}`);
                 }
             } catch (error) {
-                console.error('Error:', error);
+                alert(error.message);
                 alert('An error occurred. Please try again.');
             }
         });

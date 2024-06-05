@@ -18,10 +18,10 @@
             <textarea class="form-control" id="editDescription" rows="3"></textarea>
           </div>
           <div class="mb-3">
-            <label for="editPublished" class="form-label">Published</label>
+            <label for="editPublished" class="form-label">State</label>
             <select class="form-select" id="editPublished" required>
-              <option value="true">True</option>
-              <option value="false">False</option>
+              <option value="true">Published</option>
+              <option value="false">Unpublished</option>
             </select>
           </div>
           <div class="mb-3">
@@ -99,7 +99,7 @@
         .then(response => response.json())
         .then(data => { window.location.reload(); })
         .catch((error) => {
-          console.error('Error:', error);
+          alert(error.message);
         });
     });
   });

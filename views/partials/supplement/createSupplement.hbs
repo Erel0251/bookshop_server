@@ -52,7 +52,7 @@ document.getElementById('modalForm').addEventListener('submit', function(event) 
     window.location.reload();
   })
   .catch(error => {
-    console.error('Error:', error);
+    alert(error.message);
   });
   // Close the modal after form submission
   const modal = bootstrap.Modal.getInstance(document.getElementById('createSupplement'));
