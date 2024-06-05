@@ -9,6 +9,7 @@ import {
   Res,
   HttpStatus,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
@@ -18,6 +19,7 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../user/constants/role.enum';
+import { QueryOrderDto } from './dto/query-order.dto';
 
 @ApiTags('Order')
 @Controller('order')
@@ -35,9 +37,16 @@ export class OrderController {
   // Get all orders
   @Get()
   @Roles(Role.ADMIN)
-  async findAll(@Res() res: any) {
-    const orders = await this.orderService.findAll();
-    res.status(HttpStatus.OK).render('order', { orders, title: 'Order' });
+  async findAll(@Query() req: QueryOrderDto, @Res() res: any) {
+    const query = new QueryOrderDto(req);
+    const orders = await this.orderService.findAll(query);
+    res.status(HttpStatus.OK).render('order', {
+      title: 'Order',
+      orders: orders,
+      limit: query.limit,
+      offset: query.offset,
+      total: orders.length,
+    });
   }
 
   // Get an order by id

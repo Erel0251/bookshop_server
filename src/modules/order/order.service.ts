@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { OrderDetail } from './entities/order-detail.entity';
 import { validStatusTransition } from './helpers/helpers';
 import { BookService } from '../book/book.service';
+import { QueryOrderDto } from './dto/query-order.dto';
 
 @Injectable()
 export class OrderService {
@@ -36,12 +37,34 @@ export class OrderService {
     return;
   }
 
-  async findAll(): Promise<Order[]> {
+  async findAll(req: QueryOrderDto): Promise<Order[]> {
     // case value order by status
     // with order pending, confirmed, delivering, delivered, canceled
-    return await this.orderRepository
-      .createQueryBuilder('order')
-      .orderBy(
+    const query = this.orderRepository.createQueryBuilder('order');
+    if (req.name) {
+      query.andWhere('order.name LIKE :name', { name: `%${req.name}%` });
+    }
+
+    if (req.email) {
+      query.andWhere('order.email LIKE :email', { email: `%${req.email}%` });
+    }
+
+    if (req.phone) {
+      query.andWhere('order.phone LIKE :phone', { phone: `%${req.phone}%` });
+    }
+
+    if (req.date) {
+      query.andWhere('order.update_at::text LIKE :date', {
+        date: `%${req.date}%`,
+      });
+    }
+
+    if (req.status) {
+      query.andWhere('order.status LIKE :status', {
+        status: `%${req.status.toUpperCase()}%`,
+      });
+    } else {
+      query.orderBy(
         `CASE
           WHEN order.status = 'PENDING' THEN 1
           WHEN order.status = 'CONFIRMED' THEN 2
@@ -51,11 +74,16 @@ export class OrderService {
           ELSE 6
         END`,
         'ASC',
-      )
+      );
+    }
+
+    query.offset(req.offset || 0).limit(req.limit || 20);
+
+    query
       .leftJoinAndSelect('order.order_details', 'order_details')
       // get book name and id
-      .leftJoinAndSelect('order_details.books', 'book')
-      .getMany();
+      .leftJoinAndSelect('order_details.books', 'book');
+    return await query.getMany();
   }
 
   async findOne(id: string): Promise<Order | Error> {

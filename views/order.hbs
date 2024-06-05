@@ -8,109 +8,42 @@
   </div>
 
   <!-- Search -->
-  <div class="card m-4">
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-5">
-          <div class="form-group row m-2">
-            <div class="col-md-4">
-              <div class="text-end"><label class="col-form-label" for="SearchStartDate">Start
-                  date</label>
-                <div title="The start date for the search." data-toggle="tooltip" class="ico-help"><i
-                    class="fas fa-question-circle"></i></div>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <input id="SearchStartDate" name="SearchStartDate" type="date" class="form-control">
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-4">
-              <div class="text-end"><label class="col-form-label" for="SearchEndDate">End
-                  date</label>
-                <div title="The end date for the search." data-toggle="tooltip" class="ico-help"><i
-                    class="fas fa-question-circle"></i></div>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <input id="SearchEndDate" name="SearchEndDate" type="date" class="form-control">
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-4">
-              <div class="text-end"><label class="col-form-label" for="SearchDiscountTypeId">Discount
-                  type</label>
-                <div title="Search by discount type." data-toggle="tooltip" class="ico-help"><i
-                    class="fas fa-question-circle"></i></div>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <select class="form-control" data-val="true" data-val-required="The Discount type field is required."
-                id="SearchDiscountTypeId" name="SearchDiscountTypeId">
-                <option selected="selected" value="0">All</option>
-                <option value="1">Assigned to order total</option>
-                <option value="2">Assigned to products</option>
-                <option value="5">Assigned to categories</option>
-                <option value="6">Assigned to manufacturers</option>
-                <option value="10">Assigned to shipping</option>
-                <option value="20">Assigned to order subtotal</option>
-              </select>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-7">
-          <div class="form-group row m-2">
-            <div class="col-md-4">
-              <div class="text-end"><label class="col-form-label" for="SearchDiscountCouponCode">Coupon
-                  code</label>
-                <div title="Search by discount coupon code." data-toggle="tooltip" class="ico-help"><i
-                    class="fas fa-question-circle"></i></div>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <input class="form-control text-box single-line" id="SearchDiscountCouponCode"
-                name="SearchDiscountCouponCode" type="text" value="">
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-4">
-              <div class="text-end"><label class="col-form-label" for="SearchDiscountName">Discount
-                  name</label>
-                <div title="Search by discount name." data-toggle="tooltip" class="ico-help"><i
-                    class="fas fa-question-circle"></i></div>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <input class="form-control text-box single-line" id="SearchDiscountName" name="SearchDiscountName"
-                type="text" value="">
-            </div>
-          </div>
-          <div class="form-group row m-2">
-            <div class="col-md-4">
-              <div class="text-end"><label class="col-form-label" for="IsActiveId">Is
-                  Active</label>
-                <div title="Search by &quot;IsActive&quot; property." data-toggle="tooltip" class="ico-help"><i
-                    class="fas fa-question-circle"></i></div>
-              </div>
-            </div>
-            <div class="col-md-8">
-              <select class="form-control" data-val="true" data-val-required="The Is Active field is required."
-                id="IsActiveId" name="IsActiveId">
-                <option selected="selected" value="0">All</option>
-                <option value="1">Active only</option>
-                <option value="2">Inactive only</option>
-              </select>
-            </div>
-          </div>
-        </div>
+  <form action="/order" method="get" class="card p-4 m-4">
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="date" class="form-label">Date</label>
+        <input type="date" class="form-control" id="date" name="date">
       </div>
-      <div class="d-flex justify-content-end mx-3 my-2">
-        <button type="button" id="search-discounts" class="btn btn-primary btn-search">
-          Search
-        </button>
+      <div class="col-md-6">
+        <label for="name" class="form-label">Customer Name</label>
+        <input type="text" class="form-control" id="name" name="name">
       </div>
     </div>
-  </div>
+    <div class="row mb-3">
+      <div class="col-md-6">
+        <label for="phone" class="form-label">Telephone</label>
+        <input type="number" class="form-control" id="phone" name="phone">
+      </div>
+      <div class="col-md-6">
+        <label for="status" class="form-label">Order Process</label>
+        <select class="form-select" id="status" name="status">
+          <option value="" selected>All</option>
+          <option value="PENDING">Pending</option>
+          <option value="CONFIRMED">Confirmed</option>
+          <option value="REJECTED">Rejected</option>
+        </select>
+      </div>
+    </div>
+    <button type="submit" class="btn btn-primary">Search</button>
+  </form>
+
+  <!-- Pagination Limit item -->
+  <select class="form-select">
+    <option selected>20</option>
+    <option value="10">One</option>
+    <option value="2">Two</option>
+    <option value="3">Three</option>
+  </select>
 
   <!-- Table -->
   <table class="table table-hover table-striped table-bordered">
@@ -181,6 +114,21 @@
 
     </tbody>
   </table>
+
+  <!-- Pagination -->
+  <nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item disabled">
+        <a class="page-link">Previous</a>
+      </li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item">
+        <a class="page-link" href="#">Next</a>
+      </li>
+    </ul>
+  </nav>
 
 </div>
 
