@@ -13,6 +13,16 @@ export class HttpExceptionFilter implements ExceptionFilter {
     const request = ctx.getRequest();
     const status = exception.getStatus();
 
+    if (status === 401) {
+      return response.status(status).redirect('/login');
+    } else if (status === 403) {
+      return response.status(status).redirect('/login');
+    } /* else if (status === 404) {
+      return response.status(status).redirect('/not-found');
+    } else if (status === 500) {
+      return response.status(status).redirect('/server-error');
+    }*/
+
     response.status(status).json({
       statusCode: status,
       timestamp: new Date().toISOString(),
