@@ -37,6 +37,10 @@ export class CreateOrderDto {
   @ApiProperty()
   email: string;
 
+  @IsNumberString()
+  @ApiPropertyOptional()
+  shipping?: number;
+
   @IsString()
   @ApiPropertyOptional()
   status: OrderStatus = OrderStatus.PENDING;

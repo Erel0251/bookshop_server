@@ -129,16 +129,12 @@
     <tbody>
       <!-- Supplement -->
       {{#each orders}}
-      <tr 
-        data-bs-toggle="collapse" 
-        data-bs-target="#{{id}}"
-        data-order-id="{{id}}"
-      >
+      <tr data-bs-toggle="collapse" data-bs-target="#{{id}}" data-order-id="{{id}}">
         <td>{{inc @index}}</td>
         <td>{{name}}</td>
         <td>{{formatAddress address ward district province}}</td>
         <td>{{phone}}</td>
-        <td>{{totalPrice order_details}}</td>
+        <td>{{totalPrice order_details shipping}}</td>
         <td>
           <div class="{{lowerCase status}}">{{status}}</div>
         </td>

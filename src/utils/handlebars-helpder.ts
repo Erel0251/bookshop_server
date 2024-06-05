@@ -42,13 +42,13 @@ const formatAddress = (
   return `${address}, ${ward}, ${district}, ${province}`;
 };
 
-const totalPrice = (orderDetail: OrderDetail[]) => {
+const totalPrice = (orderDetail: OrderDetail[], shipping: number = 0) => {
   if (!orderDetail) {
     return 0;
   } else {
     const total = orderDetail.reduce(
       (total, item) => total + item.total_price,
-      0,
+      shipping || 0,
     );
     return formatPrice(total);
   }
