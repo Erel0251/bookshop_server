@@ -40,7 +40,7 @@ export class AppController {
     } catch (err) {
       console.error(err);
     }
-    res.render('about', { message: 'About page', title: 'About', data: data });
+    res.render('about', { message: 'About page', title: 'About', data });
   }
 
   // for user get
@@ -57,9 +57,7 @@ export class AppController {
 
   @Post('about')
   postAbout(@Body() req: any, @Res() res: any) {
-    console.log(req);
-    console.log(req.editordata);
     fs.writeFileSync('public/about.txt', req.editordata);
-    res.status(HttpStatus.OK).redirect('about');
+    res.status(HttpStatus.OK).send({ message: 'About page updated' });
   }
 }

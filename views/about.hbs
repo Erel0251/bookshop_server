@@ -10,18 +10,43 @@
 
   <form id="aboutForm" action="/about" method="post"
     class="m-5 d-flex flex-column justify-content-evenly align-items-center">
-    <textarea id="summernote" style="width: 100%;" name="editordata">{{data}}</textarea>
-    <button class="btn btn-primary" type="submit">Submit</button>
+    <div id="div_editor">{{data}}</div>
+    <button class="btn btn-primary" id="submit" type="submit">Submit</button>
   </form>
 </div>
 
 <script>
-  $(document).ready(function () {
-    $('#summernote').summernote({
-      placeholder: 'Type your content here...',
-      tabsize: 2,
-      height: 400,
-      width: 900,
-    });
+  let editor;
+  // Add event and data to button submit
+  document.getElementById('submit').addEventListener('click', function (e) {
+    e.preventDefault();
+    const data = editor.getData();
+    fetch('/about', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        editordata: data
+      })
+    })
+      .then(res => res.json())
+      .then(data => {
+        alert(data.message);
+      })
+      .catch(err => {
+        alert(err.message);
+      });
+    
   });
+
+  ClassicEditor
+    .create(document.querySelector('#div_editor'))
+    .then(newEditor => {
+      editor = newEditor;
+      editor.setData(`{{{data}}}`);
+    })
+    .catch(error => {
+      alert(error.message);
+    });
 </script>
