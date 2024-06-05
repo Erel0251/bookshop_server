@@ -16,6 +16,10 @@ export class QueryBookDto extends CommonDto {
   @ApiPropertyOptional()
   categories?: string[];
 
+  @IsString({ each: true })
+  @ApiPropertyOptional()
+  publishers?: string[];
+
   @IsNumber()
   @ApiPropertyOptional()
   rating?: number;

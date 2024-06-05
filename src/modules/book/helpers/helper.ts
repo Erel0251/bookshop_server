@@ -37,6 +37,12 @@ export const queryBuilder = (
     });
   }
 
+  if (req.publishers) {
+    query.andWhere('book.publisher IN (:...publishers)', {
+      publishers: req.publishers,
+    });
+  }
+
   Maybe.fromFalsy(req.fromPrice).ifJust((fromPrice) =>
     query.andWhere('book.price >= :fromPrice', { fromPrice }),
   );

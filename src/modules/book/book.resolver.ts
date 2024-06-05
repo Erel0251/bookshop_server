@@ -42,6 +42,8 @@ export class BookResolver {
     search: string,
     @Args('categories', { type: () => [String], nullable: true })
     categories: string[],
+    @Args('publishers', { type: () => [String], nullable: true })
+    publishers: string[],
     @Args('rating', { type: () => Number, nullable: true })
     rating: number,
     @Args('fromPrice', { type: () => Number, nullable: true })
@@ -68,6 +70,7 @@ export class BookResolver {
     const query = new QueryBookDto({
       keyword: search,
       categories,
+      publishers,
       rating,
       fromPrice,
       toPrice,
@@ -89,6 +92,11 @@ export class BookResolver {
   @ResolveField(() => Category, { name: 'category', nullable: true })
   async category(@Parent() book: Book): Promise<Category> {
     return await this.bookService.findCategoryByBookId(book.id);
+  }
+
+  @Query(() => [String], { name: 'publishers' })
+  async publishers(): Promise<string[]> {
+    return await this.bookService.getPublisher();
   }
 
   @ResolveField(() => [Review], { name: 'reviews', nullable: true })

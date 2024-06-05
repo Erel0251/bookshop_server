@@ -119,4 +119,12 @@ export class BookService {
       await this.promotionService.findDetailPromotionByBook(book);
     return promotion ? promotion.price : undefined;
   }
+
+  async getPublisher(): Promise<string[]> {
+    const publisher = await this.book
+      .createQueryBuilder('book')
+      .select('DISTINCT book.publisher')
+      .getRawMany();
+    return publisher.map((p) => p.publisher);
+  }
 }
