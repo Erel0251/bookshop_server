@@ -7,31 +7,54 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <form id="bookForm">
-          <div class="mb-3">
-            <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" required>
+        <form id="bookForm" class="container">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="name" class="form-label">Name</label>
+                <input type="text" class="form-control" id="name" required>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="author" class="form-label">Author Name</label>
+                <input type="text" class="form-control" id="author" required>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="imageUrl" class="form-label">URL of Images</label>
-            <input type="url" class="form-control" id="imageUrl" required>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="isbn" class="form-label">ISBN</label>
+                <input type="text" class="form-control" id="isbn">
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="publisher" class="form-label">Publisher Name</label>
+                <input type="text" class="form-control" id="publisher" required>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="author" class="form-label">Author Name</label>
-            <input type="text" class="form-control" id="author" required>
-          </div>
-          <div class="mb-3">
-            <label for="publisher" class="form-label">Publisher Name</label>
-            <input type="text" class="form-control" id="publisher" required>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="isbn" class="form-label">Img</label>
+                <input type="file" class="form-control" id="img" multiple>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="imageUrl" class="form-label">URL of Images</label>
+                <input type="url" class="form-control" id="imageUrl" required>
+              </div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="overview" class="form-label">Overview (optional)</label>
             <textarea class="form-control" id="overview" rows="3"></textarea>
           </div>
-          <div class="mb-3">
-            <label for="isbn" class="form-label">ISBN</label>
-            <input type="text" class="form-control" id="isbn">
-          </div>
+
           <div class="mb-3">
             <label for="price" class="form-label">Price</label>
             <input type="number" class="form-control" id="price" required>
@@ -53,7 +76,7 @@
 <script>
   document.getElementById('bookForm').addEventListener('submit', function () {
     event.preventDefault();
-    
+
     const name = document.getElementById('name').value;
     const imageUrl = document.getElementById('imageUrl').value;
     const author = document.getElementById('author').value;
