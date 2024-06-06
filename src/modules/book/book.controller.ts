@@ -10,6 +10,7 @@ import {
   Logger,
   ParseUUIDPipe,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from './book.service';
@@ -17,15 +18,21 @@ import { CreateBookDto } from './dto/create-book.dto';
 import { UpdateBookDto } from './dto/update-book.dto';
 import { BookStatus } from './constants/status.enum';
 import { QueryBookDto } from './dto/query-book.dto';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../user/constants/role.enum';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 
 @Controller('book')
 @ApiTags('Book')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class BookController {
   constructor(private readonly bookService: BookService) {}
 
   private readonly logger = new Logger(BookController.name);
 
   @Post()
+  @Roles(Role.ADMIN)
   async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
     try {
       await this.bookService.create(createBookDto);
@@ -39,6 +46,7 @@ export class BookController {
   }
 
   @Get()
+  @Roles(Role.ADMIN)
   async findAll(@Query() req: QueryBookDto, @Res() res: any) {
     const books = await this.bookService.findAll(req, true);
     const statuses = Object.values(BookStatus);
@@ -51,6 +59,7 @@ export class BookController {
   }
 
   @Get(':id')
+  @Roles(Role.ADMIN)
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const book = await this.bookService.findOne(id);
@@ -62,6 +71,7 @@ export class BookController {
   }
 
   @Patch(':id')
+  @Roles(Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateBookDto: UpdateBookDto,
@@ -72,6 +82,7 @@ export class BookController {
   }
 
   @Get('total')
+  @Roles(Role.ADMIN)
   async getCountTotal(@Res() res: any) {
     const total = await this.bookService.getCountTotal();
     res.status(HttpStatus.OK).send(total);

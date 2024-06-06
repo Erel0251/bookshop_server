@@ -29,7 +29,7 @@ export class OrderController {
 
   // Create a new order
   @Post()
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   async create(@Body() createOrderDto: CreateOrderDto) {
     return await this.orderService.create(createOrderDto);
   }
@@ -51,12 +51,14 @@ export class OrderController {
 
   // Get an order by id
   @Get(':id')
+  @Roles(Role.USER, Role.ADMIN)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.orderService.findOne(id);
   }
 
   // Update status of an order
   @Patch(':id')
+  @Roles(Role.USER, Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateOrderDto: UpdateOrderDto,
