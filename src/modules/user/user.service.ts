@@ -17,18 +17,21 @@ export class UserService {
   ) {}
 
   async findAll(): Promise<User[]> {
-    // return list user from database
-    // based on list of roles of them
-    // with order admin -> manager (if has) -> user
-    return await this.userRepository
-      .createQueryBuilder('user')
-      .orderBy(
-        `CASE
-          WHEN 'admin' = ANY(user.roles) THEN 1
-          ELSE 2
-        `,
+    const query = this.userRepository.createQueryBuilder('user');
+    query
+      .leftJoinAndSelect('user.orders', 'orders')
+      .leftJoinAndSelect('orders.order_details', 'order_details')
+      .leftJoinAndSelect('user.reviews', 'reviews')
+      .groupBy('user.id')
+      .select('user')
+      .addSelect('COUNT(orders.id)', 'order_count')
+      .addSelect(
+        `SUM(CASE WHEN orders.status = 'CONFIRMED' THEN order_details.total_price ELSE 0 END)`,
+        'total_spent',
       )
-      .getMany();
+      .addSelect('COUNT(reviews.id)', 'review_count')
+      .addSelect('ROUND(AVG(reviews.rating), 2)', 'average_rating');
+    return await query.getRawMany();
   }
 
   async findOne(email: string) {
