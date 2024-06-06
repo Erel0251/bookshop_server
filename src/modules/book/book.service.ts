@@ -52,7 +52,8 @@ export class BookService {
   }
 
   async findAll(req?: QueryBookDto, isAdmin: boolean = false): Promise<Book[]> {
-    const query = queryBuilder(this.book.createQueryBuilder('book'), req);
+    const filter = new QueryBookDto(req);
+    const query = queryBuilder(this.book.createQueryBuilder('book'), filter);
 
     // if not admin, need pagination
     if (!isAdmin) {
