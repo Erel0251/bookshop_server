@@ -51,13 +51,18 @@ export class BookService {
     await this.book.update(id, updateBookDto);
   }
 
-  async findAll(req?: QueryBookDto): Promise<Book[]> {
-    const filter = new QueryBookDto(req);
-    const query = queryBuilder(
-      this.book.createQueryBuilder('book'),
-      filter,
-      true,
-    );
+  async findAll(req?: QueryBookDto, isAdmin: boolean = false): Promise<Book[]> {
+    const query = queryBuilder(this.book.createQueryBuilder('book'), req);
+
+    // if not admin, need pagination
+    if (!isAdmin) {
+      query.offset(req.offset || 0);
+      query.limit(req.limit || 20);
+    } else {
+      // if admin, get all reviews and users
+      query.leftJoinAndSelect('book.reviews', 'review');
+      query.leftJoinAndSelect('review.user', 'user');
+    }
 
     return await query.getMany();
   }
@@ -85,8 +90,7 @@ export class BookService {
   async getCountTotal(req?: QueryBookDto): Promise<number> {
     const filter = new QueryBookDto(req);
     const query = queryBuilder(this.book.createQueryBuilder('book'), filter);
-
-    return await query.getCount();
+    return (await query.getMany()).length;
   }
 
   async updateInventory(id: string, buy: number = 0): Promise<void> {

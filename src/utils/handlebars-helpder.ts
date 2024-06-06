@@ -61,7 +61,7 @@ const formatPublished = (published: boolean) => {
 
 const avgRating = (reviews: Review[]) => {
   if (!reviews || reviews.length === 0) {
-    return 0;
+    return 'Dont have rating';
   }
   const total = reviews.reduce((total, review) => total + review.rating, 0);
   return (total / reviews.length).toFixed(1);

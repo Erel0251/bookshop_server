@@ -40,7 +40,7 @@ export class BookController {
 
   @Get()
   async findAll(@Query() req: QueryBookDto, @Res() res: any) {
-    const books = await this.bookService.findAll(req);
+    const books = await this.bookService.findAll(req, true);
     const statuses = Object.values(BookStatus);
     res.status(HttpStatus.OK).render('book', {
       title: 'Book',
