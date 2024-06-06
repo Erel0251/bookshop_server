@@ -69,19 +69,52 @@
           <td class="editable">{{formatName author}}</td>
           <td class="editable">{{formatName publisher}}</td>
           <td class="editable">{{isbn}}</td>
-          <td 
-            class="editable" 
-            data-price="{{price}}"
-            data-currency="{{currency}}"
-          >{{formatPrice price currency}}</td>
+          <td class="editable" data-price="{{price}}" data-currency="{{currency}}">{{formatPrice price currency}}</td>
           <td class="editable">{{avgRating reviews}}</td>
           <td class="editable">{{formatName status}}</td>
           <td>{{inventory}}</td>
           <td>
-            <button class="btn btn-outline-primary editBtn" data-bs-toggle="modal" data-bs-target="#editBook">Edit</button>
+            <button class="btn btn-outline-primary btn-sm editBtn" data-bs-toggle="modal"
+              data-bs-target="#editBook">Edit</button>
+            {{#if this.reviews}}
+            <button class="btn btn-outline-info btn-sm" data-bs-toggle="modal" data-bs-target="#book-{{id}}">
+              Comments
+            </button>
+            {{/if}}
           </td>
         </tr>
-        {{/each}}
+        {{#if this.reviews}}
+        <div class="modal fade" id="book-{{id}}">
+          <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">List of Titles, Comments, and Ratings</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+              </div>
+              <div class="modal-body" style="max-height: 400px; overflow-y: auto;">
+                <div class="list-group">
+                  {{#each this.reviews}}
+                  <!-- Sample list items (you can replace with dynamic data) -->
+                  <!-- Repeat this block for each item -->
+                  <a href="#" class="list-group-item list-group-item-action">
+                    <div class="d-flex w-100 justify-content-between">
+                      <h5 class="mb-1">{{title}}</h5>
+                      <small>Rating: {{rating}}</small>
+                    </div>
+                    <p class="mb-1">{{comment}}</p>
+                  </a>
+                  <!-- End of sample list items -->
+                  {{/each}}
+                </div>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
+        {{/if}}
+      {{/each}}
       </tbody>
     </table>
   </div>
