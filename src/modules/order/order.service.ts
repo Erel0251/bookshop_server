@@ -77,8 +77,6 @@ export class OrderService {
       );
     }
 
-    query.offset(req.offset || 0).limit(req.limit || 20);
-
     query
       .leftJoinAndSelect('order.order_details', 'order_details')
       // get book name and id

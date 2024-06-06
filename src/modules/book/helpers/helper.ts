@@ -38,8 +38,11 @@ export const queryBuilder = (
   }
 
   if (req.publishers) {
-    query.andWhere('book.publisher IN (:...publishers)', {
-      publishers: req.publishers,
+    req.publishers.forEach((publisher, index) => {
+      const name = `publisher${index}`;
+      query.orWhere(`book.publisher LIKE :${name}`, {
+        [name]: `%${publisher}%`,
+      });
     });
   }
 
@@ -62,6 +65,54 @@ export const queryBuilder = (
         rating: req.rating,
       })
       .select('book');
+  }
+
+  if (req.type) {
+    const date = new Date();
+    switch (req.type) {
+      case 'popular':
+        // order book by sold in this month
+        const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+        const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+        query
+          .leftJoinAndSelect('book.order_details', 'order_detail')
+          .groupBy('book.id')
+          .orderBy('COALESCE(SUM(order_detail.quantity), 0)', 'DESC')
+          .where('order_detail.created_at BETWEEN :firstDay AND :lastDay', {
+            firstDay,
+            lastDay,
+          })
+          .select('book');
+        break;
+      case 'sale':
+        // order book by Sale price from the promotion book in current date
+        query
+          .leftJoinAndSelect('book.promotion_books', 'promotion')
+          .leftJoinAndSelect('promotion.promotion', 'promotion_detail')
+          .where('promotion_detail.type = :type', { type: 'SALE' })
+          .groupBy('book.id')
+          .having('COUNT(promotion) > 0')
+          .andWhere('promotion_detail.from <= :date', { date })
+          .andWhere('promotion_detail.to >= :date', { date })
+          .orderBy('promotion.price', 'ASC')
+          .select('book')
+          .addSelect('MIN(promotion.price) as sale_price');
+        break;
+      case 'recommend':
+        // order book by recommended
+        query
+          .leftJoinAndSelect('book.promotion_books', 'promotion')
+          .leftJoinAndSelect('promotion.promotion', 'promotion_detail')
+          .where('promotion_detail.type = :type', { type: 'RECOMMEND' })
+          .groupBy('book.id')
+          .having('COUNT(promotion) > 0')
+          .andWhere('promotion_detail.from <= :date', { date })
+          .andWhere('promotion_detail.to >= :date', { date })
+          .select('book');
+        break;
+      default:
+        break;
+    }
   }
 
   // alway get non-deleted book

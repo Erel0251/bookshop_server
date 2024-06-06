@@ -21,17 +21,19 @@ export class ReviewService {
   ) {}
 
   async create(createReviewDto: CreateReviewDto) {
-    /* check if the review already exists
-    const review = this.reviewRepository.findOne({
+    // check if user has already ordered the book
+
+    // check if the review already exists
+    const reviewExist = this.reviewRepository.findOne({
       where: {
         book: { id: createReviewDto.book_id },
         user: { id: createReviewDto.user_id },
       },
     });
-    if (review) {
-      return review;
+    if (reviewExist) {
+      return;
     }
-    */
+
     const book = await this.bookRepository.findOne({
       where: { id: createReviewDto.book_id },
     });

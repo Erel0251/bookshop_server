@@ -67,9 +67,9 @@ export class UserService {
     return await this.cartService.create(cartItem);
   }
 
-  async updateCartItem(userId: string, product: UpdateCartDto) {
-    product.user_id = userId;
-    return await this.cartService.update(product);
+  async updateCartItem(product: UpdateCartDto) {
+    // get list of cart items of user
+    await this.cartService.update(product);
   }
 
   async removeCartItem(userId: string, bookId: string) {

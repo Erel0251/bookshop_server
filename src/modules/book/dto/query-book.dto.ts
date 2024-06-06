@@ -32,6 +32,10 @@ export class QueryBookDto extends CommonDto {
   @ApiPropertyOptional()
   toPrice?: number;
 
+  @IsString()
+  @ApiPropertyOptional()
+  type?: string;
+
   constructor(partial: Partial<QueryBookDto>) {
     super();
     Object.assign(this, partial);

@@ -4,6 +4,8 @@ import { Cart } from './entities/cart.entity';
 import { Repository } from 'typeorm';
 import { CreateCartDto } from './dto/create-cart.dto';
 import { UpdateCartDto } from './dto/update-cart.dto';
+import { User } from '../user/entities/user.entity';
+import { Book } from '../book/entities/book.entity';
 
 // import { CreateCartDto } from './dto/create-cart.dto';
 // import { UpdateCartDto } from './dto/update-cart.dto';
@@ -13,6 +15,12 @@ export class CartService {
   constructor(
     @InjectRepository(Cart)
     private cartItemRepository: Repository<Cart>,
+
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+
+    @InjectRepository(Book)
+    private bookRepository: Repository<Book>,
   ) {}
 
   async create(createCartDto: CreateCartDto): Promise<void | Error> {
@@ -49,6 +57,17 @@ export class CartService {
       } else {
         throw new Error('Quantity must be greater than 0');
       }
+    } else {
+      const item = await this.cartItemRepository.create(updateCartDto);
+      const book = await this.bookRepository.findOne({
+        where: { id: updateCartDto.book_id },
+      });
+      const user = await this.userRepository.findOne({
+        where: { id: updateCartDto.user_id },
+      });
+      item.books = book;
+      item.user = user;
+      await this.cartItemRepository.save(item);
     }
   }
 

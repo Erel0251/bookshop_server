@@ -50,6 +50,8 @@ export class BookResolver {
     fromPrice: number,
     @Args('toPrice', { type: () => Number, nullable: true })
     toPrice: number,
+    @Args('type', { type: () => String, nullable: true })
+    type: string,
     @Args('offset', { type: () => Number, nullable: true, defaultValue: 0 })
     offset: number,
     @Args('limit', { type: () => Number, nullable: true, defaultValue: 20 })
@@ -71,6 +73,7 @@ export class BookResolver {
       keyword: search,
       categories,
       publishers,
+      type,
       rating,
       fromPrice,
       toPrice,

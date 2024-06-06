@@ -81,14 +81,10 @@ export class UserController {
   }
 
   // Update item quantity in user's cart
-  @Patch(':id/cart/:productId')
-  async updateCart(
-    @Param('id', ParseUUIDPipe) id: string,
-    @Body() product: UpdateCartDto,
-    @Res() res: any,
-  ) {
+  @Post('/cart')
+  async updateCart(@Body() product: UpdateCartDto, @Res() res: any) {
     try {
-      await this.userService.updateCartItem(id, product);
+      await this.userService.updateCartItem(product);
       return res.status(HttpStatus.OK).send({ message: 'Cart updated' });
     } catch (error) {
       this.logger.error(error);
