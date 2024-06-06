@@ -3,6 +3,7 @@ import { OrderService } from './order.service';
 import { CreateOrderDto } from './dto/create-order.dto';
 import { OrderStatus } from './constants/order-status.enum';
 import { CreateOrderDetailDto } from './dto/create-order-detail.dto';
+import { QueryOrderDto } from './dto/query-order.dto';
 
 export const mockOrderDetail: CreateOrderDetailDto = {
   price: 100,
@@ -14,13 +15,14 @@ export const mockOrderDetail: CreateOrderDetailDto = {
 
 export const mockOrder: CreateOrderDto = {
   id: 'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
+  user_id: 'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
+  name: 'test',
   province: 'test',
   district: 'test',
   ward: 'test',
   address: 'test',
   phone: 'test',
   email: 'test@gmail.com',
-  total_price: 100,
   status: OrderStatus.PENDING,
   order_details: [],
 };
@@ -68,7 +70,11 @@ describe('OrderService', () => {
 
   // Find all orders
   it('should return all orders', async () => {
-    expect(await service.findAll()).toEqual([mockOrder]);
+    const req = new QueryOrderDto({
+      name: 'test',
+      email: '',
+    });
+    expect(await service.findAll(req)).toEqual([mockOrder]);
   });
 
   // Find one order

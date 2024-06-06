@@ -7,6 +7,7 @@ import { BookStatus } from './constants/status.enum';
 import { ReviewService } from '../review/review.service';
 import { PromotionService } from '../promotion/promotion.service';
 import { CategoryService } from '../category/category.service';
+import { QueryBookDto } from './dto/query-book.dto';
 
 const mockBook: CreateBookDto = {
   id: 'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
@@ -79,7 +80,8 @@ describe('BookService', () => {
 
   // Find all books
   it('should return all books', async () => {
-    expect(await service.findAll()).toEqual([mockBook]);
+    const req: QueryBookDto = new QueryBookDto({});
+    expect(await service.findAll(req)).toEqual([mockBook]);
   });
 
   // Find one book

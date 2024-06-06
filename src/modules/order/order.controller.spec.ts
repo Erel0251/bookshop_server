@@ -3,6 +3,7 @@ import { OrderController } from './order.controller';
 import { OrderService } from './order.service';
 import { mockOrder } from './order.service.spec';
 import { mockResponse } from '../../shared/dto/mock-response.dto';
+import { QueryOrderDto } from './dto/query-order.dto';
 
 const mockOrderService = {
   create: jest.fn().mockResolvedValue(mockOrder),
@@ -48,7 +49,11 @@ describe('OrderController', () => {
   describe('findAll', () => {
     it('should return an array of orders', async () => {
       const res = mockResponse();
-      await controller.findAll(res);
+      const query: QueryOrderDto = new QueryOrderDto({
+        name: 'test',
+        email: '',
+      });
+      await controller.findAll(query, res);
 
       expect(mockOrderService.findAll).toHaveBeenCalled();
     });
@@ -68,7 +73,8 @@ describe('OrderController', () => {
   describe('update', () => {
     it('should return an order', async () => {
       const result = mockOrder;
-      await controller.update(result.id, result);
+      const res = mockResponse();
+      await controller.update(result.id, result, res);
 
       expect(mockOrderService.updateStatusOrder).toHaveBeenCalled();
     });
