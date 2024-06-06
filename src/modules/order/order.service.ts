@@ -70,7 +70,7 @@ export class OrderService {
           WHEN order.status = 'CONFIRMED' THEN 2
           WHEN order.status = 'DELIVERING' THEN 3
           WHEN order.status = 'DELIVERED' THEN 4
-          WHEN order.status = 'CANCELED' THEN 5
+          WHEN order.status = 'CANCELLED' THEN 5
           ELSE 6
         END`,
         'ASC',

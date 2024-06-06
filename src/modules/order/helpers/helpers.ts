@@ -8,13 +8,13 @@ export const validStatusTransition = (
   const validTransitions = {
     [OrderStatus.PENDING]: [
       OrderStatus.CONFIRMED,
-      OrderStatus.CANCELED,
+      OrderStatus.CANCELLED,
       OrderStatus.REJECTED,
     ],
-    [OrderStatus.CONFIRMED]: [OrderStatus.DELIVERING, OrderStatus.CANCELED],
+    [OrderStatus.CONFIRMED]: [OrderStatus.DELIVERING, OrderStatus.CANCELLED],
     [OrderStatus.DELIVERING]: [OrderStatus.DELIVERED],
     [OrderStatus.DELIVERED]: [],
-    [OrderStatus.CANCELED]: [],
+    [OrderStatus.CANCELLED]: [],
     [OrderStatus.REJECTED]: [],
   };
 

@@ -3,6 +3,6 @@ export enum OrderStatus {
   CONFIRMED = 'CONFIRMED', // when manager/admin confirm order
   DELIVERING = 'DELIVERING', // when order is delivering
   DELIVERED = 'DELIVERED', // when order is delivered
-  CANCELED = 'CANCELED', // when user cancel order
+  CANCELLED = 'CANCELLED', // when user cancel order
   REJECTED = 'REJECTED', // when manager/admin reject order
 }
