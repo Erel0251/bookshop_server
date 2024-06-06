@@ -26,10 +26,7 @@
         <tr data-user-id="{{id}}">
 					<td>{{user_last_name}} {{user_first_name}}</td>
 					<td>{{user_email}}</td>
-					<td>
-					{{#each user_roles}}
-						{{this}}
-					{{/each}}
+					<td>{{formatRoles user_roles}}
 					</td>
 					<td>{{user_phone}}</td>
 					<td>{{order_count}}</td>

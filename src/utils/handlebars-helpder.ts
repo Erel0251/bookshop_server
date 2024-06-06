@@ -67,6 +67,15 @@ const avgRating = (reviews: Review[]) => {
   return (total / reviews.length).toFixed(1);
 };
 
+const formatRoles = (roles: string) => {
+  // from '{admin, user}' to 'Admin, User'
+  return roles
+    .replace(/[{()}]/g, '')
+    .split(',')
+    .map((role) => formatName(role))
+    .join(', ');
+};
+
 export function registerHelpers() {
   hbs.registerHelper('showNum', (value) => (value ? value : '0'));
   hbs.registerHelper('inc', (index) => index + 1);
@@ -87,4 +96,5 @@ export function registerHelpers() {
   hbs.registerHelper('isPending', (status) => status === 'PENDING');
   hbs.registerHelper('formatPublished', formatPublished);
   hbs.registerHelper('avgRating', avgRating);
+  hbs.registerHelper('formatRoles', formatRoles);
 }

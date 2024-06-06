@@ -10,15 +10,21 @@ import {
   Res,
   HttpStatus,
   Logger,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { UserService } from './user.service';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateCartDto } from '../cart/dto/create-cart.dto';
 import { UpdateCartDto } from '../cart/dto/update-cart.dto';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from './constants/role.enum';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('user')
 @ApiTags('User')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
@@ -26,6 +32,7 @@ export class UserController {
 
   // Get all users
   @Get()
+  @Roles(Role.ADMIN)
   async findAll(@Res() res: any) {
     const users = await this.userService.findAll();
     res.status(HttpStatus.OK).render('user', { users, title: 'Users' });
@@ -33,12 +40,14 @@ export class UserController {
 
   // Get a single user
   @Get(':id')
+  @Roles(Role.USER, Role.ADMIN)
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.findOne(id);
   }
 
   // Update a user
   @Patch(':id')
+  @Roles(Role.USER, Role.ADMIN)
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateUserDto: UpdateUserDto,
@@ -48,12 +57,14 @@ export class UserController {
 
   // Delete a user
   @Delete(':id')
+  @Roles(Role.ADMIN)
   remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.userService.remove(id);
   }
 
   // Get user's cart list items
   @Get(':id/cart')
+  @Roles(Role.USER)
   async getCart(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const cart = await this.userService.getCart(id);
@@ -66,6 +77,7 @@ export class UserController {
 
   // Add item to user's cart
   @Post(':id/cart')
+  @Roles(Role.USER)
   async addToCart(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() product: CreateCartDto,
@@ -82,6 +94,7 @@ export class UserController {
 
   // Update item quantity in user's cart
   @Post('/cart')
+  @Roles(Role.USER)
   async updateCart(@Body() product: UpdateCartDto, @Res() res: any) {
     try {
       await this.userService.updateCartItem(product);
@@ -94,6 +107,7 @@ export class UserController {
 
   // Remove item from user's cart
   @Delete(':id/cart/:productId')
+  @Roles(Role.USER)
   async removeFromCart(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('productId', ParseUUIDPipe) productId: string,
@@ -112,6 +126,7 @@ export class UserController {
 
   // Get user's order list
   @Get(':id/order')
+  @Roles(Role.USER, Role.ADMIN)
   async getOrder(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const orders = await this.userService.getOrder(id);
