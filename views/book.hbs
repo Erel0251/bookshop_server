@@ -7,7 +7,9 @@
     <h2 class="text-left">Book Inventory</h2>
     <div class="d-flex justify-content-evenly gap-3">
       <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createBook">Create</div>
+      <!--
       <div class="btn btn-outline-success">Import</div>
+      -->
     </div>
   </div>
 
@@ -52,8 +54,8 @@
           <th>Publisher</th>
           <th>ISBN</th>
           <th>Price</th>
+          <th>Rating</th>
           <th>Status</th>
-          <th>Currency</th>
           <th>Inventory</th>
           <th>Action</th>
         </tr>
@@ -67,9 +69,13 @@
           <td class="editable">{{formatName author}}</td>
           <td class="editable">{{formatName publisher}}</td>
           <td class="editable">{{isbn}}</td>
-          <td class="editable" data-price="{{price}}">{{formatPrice price currency}}</td>
+          <td 
+            class="editable" 
+            data-price="{{price}}"
+            data-currency="{{currency}}"
+          >{{formatPrice price currency}}</td>
+          <td class="editable">{{avgRating reviews}}</td>
           <td class="editable">{{formatName status}}</td>
-          <td class="editable">{{currency}}</td>
           <td>{{inventory}}</td>
           <td>
             <button class="btn btn-outline-primary editBtn" data-bs-toggle="modal" data-bs-target="#editBook">Edit</button>

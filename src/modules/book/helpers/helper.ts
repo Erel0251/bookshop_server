@@ -14,6 +14,7 @@ export const generateISBN = () => {
 export const queryBuilder = (
   query: SelectQueryBuilder<Book>,
   req: QueryBookDto,
+  isAdmin: boolean = false,
 ) => {
   Maybe.fromFalsy(req.keyword).ifJust((keyword) =>
     query.andWhere('book.keyword LIKE :keyword', {
@@ -58,16 +59,26 @@ export const queryBuilder = (
     query
       .leftJoinAndSelect('book.reviews', 'review')
       .groupBy('book.id')
-      .select('book.*')
       .having('ROUND(AVG(review.rating)) = :rating', {
         rating: req.rating,
-      });
+      })
+      .select('book');
   }
 
   // alway get non-deleted book
   query.andWhere('book.is_deleted = :is_deleted', { is_deleted: false });
 
   query.orderBy(`book.${req.sortBy}` || 'book.created_at', req.order || 'DESC');
+
+  // if not admin, need pagination
+  if (!isAdmin) {
+    query.offset(req.offset || 0);
+    query.limit(req.limit || 20);
+  } else {
+    // if admin, get all reviews and users
+    query.leftJoinAndSelect('book.reviews', 'review');
+    query.leftJoinAndSelect('review.user', 'user');
+  }
 
   return query;
 };

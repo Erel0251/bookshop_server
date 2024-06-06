@@ -8,33 +8,51 @@
       </div>
       <div class="modal-body">
         <form id="editForm">
-          <div class="mb-3">
-            <label for="editName" class="form-label">Name</label>
-            <input type="text" class="form-control" id="editName" required>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editName" class="form-label">Name</label>
+                <input type="text" class="form-control" id="editName" required>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editAuthor" class="form-label">Author Name</label>
+                <input type="text" class="form-control" id="editAuthor" required>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="editURL" class="form-label">URL Images</label>
-            <input type="url" class="form-control" id="editURL" required>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="img" class="form-label">Img</label>
+                <input type="file" class="form-control" id="img" multiple>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editURL" class="form-label">URL Images</label>
+                <input type="url" class="form-control" id="editURL" required>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="editAuthor" class="form-label">Author Name</label>
-            <input type="text" class="form-control" id="editAuthor" required>
-          </div>
-          <div class="mb-3">
-            <label for="editPublisher" class="form-label">Publisher Name</label>
-            <input type="text" class="form-control" id="editPublisher" required>
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editISBN" class="form-label">ISBN</label>
+                <input type="text" class="form-control" id="editISBN">
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editPublisher" class="form-label">Publisher Name</label>
+                <input type="text" class="form-control" id="editPublisher" required>
+              </div>
+            </div>
           </div>
           <div class="mb-3">
             <label for="editOverview" class="form-label">Overview</label>
             <textarea class="form-control" id="editOverview" rows="3"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="editISBN" class="form-label">ISBN</label>
-            <input type="text" class="form-control" id="editISBN">
-          </div>
-          <div class="mb-3">
-            <label for="editPrice" class="form-label">Price</label>
-            <input type="number" class="form-control" id="editPrice" required>
           </div>
           <div class="mb-3">
             <label for="editStatus" class="form-label">Status</label>
@@ -45,9 +63,19 @@
               <option value="DISCOUNTINUED">Discountinued</option>
             </select>
           </div>
-          <div class="mb-3">
-            <label for="editCurrency" class="form-label">Currency</label>
-            <input type="text" class="form-control" id="editCurrency">
+          <div class="row">
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editPrice" class="form-label">Price</label>
+                <input type="number" class="form-control" id="editPrice" required>
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editCurrency" class="form-label">Currency</label>
+                <input type="text" class="form-control" id="editCurrency">
+              </div>
+            </div>
           </div>
         </form>
       </div>
@@ -74,8 +102,8 @@
         const publisher = currentRow.children[3].innerText;
         const isbn = currentRow.children[4].innerText;
         const price = currentRow.children[5].getAttribute('data-price');
-        const status = currentRow.children[6].innerText;
-        const currency = currentRow.children[7].innerText;
+        const status = currentRow.children[7].innerText;
+        const currency = currentRow.children[5].getAttribute('data-currency');
 
         document.getElementById('editName').value = name;
         document.getElementById('editURL').value = url;

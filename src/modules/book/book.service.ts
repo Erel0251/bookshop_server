@@ -53,10 +53,11 @@ export class BookService {
 
   async findAll(req?: QueryBookDto): Promise<Book[]> {
     const filter = new QueryBookDto(req);
-    const query = queryBuilder(this.book.createQueryBuilder('book'), filter);
-
-    query.offset(filter.offset || 0);
-    query.limit(filter.limit || 20);
+    const query = queryBuilder(
+      this.book.createQueryBuilder('book'),
+      filter,
+      true,
+    );
 
     return await query.getMany();
   }

@@ -1,5 +1,6 @@
 import * as hbs from 'hbs';
 import { OrderDetail } from '../modules/order/entities/order-detail.entity';
+import { Review } from '../modules/review/entities/review.entity';
 
 const formatDate = (req: Date) => {
   // Format date to dd/mm/yyyy
@@ -58,6 +59,14 @@ const formatPublished = (published: boolean) => {
   return published ? 'Published' : 'Unpublished';
 };
 
+const avgRating = (reviews: Review[]) => {
+  if (!reviews || reviews.length === 0) {
+    return 0;
+  }
+  const total = reviews.reduce((total, review) => total + review.rating, 0);
+  return (total / reviews.length).toFixed(1);
+};
+
 export function registerHelpers() {
   hbs.registerHelper('showNum', (value) => (value ? value : '0'));
   hbs.registerHelper('inc', (index) => index + 1);
@@ -77,4 +86,5 @@ export function registerHelpers() {
   hbs.registerHelper('totalPrice', totalPrice);
   hbs.registerHelper('isPending', (status) => status === 'PENDING');
   hbs.registerHelper('formatPublished', formatPublished);
+  hbs.registerHelper('avgRating', avgRating);
 }
