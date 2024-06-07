@@ -49,7 +49,6 @@ export class PromotionService {
         from: LessThanOrEqual(date),
         to: MoreThanOrEqual(date),
       },
-      relations: ['promotion_books', 'promotion_books.book'],
     });
   }
 

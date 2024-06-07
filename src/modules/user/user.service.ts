@@ -55,14 +55,28 @@ export class UserService {
   }
 
   async getCart(id: string) {
-    return await this.userRepository.findOne({
-      where: { id },
-      relations: [
-        'cart_items',
-        'cart_items.books',
-        'cart_items.books.promotion_books',
-      ],
-    });
+    const date = new Date().toISOString().split('T')[0];
+    return await this.userRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.cart_items', 'cart_items')
+      .leftJoinAndSelect('cart_items.books', 'books')
+      .leftJoinAndSelect('books.promotion_books', 'promotion_books')
+      .leftJoinAndMapOne(
+        'promotion_books.promotion',
+        'promotion',
+        'promotion',
+        'promotion_books.promotion_id = promotion.id AND promotion.from <= :date AND promotion.to >= :date',
+        { date },
+      )
+      .where('user.id = :id', { id })
+      .groupBy('books.id')
+      .addGroupBy('cart_items.id')
+      .select([
+        'books',
+        'MIN(promotion_books.price) as sale_price',
+        'cart_items.quantity',
+      ])
+      .getRawMany();
   }
 
   async addBookToCart(userId: string, cartItem: CreateCartDto) {

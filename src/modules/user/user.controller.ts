@@ -68,7 +68,24 @@ export class UserController {
   async getCart(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const cart = await this.userService.getCart(id);
-      return res.status(HttpStatus.OK).send(cart);
+      const response = cart.map((item) => {
+        return {
+          book: {
+            id: item.books_id,
+            title: item.books_title,
+            author: item.books_author,
+            overview: item.books_overview,
+            publisher: item.books_publisher,
+            img_urls: item.books_img_urls,
+            isbn: item.books_isbn,
+            price: item.books_price,
+            currency: item.books_currency,
+            sale_price: item.sale_price,
+          },
+          quantity: item.cart_items_quantity,
+        };
+      });
+      return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

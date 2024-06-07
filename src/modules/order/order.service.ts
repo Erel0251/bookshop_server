@@ -8,6 +8,7 @@ import { OrderDetail } from './entities/order-detail.entity';
 import { validStatusTransition } from './helpers/helpers';
 import { BookService } from '../book/book.service';
 import { QueryOrderDto } from './dto/query-order.dto';
+import { User } from '../user/entities/user.entity';
 
 @Injectable()
 export class OrderService {
@@ -18,13 +19,21 @@ export class OrderService {
     @InjectRepository(OrderDetail)
     private orderDetailRepository: Repository<OrderDetail>,
 
+    @InjectRepository(User)
+    private userRepository: Repository<User>,
+
     private readonly bookService: BookService,
   ) {}
 
   private readonly logger = new Logger(OrderService.name);
 
   async create(createOrderDto: CreateOrderDto) {
-    const order = await this.orderRepository.save(createOrderDto);
+    const order = await this.orderRepository.create(createOrderDto);
+    const user = await this.userRepository.findOne({
+      where: { id: createOrderDto.user_id },
+    });
+    order.user = user;
+    await this.orderRepository.save(order);
     if (createOrderDto.order_details) {
       createOrderDto.order_details.forEach(async (orderDetail) => {
         const detail = await this.orderDetailRepository.create(orderDetail);
