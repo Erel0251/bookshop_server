@@ -75,7 +75,7 @@ export class CategoryController {
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const category = await this.categoryService.findOne(id);
-      const books = await this.bookService.findAll();
+      const books = await this.bookService.findAll(undefined, true);
       return res.status(HttpStatus.OK).render('detailCategory', {
         title: 'Category Detail',
         message: 'Get data successfully',

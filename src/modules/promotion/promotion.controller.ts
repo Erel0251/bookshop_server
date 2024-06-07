@@ -72,7 +72,7 @@ export class PromotionController {
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const promotion = await this.promotionService.findOne(id);
-      const books = await this.bookService.findAll();
+      const books = await this.bookService.findAll(undefined, true);
       res.status(HttpStatus.OK).render('detailPromotion', {
         title: 'Promotion Detail',
         promotion,

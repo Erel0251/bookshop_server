@@ -93,7 +93,7 @@ export class SupplementController {
   async findOne(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const supplement = await this.supplementService.findOne(id);
-      const books = await this.bookService.findAll();
+      const books = await this.bookService.findAll(undefined, true);
       res.status(HttpStatus.OK).render('detailSupplement', {
         title: 'Supplement Detail',
         message: 'Get data successfully',

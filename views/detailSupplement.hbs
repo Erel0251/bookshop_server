@@ -106,6 +106,7 @@
 
   document.getElementById('addBook').addEventListener('submit', function(){
     event.preventDefault();
+    console.log('submit')
 
     const bookName = document.getElementById('book-name').value;
     const selectedOption = document.querySelector(`option[value="${bookName}"]`);
@@ -126,6 +127,9 @@
         price: +bookPrice
       }
     };
+
+    console.log(supplementDetail)
+    console.log(newBook)
 
     fetch('/supplement/{{supplement.id}}/book', {
       method: 'PATCH',

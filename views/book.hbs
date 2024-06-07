@@ -13,37 +13,6 @@
     </div>
   </div>
 
-
-  <form action="/book" method="get" class="card p-4 m-4" id="queryBook">
-    <div class="row">
-      <div class="col-md-4 mb-3">
-        <label for="filterTitle">Title</label>
-        <input type="text" id="filterTitle" class="form-control" placeholder="Search by Title" name="title">
-      </div>
-      <div class="col-md-4 mb-3">
-        <label for="filterAuthor">Author</label>
-        <input type="text" id="filterAuthor" class="form-control" placeholder="Search by Author" name="publisher">
-      </div>
-      <div class="col-md-4 mb-3">
-        <label for="filterPublisher">Publisher</label>
-        <input type="text" id="filterPublisher" class="form-control" placeholder="Search by Publisher" name="publisher">
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="filterISBN">ISBN</label>
-        <input type="text" id="filterISBN" class="form-control" placeholder="Search by ISBN" name="isbn">
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="filterStatus">Status</label>
-        <select id="filterStatus" name="status" form="queryBook" class="form-select">
-          {{#each statuses}}
-          <option value="{{this}}">{{formatName this}}</option>
-          {{/each}}
-        </select>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-  </form>
-
   <div class="m-3">
     <table class="table table-hover" id="book-data">
       <thead>

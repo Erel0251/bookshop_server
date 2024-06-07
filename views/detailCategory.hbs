@@ -41,7 +41,7 @@
   <div class="card m-3">
     <div class="card-header h3 p-3">Category Books</div>
     <div class="m-3">
-      <table class="table">
+      <table class="table" id="detail">
         <thead>
           <tr>
             <th scope="col">#</th>
@@ -96,6 +96,13 @@
 
 
 <script>
+
+  new DataTable('#detail', {
+    searchable: true,
+    sortable: true,
+    perPageSelect: true,
+    perPage: 5,
+  })
 
   document.getElementById('addBook').addEventListener('submit', function () {
     event.preventDefault();

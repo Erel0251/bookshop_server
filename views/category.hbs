@@ -10,26 +10,8 @@
   </div>
 
 
-  <form action="/category" method="get" class="card p-4 m-4" id="queryBook">
-    <div class="row">
-      <div class="col-md-6 mb-3">
-        <label for="filterTitle">Name</label>
-        <input type="text" id="filterTitle" class="form-control" placeholder="Search by name" name="name">
-      </div>
-      <div class="col-md-6 mb-3">
-        <label for="filterPublished">Published</label>
-        <select id="filterPublished" name="published" form="queryBook" class="form-select">
-          <option value="all">All</option>
-          <option value="onlyPublished">Published only</option>
-          <option value="onlyUnpublished">Unpublished only</option>
-        </select>
-      </div>
-    </div>
-    <button type="submit" class="btn btn-primary">Search</button>
-  </form>
-
   <div class="m-3">
-    <table class="table table-bordered">
+    <table class="table table-bordered" id="category-table">
       <thead>
         <tr>
           <th>#</th>
@@ -63,3 +45,7 @@
 
 {{> category/createCategory}}
 {{> category/editCategory}}
+
+<script>
+  new DataTable("#category-table");
+</script>

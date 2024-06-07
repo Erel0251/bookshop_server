@@ -47,7 +47,7 @@
   </form>
 
   <div class="m-4">
-    <table class="table table-hover table-striped">
+    <table class="table table-hover table-striped" id="supplement-table">
       <thead>
         <tr>
           <th>#</th>
@@ -134,3 +134,7 @@
 
 {{> supplement/createSupplement}}
 {{> supplement/editSupplement}}
+
+<script>
+  new DataTable("#supplement-table");
+</script>

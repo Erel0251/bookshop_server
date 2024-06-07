@@ -6,15 +6,12 @@ import {
   Post,
   Req,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import * as fs from 'fs';
 import { Roles } from './modules/auth/decorators/roles.decorator';
 import { Role } from './modules/user/constants/role.enum';
-import { RolesGuard } from './modules/auth/guards/roles.guard';
 
 @Controller()
-@UseGuards(RolesGuard)
 export class AppController {
   constructor() {}
 
@@ -38,7 +35,6 @@ export class AppController {
   }
 
   @Get('about')
-  @Roles(Role.ADMIN)
   about(@Res() res: any) {
     let data = undefined;
     try {
