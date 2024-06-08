@@ -84,6 +84,11 @@
     const imageUrl = document.getElementById('imageUrl').value;
     const currency = document.getElementById('currency').value;
 
+    if (!imageUrl && !document.getElementById('img').files.length) {
+      alert('Please provide an image for the book');
+      return;
+    }
+
     const formData = new FormData(document.getElementById('bookForm'));
     formData.append('currency', currency || 'VND');
     formData.append('img_urls', [imageUrl]);

@@ -62,7 +62,7 @@ export class BookController {
     try {
       const imagePaths = files.map((file) => file.path);
       if (!createBookDto.img_urls || createBookDto.img_urls.length === 0) {
-        createBookDto.img_urls = imagePaths;
+        createBookDto.img_urls = [...imagePaths, ...createBookDto.img_urls];
       }
       await this.bookService.create(createBookDto);
       res
@@ -100,14 +100,40 @@ export class BookController {
   }
 
   @Patch(':id')
+  @UseInterceptors(
+    FilesInterceptor('img', 10, {
+      storage: diskStorage({
+        destination: './uploads/books',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(
+            null,
+            `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`,
+          );
+        },
+      }),
+      limits: { fileSize: 1024 * 1024 },
+    }),
+  )
   @Roles(Role.ADMIN)
   async update(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() updateBookDto: UpdateBookDto,
+    @UploadedFiles() files: Express.Multer.File[],
     @Res() res: any,
   ) {
-    await this.bookService.update(id, updateBookDto);
-    res.status(HttpStatus.OK).send({ message: 'Update book successfully' });
+    try {
+      const imagePaths = files.map((file) => file.path);
+      if (imagePaths.length > 0) {
+        updateBookDto.img_urls = [...imagePaths, ...updateBookDto.img_urls];
+      }
+      await this.bookService.update(id, updateBookDto);
+      res.status(HttpStatus.OK).send({ message: 'Update book successfully' });
+    } catch (error) {
+      this.logger.error(error);
+      res.status(error.status).send(error.message);
+    }
   }
 
   @Get('total')

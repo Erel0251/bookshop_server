@@ -10,70 +10,53 @@
         <form id="editForm">
           <div class="row">
             <div class="col-12 col-md-6">
+              <div class="row" id="editImagePreview"></div>
+              <div class="mb-3">
+                <label for="editImg" class="form-label">Img</label>
+                <input type="file" class="form-control" name="img" id="editImg" multiple>
+              </div>
+              <div class="mb-3">
+                <label for="editURL" class="form-label">Or URL of Images</label>
+                <input type="url" class="form-control" id="editURL">
+              </div>
+            </div>
+            <div class="col-12 col-md-6">
               <div class="mb-3">
                 <label for="editName" class="form-label">Name</label>
-                <input type="text" class="form-control" id="editName" required>
+                <input type="text" class="form-control" name="title" id="editName" required>
               </div>
-            </div>
-            <div class="col-12 col-md-6">
               <div class="mb-3">
                 <label for="editAuthor" class="form-label">Author Name</label>
-                <input type="text" class="form-control" id="editAuthor" required>
+                <input type="text" class="form-control" name="author" id="editAuthor" required>
               </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="img" class="form-label">Img</label>
-                <input type="file" class="form-control" id="img" multiple>
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="editURL" class="form-label">URL Images</label>
-                <input type="url" class="form-control" id="editURL" required>
-              </div>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="editISBN" class="form-label">ISBN</label>
-                <input type="text" class="form-control" id="editISBN">
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
               <div class="mb-3">
                 <label for="editPublisher" class="form-label">Publisher Name</label>
-                <input type="text" class="form-control" id="editPublisher" required>
+                <input type="text" class="form-control" name="publisher" id="editPublisher" required>
               </div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="editOverview" class="form-label">Overview</label>
-            <textarea class="form-control" id="editOverview" rows="3"></textarea>
-          </div>
-          <div class="mb-3">
-            <label for="editStatus" class="form-label">Status</label>
-            <select class="form-control" id="editStatus" required>
-              <option value="AVAILABLE">Available</option>
-              <option value="OUT_OF_STOCK">Out of Stock</option>
-              <option value="COMING_SOON">Coming Soon</option>
-              <option value="DISCOUNTINUED">Discountinued</option>
-            </select>
-          </div>
-          <div class="row">
-            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editISBN" class="form-label">ISBN</label>
+                <input type="text" class="form-control" name="isbn" id="editISBN">
+              </div>
               <div class="mb-3">
                 <label for="editPrice" class="form-label">Price</label>
-                <input type="number" class="form-control" id="editPrice" required>
+                <input type="number" class="form-control" name="price" id="editPrice" required>
               </div>
-            </div>
-            <div class="col-12 col-md-6">
+              <div class="mb-3">
+                <label for="editStatus" class="form-label">Status</label>
+                <select class="form-control" id="editStatus" required>
+                  <option value="AVAILABLE">Available</option>
+                  <option value="OUT_OF_STOCK">Out of Stock</option>
+                  <option value="COMING_SOON">Coming Soon</option>
+                  <option value="DISCOUNTINUED">Discountinued</option>
+                </select>
+              </div>
+              <div class="mb-3">
+                <label for="editOverview" class="form-label">Overview (optional)</label>
+                <textarea class="form-control" name="overview" id="editOverview" rows="3"></textarea>
+              </div>
               <div class="mb-3">
                 <label for="editCurrency" class="form-label">Currency</label>
-                <input type="text" class="form-control" id="editCurrency">
+                <input type="text" class="form-control" name="currency" id="editCurrency" required>
               </div>
             </div>
           </div>
@@ -81,7 +64,7 @@
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary" id="saveChanges">Save changes</button>
+        <button type="submit" class="btn btn-primary" id="saveChanges" form="editForm">Save changes</button>
       </div>
     </div>
   </div>
@@ -89,6 +72,21 @@
 
 <!-- Edit Book Modal -->
 <script>
+  document.getElementById('editImg').addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'img-thumbnail';
+        document.getElementById('editImagePreview').innerHTML = '';
+        document.getElementById('editImagePreview').appendChild(img);
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
     const editButtons = document.querySelectorAll('.editBtn');
     let currentRow = null;
@@ -105,8 +103,14 @@
         const status = currentRow.children[7].innerText;
         const currency = currentRow.children[5].getAttribute('data-currency');
 
+        // preview image
+        const img = document.createElement('img');
+        img.src = url;
+        img.className = 'img-thumbnail';
+        document.getElementById('editImagePreview').innerHTML = '';
+        document.getElementById('editImagePreview').appendChild(img);
+
         document.getElementById('editName').value = name;
-        document.getElementById('editURL').value = url;
         document.getElementById('editAuthor').value = author;
         document.getElementById('editPublisher').value = publisher;
         document.getElementById('editISBN').value = isbn;
@@ -123,26 +127,25 @@
       });
     });
 
-    document.getElementById('saveChanges').addEventListener('click', function () {
+    document.getElementById('editForm').addEventListener('submit', function () {
+      event.preventDefault();
+      const imageUrl = document.getElementById('editURL').value;
+      const currency = document.getElementById('editCurrency').value;
+      const status = document.getElementById('editStatus').value;
+
+      if (!imageUrl && !document.getElementById('editImg').files.length) {
+        alert('Please provide an image');
+        return;
+      }
+
+      const formData = new FormData(document.getElementById('editForm'));
       const bookId = currentRow.getAttribute('data-book-id');
-      const data = {
-        title: document.getElementById('editName').value,
-        img_urls: [document.getElementById('editURL').value],
-        author: document.getElementById('editAuthor').value,
-        publisher: document.getElementById('editPublisher').value,
-        overview: document.getElementById('editOverview').value,
-        isbn: document.getElementById('editISBN').value,
-        price: +document.getElementById('editPrice').value,
-        status: document.getElementById('editStatus').value,
-        currency: document.getElementById('editCurrency').value
-      };
+      formData.append('img_urls', [imageUrl]);
+      formData.append('status', status);
 
       fetch(`book/${bookId}`, {
         method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        body: formData
       })
         .then(response => response.json())
         .then(() => {
