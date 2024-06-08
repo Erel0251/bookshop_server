@@ -13,7 +13,7 @@
             <div class="row" id="image-preview"></div>
             <div class="mb-3">
               <label for="img" class="form-label">Img</label>
-              <input type="file" class="form-control" name="img" id="img" multiple>
+              <input type="file" class="form-control" name="img" id="img">
             </div>
             <div class="mb-3">
               <label for="imageUrl" class="form-label">Or URL of Images</label>
@@ -64,7 +64,7 @@
 <script>
   // preview image when user selects an image file
   document.getElementById('img').addEventListener('change', function () {
-    const file = this.files[0];
+    const file = this.files;
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {

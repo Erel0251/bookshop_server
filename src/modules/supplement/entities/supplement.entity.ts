@@ -13,7 +13,7 @@ export class Supplement extends CommonEntity {
   @Column({ default: 0 })
   total_quantity: number;
 
-  @Column({ default: 0 })
+  @Column({ type: 'real', default: 0 })
   total_price: number;
 
   @Column({ default: 'VND' })

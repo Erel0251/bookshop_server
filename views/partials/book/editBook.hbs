@@ -13,7 +13,7 @@
               <div class="row" id="editImagePreview"></div>
               <div class="mb-3">
                 <label for="editImg" class="form-label">Img</label>
-                <input type="file" class="form-control" name="img" id="editImg" multiple>
+                <input type="file" class="form-control" name="img" id="editImg">
               </div>
               <div class="mb-3">
                 <label for="editURL" class="form-label">Or URL of Images</label>
@@ -73,7 +73,7 @@
 <!-- Edit Book Modal -->
 <script>
   document.getElementById('editImg').addEventListener('change', function () {
-    const file = this.files[0];
+    const file = this.files;
     if (file) {
       const reader = new FileReader();
       reader.onload = function (e) {

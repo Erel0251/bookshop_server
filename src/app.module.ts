@@ -27,6 +27,7 @@ import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { AppController } from './app.controller';
 import { MulterModule } from '@nestjs/platform-express';
+import { CloudinaryModule } from './shared/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -71,6 +72,7 @@ import { MulterModule } from '@nestjs/platform-express';
     MulterModule.register({
       dest: './uploads',
     }),
+    CloudinaryModule,
     UserModule,
     AuthModule,
     //AuthorModule,

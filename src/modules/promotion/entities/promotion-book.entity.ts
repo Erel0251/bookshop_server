@@ -12,7 +12,7 @@ export class PromotionBook extends CommonEntity {
   quantity?: number;
 
   @Field({ nullable: true })
-  @Column({ type: 'integer', nullable: true })
+  @Column({ type: 'real', nullable: true })
   price: number;
 
   @Field({ nullable: true })

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreatePromotionDto } from './dto/create-promotion.dto';
 import { UpdatePromotionDto } from './dto/update-promotion.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -103,12 +103,13 @@ export class PromotionService {
       throw new Error('Promotion not found');
     }
     const book = await Book.findOne({ where: { id: bookId } });
-    detailPromotion.price = book.price * detailPromotion.discount;
+    detailPromotion.price = book.price * (1 - detailPromotion.discount);
     // if the quantity is greater than the inventory, set the quantity to the inventory
     // if the quantity is zero or undefined, set the quantity to inventory
-    detailPromotion.quantity = !detailPromotion.quantity
-      ? book.inventory
-      : Math.min(detailPromotion.quantity, book.inventory);
+    detailPromotion.quantity =
+      !detailPromotion.quantity || detailPromotion.quantity === 0
+        ? book.inventory
+        : Math.min(detailPromotion.quantity, book.inventory);
 
     const detail = await this.promotionBook.create(detailPromotion);
     detail.promotion = promotion;
@@ -120,18 +121,26 @@ export class PromotionService {
     id: string,
     promotionBook: UpdatePromotionBookDto,
   ): Promise<void | Error> {
-    const promotionBookEntity = await this.promotionBook.findOne({
+    const promotion = await this.promotion.findOne({
       where: { id },
     });
-    if (!promotionBookEntity) {
-      throw new Error('Promotion book not found');
+    if (!promotion) {
+      throw new NotFoundException('Promotion not found');
     }
-    const book = await Book.findOne({ where: { id: promotionBook.id } });
-    promotionBookEntity.price = book.price * promotionBook.discount;
-    promotionBookEntity.quantity = !promotionBook.quantity
-      ? book.inventory
-      : Math.min(promotionBook.quantity, book.inventory);
-    await this.promotionBook.update(id, promotionBook);
+    const promotionBookEntity = await this.promotionBook.findOne({
+      where: { id: promotionBook.id },
+      relations: ['book'],
+    });
+    if (!promotionBookEntity) {
+      throw new NotFoundException('Promotion book not found');
+    }
+    promotionBookEntity.price =
+      promotionBookEntity.book.price * (1 - promotionBook.discount);
+    promotionBookEntity.quantity =
+      !promotionBook.quantity || promotionBook.quantity === 0
+        ? promotionBookEntity.book.inventory
+        : Math.min(promotionBook.quantity, promotionBookEntity.book.inventory);
+    await promotionBookEntity.save();
   }
 
   async findDetailPromotionByBook(book: Book): Promise<PromotionBook> {

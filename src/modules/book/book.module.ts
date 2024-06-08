@@ -9,6 +9,7 @@ import { Book } from './entities/book.entity';
 import { CategoryModule } from '../category/category.module';
 import { ReviewModule } from '../review/review.module';
 import { PromotionModule } from '../promotion/promotion.module';
+import { CloudinaryModule } from '../../shared/cloudinary/cloudinary.module';
 
 @Module({
   imports: [
@@ -16,6 +17,7 @@ import { PromotionModule } from '../promotion/promotion.module';
     ReviewModule,
     CategoryModule,
     PromotionModule,
+    CloudinaryModule,
   ],
   controllers: [BookController],
   providers: [BookService, BookResolver],

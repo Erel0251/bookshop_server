@@ -5,10 +5,10 @@ import { Book } from 'src/modules/book/entities/book.entity';
 
 @Entity()
 export class SupplementDetail extends CommonEntity {
-  @Column()
+  @Column({ type: 'integer', default: 0 })
   quantity: number;
 
-  @Column()
+  @Column({ type: 'real', default: 0 })
   price: number;
 
   @Column({ default: 'VND' })

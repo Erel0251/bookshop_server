@@ -147,16 +147,16 @@ export class PromotionController {
   }
 
   // Update specific promotion book
-  @Patch(':id/book/:bookId')
+  @Patch(':id/book/:detailId')
   @Roles(Role.ADMIN)
   async updatePromotionBook(
     @Param('id') id: string,
-    @Param('bookId') bookId: string,
+    @Param('detailId') detailId: string,
     @Body() promotionBook: UpdatePromotionBookDto,
     @Res() res: any,
   ) {
     try {
-      promotionBook.id = bookId;
+      promotionBook.id = detailId;
       this.promotionService.updatePromotionBook(id, promotionBook);
       res
         .status(HttpStatus.OK)
