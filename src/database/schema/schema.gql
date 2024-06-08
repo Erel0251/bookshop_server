@@ -50,6 +50,11 @@ type PromotionBook {
   currency: String!
 }
 
+type ReviewResponse {
+  total: Int!
+  data: [Review!]!
+}
+
 type Book {
   title: String!
   author: String
@@ -66,7 +71,7 @@ type Book {
   buy_count: Int!
   inventory: Int!
   category: Category
-  reviews(rating: Float, offset: Float = 0, limit: Float = 10, sortBy: String = "created_at", order: String = "DESC"): [Review!]
+  reviews(rating: Float, offset: Float = 0, limit: Float = 10, sortBy: String = "created_at", order: String = "DESC"): ReviewResponse
   id: ID!
   sale_price: Float
 }
