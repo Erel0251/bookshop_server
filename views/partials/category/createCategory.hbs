@@ -78,7 +78,7 @@
           window.location.reload();
         })
         .catch(error => {
-          alert(error.message);
+          showToast(err.message, 'danger');
           // Handle error here
         });
       // Optionally, you can close the modal here

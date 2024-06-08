@@ -118,12 +118,13 @@
       },
     })
       .then(response => response.json())
-      .then(() => {
+      .then((message) => {
+        showToast(message.message, 'success');
         // Reload the page after form submission
         window.location.reload();
       })
       .catch(error => {
-        alert(error.message);
+        showToast(err.message, 'danger');
       });
   });
 
@@ -143,12 +144,13 @@
       },
     })
       .then(response => response.json())
-      .then(() => {
+      .then((message) => {
+        showToast(message.message, 'success');
         // Reload the page after form submission
         window.location.reload();
       })
       .catch(error => {
-        alert(error.message);
+        showToast(err.message, 'danger');
       });
   })
 </script>

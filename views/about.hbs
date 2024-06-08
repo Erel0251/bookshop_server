@@ -32,10 +32,10 @@
     })
       .then(res => res.json())
       .then(data => {
-        alert(data.message);
+        showToast(data.message, 'success');
       })
       .catch(err => {
-        alert(err.message);
+        showToast(err.message, 'danger');
       });
     
   });
@@ -45,8 +45,9 @@
     .then(newEditor => {
       editor = newEditor;
       editor.setData(`{{{data}}}`);
+      showToast(data.message, 'success');
     })
     .catch(error => {
-      alert(error.message);
+        showToast(err.message, 'danger');
     });
 </script>

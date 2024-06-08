@@ -136,7 +136,7 @@
         window.location.reload();
       })
       .catch(error => {
-        alert(error.message);
+        showToast(err.message, 'danger');
       });
   });
 
@@ -161,7 +161,7 @@
         window.location.reload();
       })
       .catch(error => {
-        alert(error.message);
+        showToast(err.message, 'danger');
       });
   })
 </script>
