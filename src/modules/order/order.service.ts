@@ -9,6 +9,8 @@ import { validStatusTransition } from './helpers/helpers';
 import { BookService } from '../book/book.service';
 import { QueryOrderDto } from './dto/query-order.dto';
 import { User } from '../user/entities/user.entity';
+import { OrderStatus } from './constants/order-status.enum';
+import { BookStatus } from '../book/constants/status.enum';
 
 @Injectable()
 export class OrderService {
@@ -114,7 +116,10 @@ export class OrderService {
     id: string,
     updateOrderDto: UpdateOrderDto,
   ): Promise<Order | Error> {
-    const order = await this.orderRepository.findOne({ where: { id } });
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['order_details', 'order_details.books'],
+    });
     if (!order) {
       return new Error('Order not found');
     }
@@ -124,6 +129,21 @@ export class OrderService {
     }
 
     order.status = updateOrderDto.status;
+
+    if (updateOrderDto.status === OrderStatus.CONFIRMED) {
+      order.order_details.map(async (orderDetail) => {
+        const book = await this.bookService.findOne(orderDetail.books.id);
+        // assuming that the quantity of the book is enough
+        // if (book.quantity < orderDetail.quantity) {
+        //   return new Error('Not enough book quantity');
+        // }
+        book.inventory -= orderDetail.quantity;
+        if (book.inventory === 0) {
+          book.status = BookStatus.OUT_OF_STOCK;
+        }
+        await this.bookService.update(book.id, book);
+      });
+    }
 
     return await this.orderRepository.save(order);
   }

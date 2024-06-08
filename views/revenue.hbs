@@ -16,60 +16,66 @@
             Common statistics
           </button>
         </h2>
-        <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne"
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
           data-bs-parent="#statistics">
           <div class="accordion-body m-3 p-0">
             <div class="container-fluid">
               <div class="row text-white text-center">
                 <div class="col-2 col-md-3 ">
-                  <div class="card bg-success mb-3">
+                  <div class="card mb-3" style="background-color:darkseagreen;">
                     <div class="card-body">
                       <div class="d-flex justify-content-evenly align-items-center m-2">
                         <div class="display-4" style="min-height: 80px;">{{data.registered}}</div>
                         <div class="h5">Registered customers</div>
                       </div>
+                    </div>
                       <div class="card-footer d-flex justify-content-between align-items-center">
                         <div class="text-body-secondary">{{data.account_admin}} Admin</div>
+                        <a href="/user" style="text-decoration: none;">View</a>
                         <div class="text-body-secondary">{{data.account_user}} User</div>
                       </div>
-                    </div>
                   </div>
                 </div>
                 <div class="col-2 col-md-3 ">
-                  <div class="card bg-warning mb-3">
+                  <div class="card mb-3" style="background-color: burlywood;">
                     <div class="card-body">
                       <div class="d-flex justify-content-evenly align-items-center m-2">
                         <div class="display-4" style="min-height: 80px;">{{data.category.total}}</div>
                         <div class="h5">Categories</div>
                       </div>
+                    </div>
                       <div class="card-footer d-flex justify-content-between align-items-center">
                         <div class="text-body-secondary">{{data.category.published}} Published</div>
+                        <a href="/category" style="text-decoration: none;">View</a>
                         <div class="text-body-secondary">{{data.category.unpublished}} Unblished</div>
                       </div>
-                    </div>
                   </div>
                 </div>
                 <div class="col-2 col-md-3 ">
-                  <div class="card bg-info mb-3">
+                  <div class="card mb-3" style="background-color:powderblue;">
                     <div class="card-body">
-                      <div class="display-4" style="min-height: 80px;">{{data.book}}</div>
-                      <div class="h5">Books</div>
+                      <div class="d-flex justify-content-evenly align-items-center m-2">
+                        <div class="display-4" style="min-height: 80px;">{{data.book}}</div>
+                        <div class="h5">Books</div>
+                      </div>
                     </div>
-                    <div class="card-footer"></div>
+                    <div class="card-footer">
+                      <a href="/book" style="text-decoration: none;">View</a>
+                    </div>
                   </div>
                 </div>
                 <div class="col-2 col-md-3 ">
-                  <div class="card mb-3" style="background-color:lightsteelblue;">
+                  <div class="card mb-3" style="background-color:gainsboro;">
                     <div class="card-body">
                       <div class="d-flex justify-content-evenly align-items-center m-2">
                         <div class="display-4" style="min-height: 80px;">{{data.order}}</div>
                         <div class="h5">Orders</div>
                       </div>
+                    </div>
                       <div class="card-footer d-flex justify-content-between align-items-center">
                         <div class="text-danger fw-bold">-{{formatPrice data.expense 'VND'}}</div>
                         <div class="text-success fw-bold">+{{formatPrice data.income 'VND'}}</div>
                       </div>
-                    </div>
                   </div>
                 </div>
               </div>

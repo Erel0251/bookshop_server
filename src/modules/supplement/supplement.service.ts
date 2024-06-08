@@ -12,6 +12,7 @@ import { QuerySupplementDto } from './dto/query-supplement.dto';
 
 import { Maybe } from 'purify-ts/Maybe';
 import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
+import { BookStatus } from '../book/constants/status.enum';
 
 @Injectable()
 export class SupplementService {
@@ -174,6 +175,9 @@ export class SupplementService {
     }
 
     book.inventory += bookUpdate.supplement_detail?.quantity;
+    if (book.status === BookStatus.OUT_OF_STOCK) {
+      book.status = BookStatus.AVAILABLE;
+    }
     const detail = this.supplementDetailRepository.create(
       bookUpdate.supplement_detail,
     );
