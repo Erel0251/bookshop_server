@@ -103,7 +103,7 @@ export class PromotionService {
       throw new Error('Promotion not found');
     }
     const book = await Book.findOne({ where: { id: bookId } });
-    detailPromotion.price = book.price * (1 - detailPromotion.discount / 100);
+    detailPromotion.price = book.price * detailPromotion.discount;
     // if the quantity is greater than the inventory, set the quantity to the inventory
     // if the quantity is zero or undefined, set the quantity to inventory
     detailPromotion.quantity = !detailPromotion.quantity
@@ -127,7 +127,7 @@ export class PromotionService {
       throw new Error('Promotion book not found');
     }
     const book = await Book.findOne({ where: { id: promotionBook.id } });
-    promotionBookEntity.price = book.price * (1 - promotionBook.discount / 100);
+    promotionBookEntity.price = book.price * promotionBook.discount;
     promotionBookEntity.quantity = !promotionBook.quantity
       ? book.inventory
       : Math.min(promotionBook.quantity, book.inventory);

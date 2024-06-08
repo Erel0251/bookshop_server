@@ -176,6 +176,9 @@ export class BookService {
       .getOne();
     const reviews = book.reviews;
     const total = reviews.length;
+    if (total === 0) {
+      return { total, average: '0.00', details: [0, 0, 0, 0, 0] };
+    }
     const average = (
       reviews.reduce((acc, cur) => acc + cur.rating, 0) / total
     ).toFixed(2);
