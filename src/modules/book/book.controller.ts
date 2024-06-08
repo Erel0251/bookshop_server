@@ -11,6 +11,8 @@ import {
   ParseUUIDPipe,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFiles,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { BookService } from './book.service';
@@ -22,6 +24,9 @@ import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../user/constants/role.enum';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { FilesInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import { extname } from 'path';
 
 @Controller('book')
 @ApiTags('Book')
@@ -33,8 +38,32 @@ export class BookController {
 
   @Post()
   @Roles(Role.ADMIN)
-  async create(@Body() createBookDto: CreateBookDto, @Res() res: any) {
+  @UseInterceptors(
+    FilesInterceptor('img', 10, {
+      storage: diskStorage({
+        destination: './uploads/books',
+        filename: (req, file, cb) => {
+          const uniqueSuffix =
+            Date.now() + '-' + Math.round(Math.random() * 1e9);
+          cb(
+            null,
+            `${file.fieldname}-${uniqueSuffix}${extname(file.originalname)}`,
+          );
+        },
+      }),
+      limits: { fileSize: 1024 * 1024 },
+    }),
+  )
+  async create(
+    @Body() createBookDto: CreateBookDto,
+    @UploadedFiles() files: Express.Multer.File[],
+    @Res() res: any,
+  ) {
     try {
+      const imagePaths = files.map((file) => file.path);
+      if (!createBookDto.img_urls || createBookDto.img_urls.length === 0) {
+        createBookDto.img_urls = imagePaths;
+      }
       await this.bookService.create(createBookDto);
       res
         .status(HttpStatus.CREATED)

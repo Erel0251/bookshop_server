@@ -8,61 +8,49 @@
       </div>
       <div class="modal-body">
         <form id="bookForm" class="container">
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" id="name" required>
-              </div>
+        <div class="row">
+          <div class="col-12 col-md-6">
+            <div class="row" id="image-preview"></div>
+            <div class="mb-3">
+              <label for="img" class="form-label">Img</label>
+              <input type="file" class="form-control" name="img" id="img" multiple>
             </div>
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="author" class="form-label">Author Name</label>
-                <input type="text" class="form-control" id="author" required>
-              </div>
+            <div class="mb-3">
+              <label for="imageUrl" class="form-label">Or URL of Images</label>
+              <input type="url" class="form-control" id="imageUrl">
             </div>
           </div>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="isbn" class="form-label">ISBN</label>
-                <input type="text" class="form-control" id="isbn">
-              </div>
+          <div class="col-12 col-md-6">
+            <div class="mb-3">
+              <label for="name" class="form-label">Name</label>
+              <input type="text" class="form-control" name="title" id="name" required>
             </div>
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="publisher" class="form-label">Publisher Name</label>
-                <input type="text" class="form-control" id="publisher" required>
-              </div>
+            <div class="mb-3">
+              <label for="author" class="form-label">Author Name</label>
+              <input type="text" class="form-control" name="author" id="author" required>
+            </div>
+            <div class="mb-3">
+              <label for="publisher" class="form-label">Publisher Name</label>
+              <input type="text" class="form-control" name="publisher" id="publisher" required>
+            </div>
+            <div class="mb-3">
+              <label for="isbn" class="form-label">ISBN</label>
+              <input type="text" class="form-control" name="isbn" id="isbn">
+            </div>
+            <div class="mb-3">
+              <label for="price" class="form-label">Price</label>
+              <input type="number" class="form-control" name="price" id="price" required>
+            </div>
+            <div class="mb-3">
+              <label for="overview" class="form-label">Overview (optional)</label>
+              <textarea class="form-control" name="overview" id="overview" rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="currency" class="form-label">Currency (optional)</label>
+              <input type="text" class="form-control" id="currency">
             </div>
           </div>
-          <div class="row">
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="isbn" class="form-label">Img</label>
-                <input type="file" class="form-control" id="img" multiple>
-              </div>
-            </div>
-            <div class="col-12 col-md-6">
-              <div class="mb-3">
-                <label for="imageUrl" class="form-label">URL of Images</label>
-                <input type="url" class="form-control" id="imageUrl" required>
-              </div>
-            </div>
-          </div>
-          <div class="mb-3">
-            <label for="overview" class="form-label">Overview (optional)</label>
-            <textarea class="form-control" id="overview" rows="3"></textarea>
-          </div>
-
-          <div class="mb-3">
-            <label for="price" class="form-label">Price</label>
-            <input type="number" class="form-control" id="price" required>
-          </div>
-          <div class="mb-3">
-            <label for="currency" class="form-label">Currency (optional)</label>
-            <input type="text" class="form-control" id="currency">
-          </div>
+        </div>
         </form>
       </div>
       <div class="modal-footer">
@@ -74,35 +62,35 @@
 </div>
 
 <script>
+  // preview image when user selects an image file
+  document.getElementById('img').addEventListener('change', function () {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        const img = document.createElement('img');
+        img.src = e.target.result;
+        img.className = 'img-thumbnail';
+        document.getElementById('image-preview').innerHTML = '';
+        document.getElementById('image-preview').appendChild(img);
+      }
+      reader.readAsDataURL(file);
+    }
+  });
+
+
   document.getElementById('bookForm').addEventListener('submit', function () {
     event.preventDefault();
-
-    const name = document.getElementById('name').value;
     const imageUrl = document.getElementById('imageUrl').value;
-    const author = document.getElementById('author').value;
-    const publisher = document.getElementById('publisher').value;
-    const overview = document.getElementById('overview').value;
-    const isbn = document.getElementById('isbn').value;
-    const price = document.getElementById('price').value;
     const currency = document.getElementById('currency').value;
 
-    const data = {
-      title: name,
-      img_urls: [imageUrl],
-      author,
-      publisher,
-      overview,
-      isbn,
-      price: +price,
-      currency: currency || 'VND'
-    };
+    const formData = new FormData(document.getElementById('bookForm'));
+    formData.append('currency', currency || 'VND');
+    formData.append('img_urls', [imageUrl]);
 
     fetch('/book', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
+      body: formData
     })
       .then(response => response.json())
       .then(data => {

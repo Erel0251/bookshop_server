@@ -8,6 +8,7 @@ import { HttpExceptionFilter } from './filters/http-exception.filter';
 import { AppModule } from './app.module';
 import * as hbs from 'hbs';
 import * as cookieParser from 'cookie-parser';
+import * as bodyParser from 'body-parser';
 import { registerHelpers } from './utils/handlebars-helpder';
 
 async function bootstrap() {
@@ -35,8 +36,11 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggerErrorInterceptor());
 
   app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', 'uploads'), { prefix: '/uploads' });
   app.setBaseViewsDir(join(__dirname, '..', 'views'));
   hbs.registerPartials(join(__dirname, '..', 'views', 'partials'));
+  app.use(bodyParser.json({ limit: '50mb' }));
+  app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
   app.setViewEngine('hbs');
   registerHelpers();
 

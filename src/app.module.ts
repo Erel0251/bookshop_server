@@ -26,6 +26,7 @@ import { SupplementModule } from './modules/supplement/supplement.module';
 import { ReviewModule } from './modules/review/review.module';
 import { PromotionModule } from './modules/promotion/promotion.module';
 import { AppController } from './app.controller';
+import { MulterModule } from '@nestjs/platform-express';
 
 @Module({
   imports: [
@@ -67,6 +68,9 @@ import { AppController } from './app.controller';
     // RedisModule.forRootAsync({
     //   useClass: RedisConfigService,
     // }),
+    MulterModule.register({
+      dest: './uploads',
+    }),
     UserModule,
     AuthModule,
     //AuthorModule,
