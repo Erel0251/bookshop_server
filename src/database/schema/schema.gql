@@ -52,6 +52,8 @@ type PromotionBook {
 
 type ReviewResponse {
   total: Int!
+  average: Float!
+  details: [Int!]!
   data: [Review!]!
 }
 

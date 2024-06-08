@@ -1,10 +1,31 @@
-import { ResolveField, Resolver } from '@nestjs/graphql';
+import {
+  Field,
+  Float,
+  Int,
+  ObjectType,
+  ResolveField,
+  Resolver,
+} from '@nestjs/graphql';
 import { Review } from './entities/review.entity';
-import { ReviewService } from './review.service';
+
+@ObjectType()
+export class ReviewResponse {
+  @Field(() => Int)
+  total: number;
+
+  @Field(() => Float)
+  average: number;
+
+  @Field(() => [Int])
+  details: number[];
+
+  @Field(() => [Review])
+  data: Review[];
+}
 
 @Resolver(() => Review)
 export class ReviewResolver {
-  constructor(private reviewService: ReviewService) {}
+  constructor() {}
 
   @ResolveField(() => String, { name: 'id' })
   resolveId(review: Review): string {

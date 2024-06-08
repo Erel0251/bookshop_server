@@ -14,11 +14,10 @@ import { Book } from './entities/book.entity';
 import { BookService } from './book.service';
 import { Category } from '../category/entities/category.entity';
 import { ParseUUIDPipe } from '@nestjs/common';
-import { Review } from '../review/entities/review.entity';
 import { QueryBookDto } from './dto/query-book.dto';
 import { Order } from '../../shared/constants/order.enum';
+import { ReviewResponse } from '../review/review.resolver';
 import { QueryReviewDto } from '../review/dto/query-review.dto';
-import { ReviewService } from '../review/review.service';
 
 @ObjectType()
 class BooksResponse {
@@ -31,10 +30,7 @@ class BooksResponse {
 
 @Resolver(() => Book)
 export class BookResolver {
-  constructor(
-    private readonly bookService: BookService,
-    private readonly reviewService: ReviewService,
-  ) {}
+  constructor(private readonly bookService: BookService) {}
 
   @Query(() => BooksResponse, { name: 'books' })
   async books(
@@ -108,7 +104,7 @@ export class BookResolver {
     return result;
   }
 
-  @ResolveField(() => [Review], { name: 'reviews', nullable: true })
+  @ResolveField(() => ReviewResponse, { name: 'reviews', nullable: true })
   async reviews(
     @Parent() book: Book,
     @Args('rating', { type: () => Number, nullable: true })
@@ -129,16 +125,18 @@ export class BookResolver {
       defaultValue: Order.DESC,
     })
     order?: Order,
-  ): Promise<Review[]> {
-    const query = new QueryReviewDto({
-      id: book.id,
+  ): Promise<ReviewResponse> {
+    const req = new QueryReviewDto({
       rating,
       offset,
       limit,
       sortBy,
       order,
     });
-    return await this.reviewService.findBookReviews(query);
+    const data = await this.bookService.findReviewByBookId(book.id, req);
+    const { total, average, details } =
+      await this.bookService.summaryReviewByBookId(book.id);
+    return { total, average, details, data };
   }
 
   @ResolveField(() => ID, { name: 'id' })

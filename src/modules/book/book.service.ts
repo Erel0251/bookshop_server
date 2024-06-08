@@ -17,6 +17,7 @@ import { ReviewService } from '../review/review.service';
 import { Review } from '../review/entities/review.entity';
 import { PromotionService } from '../promotion/promotion.service';
 import { QueryBookDto } from './dto/query-book.dto';
+import { QueryReviewDto } from '../review/dto/query-review.dto';
 
 @Injectable()
 export class BookService {
@@ -150,5 +151,37 @@ export class BookService {
       })
       .select(['book', 'SUM(order_detail.quantity) as total'])
       .getMany();
+  }
+
+  async findReviewByBookId(id: string, req: QueryReviewDto): Promise<Review[]> {
+    const query = this.book
+      .createQueryBuilder('book')
+      .leftJoinAndSelect('book.reviews', 'reviews')
+      .where('book.id = :id', { id });
+    if (req.rating) {
+      query.andWhere('reviews.rating = :rating', { rating: req.rating });
+    }
+    query.orderBy(`reviews.${req.sortBy}`, req.order);
+    query.offset(req.offset || 0);
+    query.limit(req.limit || 10);
+    const book = await query.getOne();
+    return book.reviews;
+  }
+
+  async summaryReviewByBookId(id: string): Promise<any> {
+    const book = await this.book
+      .createQueryBuilder('book')
+      .leftJoinAndSelect('book.reviews', 'reviews')
+      .where('book.id = :id', { id })
+      .getOne();
+    const reviews = book.reviews;
+    const total = reviews.length;
+    const average = (
+      reviews.reduce((acc, cur) => acc + cur.rating, 0) / total
+    ).toFixed(2);
+    const details = [0, 0, 0, 0, 0].map(
+      (_, i) => reviews.filter((r) => r.rating === i + 1).length,
+    );
+    return { total, average, details };
   }
 }

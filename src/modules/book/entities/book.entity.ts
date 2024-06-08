@@ -10,6 +10,7 @@ import { SupplementDetail } from 'src/modules/supplement/entities/supplement-det
 import { Cart } from 'src/modules/cart/entities/cart.entity';
 import { Review } from '../../review/entities/review.entity';
 import { PromotionBook } from '../../promotion/entities/promotion-book.entity';
+import { ReviewResponse } from '../../review/review.resolver';
 
 @Entity()
 @ObjectType()
@@ -79,7 +80,7 @@ export class Book extends CommonEntity {
   // @ManyToMany(() => Author, (author) => author.books)
   // authors: Author[];
 
-  @Field(() => [Review], { nullable: true })
+  @Field(() => ReviewResponse, { nullable: true })
   @OneToMany(() => Review, (review) => review.book)
   reviews?: Review[];
 
