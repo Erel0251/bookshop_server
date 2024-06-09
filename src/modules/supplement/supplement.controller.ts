@@ -12,6 +12,8 @@ import {
   Logger,
   Query,
   UseGuards,
+  UseInterceptors,
+  UploadedFile,
 } from '@nestjs/common';
 import { SupplementService } from './supplement.service';
 import { CreateSupplementDto } from './dto/create-supplement.dto';
@@ -25,6 +27,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { Roles } from '../auth/decorators/roles.decorator';
 import { Role } from '../user/constants/role.enum';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { diskStorage } from 'multer';
+import * as path from 'path';
 
 @ApiTags('Supplement')
 @Controller('supplement')
@@ -74,13 +79,34 @@ export class SupplementController {
 
   // Import supplements from CSV or Excel file
   @Post('import')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const filename: string =
+            path.parse(file.originalname).name.replace(/\s/g, '') +
+            '-' +
+            Date.now();
+          const extension: string = path.parse(file.originalname).ext;
+          cb(null, `${filename}${extension}`);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(csv)$/)) {
+          return cb(new Error('Only .csv files are allowed!'), false);
+        }
+        cb(null, true);
+      },
+    }),
+  )
   @Roles(Role.ADMIN)
-  async import(@Res() res: any) {
+  async import(@UploadedFile() file: Express.Multer.File, @Res() res: any) {
     try {
-      //await this.supplementService.import();
+      await this.supplementService.import(file.path);
       return res
-        .status(HttpStatus.NOT_IMPLEMENTED)
-        .send({ message: 'Not implemented' });
+        .status(HttpStatus.OK)
+        .send({ message: 'Import supplement successfully' });
     } catch (error) {
       this.logger.error(error);
       return res.status(error.status).send(error.message);

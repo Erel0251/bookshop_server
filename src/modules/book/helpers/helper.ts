@@ -118,7 +118,19 @@ export const queryBuilder = (
   // alway get non-deleted book
   query.andWhere('book.is_deleted = :is_deleted', { is_deleted: false });
 
-  query.orderBy(`book.${req.sortBy}` || 'book.created_at', req.order || 'DESC');
+  query
+    .orderBy(
+      `CASE
+        WHEN book.status = 'COMING_SOON' THEN 1
+        WHEN book.status = 'AVAILABLE' THEN 2
+        WHEN book.status = 'OUT_OF_STOCK' THEN 3
+        WHEN book.status = 'DISCONTINUED' THEN 4
+        ELSE 5
+      END
+      `,
+      'ASC',
+    )
+    .addOrderBy(`book.${req.sortBy}` || 'book.created_at', req.order || 'DESC');
 
   return query;
 };

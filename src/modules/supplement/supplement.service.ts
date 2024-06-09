@@ -13,6 +13,8 @@ import { QuerySupplementDto } from './dto/query-supplement.dto';
 import { Maybe } from 'purify-ts/Maybe';
 import { UpdateSupplementDeatailDto } from './dto/update-supplement-detail.dto';
 import { BookStatus } from '../book/constants/status.enum';
+import * as fs from 'fs';
+import * as csv from 'csv-parser';
 
 @Injectable()
 export class SupplementService {
@@ -174,7 +176,10 @@ export class SupplementService {
       throw new Error('Book not found');
     }
 
-    book.inventory += bookUpdate.supplement_detail?.quantity;
+    const quantity = bookUpdate.supplement_detail
+      ? bookUpdate.supplement_detail.quantity
+      : 0;
+    book.inventory = Number(book.inventory) + Number(quantity);
     if (book.status === BookStatus.OUT_OF_STOCK) {
       book.status = BookStatus.AVAILABLE;
     }
@@ -227,12 +232,19 @@ export class SupplementService {
     if (!supplementDetail) {
       throw new Error('Supplement detail not found');
     }
-    supplementDetail.books.inventory +=
-      detail.quantity - supplementDetail.quantity;
-    supplementDetail.supplements.total_quantity +=
-      detail.quantity - supplementDetail.quantity;
-    supplementDetail.supplements.total_price +=
-      detail.price - supplementDetail.price;
+    const quantity = 0 + detail.quantity;
+    supplementDetail.books.inventory =
+      Number(supplementDetail.books.inventory) +
+      Number(quantity) -
+      Number(supplementDetail.quantity);
+    supplementDetail.supplements.total_quantity =
+      Number(supplementDetail.supplements.total_quantity) +
+      Number(quantity) -
+      Number(supplementDetail.quantity);
+    supplementDetail.supplements.total_price =
+      Number(supplementDetail.supplements.total_price) +
+      Number(detail.price) -
+      Number(supplementDetail.price);
     await this.bookService.update(
       supplementDetail.books.id,
       supplementDetail.books,
@@ -240,7 +252,7 @@ export class SupplementService {
     await this.supplementRepository.save(supplementDetail.supplements);
 
     supplementDetail.price = detail.price;
-    supplementDetail.quantity = detail.quantity;
+    supplementDetail.quantity = quantity;
     await this.supplementDetailRepository.save(supplementDetail);
   }
 
@@ -262,11 +274,74 @@ export class SupplementService {
     }
     // update book inventory
     const book = await this.bookService.findOne(bookId);
-    book.inventory -= supplementDetail.quantity;
+    book.inventory = Number(book.inventory) - Number(supplementDetail.quantity);
     supplement.total_quantity -= supplementDetail.quantity;
     supplement.total_price -= supplementDetail.price;
     await this.bookService.update(bookId, book);
     await this.supplementRepository.save(supplement);
     await this.supplementDetailRepository.remove(supplementDetail);
+  }
+
+  async import(filePath: string): Promise<void> {
+    const results = [];
+    return new Promise((resolve, reject) => {
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', async () => {
+          fs.unlinkSync(filePath); // remove the file after processing
+
+          for (const row of results) {
+            // Insert Supplement
+            const supplement = new CreateSupplementDto();
+            supplement.name = row.supplement_name;
+            supplement.description = row.supplement_description;
+            supplement.supplier = row.supplement_supplier;
+            supplement.date = new Date(row.supplement_date);
+
+            const supplementRs =
+              await this.supplementRepository.save(supplement);
+
+            // Insert Supplement Detail
+            const supplementDetail = this.supplementDetailRepository.create();
+            supplementDetail.quantity = row.supplement_detail_quantity;
+            supplementDetail.price = row.supplement_detail_price;
+            supplementDetail.currency = row.supplement_detail_currency;
+
+            supplementRs.total_price =
+              Number(supplementRs.total_price) +
+              Number(row.supplement_detail_price) *
+                Number(row.supplement_detail_quantity);
+
+            supplementRs.total_quantity =
+              Number(supplementRs.total_quantity) +
+              Number(row.supplement_detail_quantity);
+
+            // Insert Book
+            const book = await this.bookService.findOne(row.book_id);
+            book.title = row.book_title;
+            book.isbn = row.book_isbn;
+            book.author = row.book_author;
+            book.publisher = row.book_publisher;
+            book.price = row.book_price;
+            book.currency = row.book_currency;
+            book.inventory =
+              Number(book.inventory) + Number(row.supplement_detail_quantity);
+            if (book.status === BookStatus.OUT_OF_STOCK) {
+              book.status = BookStatus.AVAILABLE;
+            }
+
+            await this.bookService.update(row.book_id, book);
+
+            supplementDetail.books = book;
+            supplementDetail.supplements = supplementRs;
+            await this.supplementRepository.save(supplementRs);
+            await this.supplementDetailRepository.save(supplementDetail);
+          }
+
+          resolve();
+        })
+        .on('error', (error) => reject(error));
+    });
   }
 }

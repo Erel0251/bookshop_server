@@ -6,6 +6,8 @@ import { BookStatus } from './constants/status.enum';
 import { HttpStatus } from '@nestjs/common';
 import { Book } from './entities/book.entity';
 import { mockResponse } from '../../shared/dto/mock-response.dto';
+import { mockUploadedFile } from '../../shared/cloudinary/cloudinary.service.spec';
+import { CloudinaryService } from '../../shared/cloudinary/cloudinary.service';
 
 export const mockBook: CreateBookDto | Book = {
   id: 'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
@@ -38,6 +40,14 @@ describe('BookController', () => {
           provide: BookService,
           useValue: mockBookService,
         },
+        {
+          provide: CloudinaryService,
+          useValue: {
+            uploadFile: jest.fn().mockResolvedValue({
+              secure_url: 'test',
+            }),
+          },
+        },
       ],
     }).compile();
 
@@ -53,7 +63,8 @@ describe('BookController', () => {
   describe('create', () => {
     it('should return a book', async () => {
       const res = mockResponse();
-      await controller.create(mockBook as CreateBookDto, res);
+
+      await controller.create(mockBook as CreateBookDto, mockUploadedFile, res);
 
       expect(service.create).toHaveBeenCalled();
       expect(res.status).toHaveBeenCalledWith(HttpStatus.CREATED);
@@ -100,6 +111,7 @@ describe('BookController', () => {
       await controller.update(
         'c7d0c154-bd0f-4d78-b4cf-697eee7b61a2',
         mockBook as CreateBookDto,
+        mockUploadedFile,
         res,
       );
 

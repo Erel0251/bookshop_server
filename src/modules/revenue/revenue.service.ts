@@ -140,7 +140,7 @@ export class RevenueService {
     const expenses = Array(12).fill(0);
     supplements.forEach((supplement) => {
       supplement.supplement_details.forEach((supplementDetail) => {
-        const month = new Date(supplementDetail.created_at).getMonth();
+        const month = new Date(supplement.date).getMonth();
         expenses[month] += supplementDetail.price * supplementDetail.quantity;
       });
     });
@@ -159,7 +159,7 @@ export class RevenueService {
         return;
       }
       order.order_details.forEach((orderDetail) => {
-        const month = new Date(orderDetail.created_at).getMonth();
+        const month = new Date(order.updated_at).getMonth();
         incomes[month] += orderDetail.total_price;
       });
     });

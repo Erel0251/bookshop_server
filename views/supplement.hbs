@@ -7,9 +7,7 @@
     <h2 class="text-left">Vendor</h2>
     <div class="d-flex justify-content-evenly gap-3">
       <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createSupplement">Create</div>
-      <!--
-      <div class="btn btn-outline-success">Import</div>
-      -->
+      <div class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#importSupplement">Import</div>
     </div>
   </div>
 
@@ -39,7 +37,7 @@
         <datalist id="suggestions">
           {{#each supplements}}
           <option value="{{supplier}}">
-          {{/each}}
+            {{/each}}
         </datalist>
       </div>
     </div>
@@ -72,7 +70,8 @@
           <td>{{formatDate date}}</td>
           <td>
             <a class="btn btn-outline-info btn-sm" href="/supplement/{{id}}">Detail</a>
-            <button class="btn btn-outline-warning btn-sm editBtn" data-bs-toggle="modal" data-bs-target="#editSupplement">Edit</button>
+            <button class="btn btn-outline-warning btn-sm editBtn" data-bs-toggle="modal"
+              data-bs-target="#editSupplement">Edit</button>
             <button class="btn btn-outline-danger btn-sm deleteBtn" data-id="{{id}}" data-bs-toggle="modal"
               data-bs-target="#confirmModal">Delete</button>
           </td>
@@ -103,6 +102,35 @@
   </div>
 </div>
 
+<!-- Form import Csv file -->
+<div class="modal fade" id="importSupplement" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Import Supplement</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="importCsv" enctype="multipart/form-data" class="p-4 m-4">
+          <div class="row mb-3">
+            <div class="col">
+              <a href="/sample.csv" download>
+                <button type="button">Download Sample CSV</button>
+              </a>
+            </div>
+            <div class="col">
+              <label for="file" class="form-label">Import CSV file</label>
+              <input type="file" class="form-control" id="file" name="file" accept=".csv">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary">Import</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <script>
   let supplementId = null;
   document.querySelectorAll('.deleteBtn').forEach(btn => {
@@ -126,6 +154,26 @@
       })
       .catch(error => {
         showToast(err.message, 'danger');
+      });
+  })
+
+  const form = document.getElementById('importCsv');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    fetch('/supplement/import', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then((message) => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        alert(error.message);
       });
   })
 

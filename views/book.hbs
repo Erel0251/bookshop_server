@@ -40,7 +40,11 @@
           <td class="editable">{{isbn}}</td>
           <td class="editable" data-price="{{price}}" data-currency="{{currency}}">{{formatPrice price currency}}</td>
           <td class="editable">{{avgRating reviews}}</td>
-          <td class="editable">{{formatName status}}</td>
+          <td class="editable" style="min-width: 150px;" align="center">
+            <div class="{{lowerCase status}}">
+            {{formatName status}}
+            </div>
+          </td>
           <td>{{inventory}}</td>
           <td>
             <button class="btn btn-outline-primary btn-sm editBtn" data-bs-toggle="modal"

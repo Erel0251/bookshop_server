@@ -42,7 +42,12 @@ export class OrderService {
         const book = await this.bookService.findOne(orderDetail.book_id);
         detail.books = book;
         detail.orders = order;
+        book.inventory = Number(book.inventory) - Number(orderDetail.quantity);
+        if (book.inventory <= 0) {
+          book.status = BookStatus.OUT_OF_STOCK;
+        }
         await this.orderDetailRepository.save(detail);
+        await this.bookService.update(book.id, book);
       });
     }
     return;
@@ -82,7 +87,8 @@ export class OrderService {
           WHEN order.status = 'DELIVERING' THEN 3
           WHEN order.status = 'DELIVERED' THEN 4
           WHEN order.status = 'CANCELLED' THEN 5
-          ELSE 6
+          WHEN order.status = 'REJECTED' THEN 6
+          ELSE 7
         END`,
         'ASC',
       );
@@ -130,16 +136,12 @@ export class OrderService {
 
     order.status = updateOrderDto.status;
 
-    if (updateOrderDto.status === OrderStatus.CONFIRMED) {
+    if (updateOrderDto.status === OrderStatus.REJECTED) {
       order.order_details.map(async (orderDetail) => {
         const book = await this.bookService.findOne(orderDetail.books.id);
-        // assuming that the quantity of the book is enough
-        // if (book.quantity < orderDetail.quantity) {
-        //   return new Error('Not enough book quantity');
-        // }
-        book.inventory -= orderDetail.quantity;
-        if (book.inventory === 0) {
-          book.status = BookStatus.OUT_OF_STOCK;
+        book.inventory = Number(book.inventory) + Number(orderDetail.quantity);
+        if (book.status === BookStatus.OUT_OF_STOCK) {
+          book.status = BookStatus.AVAILABLE;
         }
         await this.bookService.update(book.id, book);
       });

@@ -10,7 +10,6 @@ import { Book } from './entities/book.entity';
 //import { AuthorService } from '../author/author.service';
 //import { Author } from '../author/entities/author.entity';
 import { Category } from '../category/entities/category.entity';
-import { BookStatus } from './constants/status.enum';
 import { generateISBN, queryBuilder } from './helpers/helper';
 import { SupplementDetail } from '../supplement/entities/supplement-detail.entity';
 import { ReviewService } from '../review/review.service';
@@ -18,6 +17,7 @@ import { Review } from '../review/entities/review.entity';
 import { PromotionService } from '../promotion/promotion.service';
 import { QueryBookDto } from './dto/query-book.dto';
 import { QueryReviewDto } from '../review/dto/query-review.dto';
+import { BookStatus } from './constants/status.enum';
 
 @Injectable()
 export class BookService {
@@ -58,6 +58,10 @@ export class BookService {
 
     // if not admin, need pagination
     if (!isAdmin) {
+      // if not admin, get books with proper status
+      query.andWhere('book.status != :status', {
+        status: BookStatus.DISCONTINUED,
+      });
       query.offset(req.offset || 0);
       query.limit(req.limit || 20);
     } else {
@@ -95,22 +99,12 @@ export class BookService {
     return (await query.getMany()).length;
   }
 
-  async updateInventory(id: string, buy: number = 0): Promise<void> {
-    const book = await this.book.findOne({ where: { id } });
-    book.inventory -= buy;
-    // if inventory empty, set status to 'out of stock'
-    if (book.inventory === 0) {
-      book.status = BookStatus.OUT_OF_STOCK;
-    }
-    await this.book.save(book);
-  }
-
   async updateSupplement(
     id: string,
     supplementDetail: SupplementDetail,
   ): Promise<void> {
     const book = await this.book.findOne({ where: { id } });
-    book.inventory += supplementDetail.quantity;
+    book.inventory = Number(book.inventory) + Number(supplementDetail.quantity);
     book.supplement_details.push(supplementDetail);
     await this.book.save(book);
   }

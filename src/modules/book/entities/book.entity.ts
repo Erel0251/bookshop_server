@@ -68,7 +68,7 @@ export class Book extends CommonEntity {
   buy_count: number;
 
   @Field(() => Int)
-  @Column({ type: 'integer', default: 0 })
+  @Column({ type: 'bigint', default: 0 })
   inventory: number;
 
   @Field(() => Category, { nullable: true })
