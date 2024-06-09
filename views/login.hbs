@@ -80,10 +80,10 @@
                     localStorage.setItem('refreshToken', result.tokens.refreshToken);
                     window.location.href = '/revenue';
                 } else {
-                    showToast(result.message, 'danger');
+                    alert(error.message);
                 }
             } catch (error) {
-                showToast('An error occurred. Please try again.', 'danger');
+                alert('An error occurred. Please try again.');
             }
         });
     });

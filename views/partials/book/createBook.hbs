@@ -103,7 +103,7 @@
         window.location.reload();
       })
       .catch((error) => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
     // Optionally close the modal after successful submission
     var myModalEl = document.getElementById('createBook');
