@@ -146,6 +146,11 @@ export class BookResolver {
 
   @ResolveField(() => Float, { name: 'sale_price', nullable: true })
   async salePrice(@Parent() book: Book): Promise<number> {
-    return await this.bookService.getCurrentSalePrice(book);
+    return await this.bookService.getCurrentSale(book, 'price');
+  }
+
+  @ResolveField(() => Float, { name: 'sale_inventory', nullable: true })
+  async saleTotal(@Parent() book: Book): Promise<number> {
+    return await this.bookService.getCurrentSale(book, 'inventory');
   }
 }

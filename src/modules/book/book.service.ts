@@ -115,10 +115,10 @@ export class BookService {
     await this.book.save(book);
   }
 
-  async getCurrentSalePrice(book: Book): Promise<number> {
+  async getCurrentSale(book: Book, type: string): Promise<number> {
     const promotion =
       await this.promotionService.findDetailPromotionByBook(book);
-    return promotion ? promotion.price : undefined;
+    return promotion ? promotion[type] : undefined;
   }
 
   async getPublisher(): Promise<string[]> {
