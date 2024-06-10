@@ -26,6 +26,8 @@ import { Role } from '../user/constants/role.enum';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CloudinaryService } from '../../shared/cloudinary/cloudinary.service';
+import { diskStorage } from 'multer';
+import * as path from 'path';
 
 @Controller('book')
 @ApiTags('Book')
@@ -49,7 +51,7 @@ export class BookController {
     try {
       // upload to cloudinary
       const result = await this.cloudinaryService.uploadFile(file);
-      createBookDto.img_urls = [result.secure_url, ...createBookDto.img_urls];
+      createBookDto.img_urls = [result.secure_url, createBookDto.img_urls];
       await this.bookService.create(createBookDto);
       res
         .status(HttpStatus.CREATED)
@@ -96,8 +98,12 @@ export class BookController {
   ) {
     try {
       // upload to cloudinary
-      const result = await this.cloudinaryService.uploadFile(file);
-      updateBookDto.img_urls = [result.secure_url, ...updateBookDto.img_urls];
+      if (file) {
+        const rs = await this.cloudinaryService.uploadFile(file);
+        updateBookDto.img_urls = [rs.secure_url, updateBookDto.img_urls];
+      } else {
+        updateBookDto.img_urls = [updateBookDto.img_urls as unknown as string];
+      }
       await this.bookService.update(id, updateBookDto);
       res.status(HttpStatus.OK).send({ message: 'Update book successfully' });
     } catch (error) {
@@ -111,5 +117,41 @@ export class BookController {
   async getCountTotal(@Res() res: any) {
     const total = await this.bookService.getCountTotal();
     res.status(HttpStatus.OK).send(total);
+  }
+
+  // Import supplements from CSV or Excel file
+  @Post('import')
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './uploads',
+        filename: (req, file, cb) => {
+          const filename: string =
+            path.parse(file.originalname).name.replace(/\s/g, '') +
+            '-' +
+            Date.now();
+          const extension: string = path.parse(file.originalname).ext;
+          cb(null, `${filename}${extension}`);
+        },
+      }),
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(csv)$/)) {
+          return cb(new Error('Only .csv files are allowed!'), false);
+        }
+        cb(null, true);
+      },
+    }),
+  )
+  @Roles(Role.ADMIN)
+  async import(@UploadedFile() file: Express.Multer.File, @Res() res: any) {
+    try {
+      await this.bookService.import(file.path);
+      return res
+        .status(HttpStatus.OK)
+        .send({ message: 'Import supplement successfully' });
+    } catch (error) {
+      this.logger.error(error);
+      return res.status(error.status).send(error.message);
+    }
   }
 }

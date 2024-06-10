@@ -69,12 +69,6 @@ export class OrderService {
       query.andWhere('order.phone LIKE :phone', { phone: `%${req.phone}%` });
     }
 
-    if (req.date) {
-      query.andWhere('order.update_at::text LIKE :date', {
-        date: `%${req.date}%`,
-      });
-    }
-
     if (req.status) {
       query.andWhere('order.status LIKE :status', {
         status: `%${req.status.toUpperCase()}%`,
@@ -98,7 +92,20 @@ export class OrderService {
       .leftJoinAndSelect('order.order_details', 'order_details')
       // get book name and id
       .leftJoinAndSelect('order_details.books', 'book');
-    return await query.getMany();
+    const orders = await query.getMany();
+    if (req.date) {
+      return orders.filter((order) => {
+        const orderDate = new Date(order.created_at);
+        const date = new Date(req.date);
+        return (
+          orderDate.getDate() === date.getDate() &&
+          orderDate.getMonth() === date.getMonth() &&
+          orderDate.getFullYear() === date.getFullYear()
+        );
+      });
+    } else {
+      return orders;
+    }
   }
 
   async findOne(id: string): Promise<Order | Error> {

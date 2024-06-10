@@ -19,6 +19,9 @@ import { QueryBookDto } from './dto/query-book.dto';
 import { QueryReviewDto } from '../review/dto/query-review.dto';
 import { BookStatus } from './constants/status.enum';
 
+import * as fs from 'fs';
+import * as csv from 'csv-parser';
+
 @Injectable()
 export class BookService {
   constructor(
@@ -59,8 +62,8 @@ export class BookService {
     // if not admin, need pagination
     if (!isAdmin) {
       // if not admin, get books with proper status
-      query.andWhere('book.status != :status', {
-        status: BookStatus.DISCONTINUED,
+      query.andWhere('book.status NOT LIKE :status', {
+        status: `%${BookStatus.DISCONTINUED}%`,
       });
       query.offset(req.offset || 0);
       query.limit(req.limit || 20);
@@ -180,5 +183,42 @@ export class BookService {
       (_, i) => reviews.filter((r) => r.rating === i + 1).length,
     );
     return { total, average, details };
+  }
+
+  async findOneByIsbn(isbn: string): Promise<Book | Error> {
+    return await this.book.findOne({
+      where: { isbn },
+    });
+  }
+
+  async import(filePath: string): Promise<void> {
+    const results = [];
+    return new Promise((resolve, reject) => {
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', async () => {
+          fs.unlinkSync(filePath); // remove the file after processing
+
+          for (const row of results) {
+            // Insert Book
+            const newbook = new CreateBookDto();
+            newbook.title = row.title.toLowerCase();
+            newbook.img_urls = [row.img];
+            newbook.isbn = row.isbn ?? generateISBN();
+            newbook.author = row.author.toLowerCase();
+            newbook.publisher = row.publisher.toLowerCase();
+            newbook.price = Number(row.price);
+            newbook.currency = row.currency;
+            newbook.inventory = 0;
+            newbook.status = BookStatus.COMING_SOON;
+            newbook.keyword = `${newbook.title}-${newbook.author}-${newbook.publisher}-${newbook.isbn}`;
+            await this.book.save(newbook);
+          }
+
+          resolve();
+        })
+        .on('error', (error) => reject(error));
+    });
   }
 }

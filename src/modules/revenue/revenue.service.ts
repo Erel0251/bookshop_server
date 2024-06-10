@@ -121,7 +121,7 @@ export class RevenueService {
       relations: ['order_details'],
     });
     return orders
-      .filter((order) => order.status !== OrderStatus.CANCELLED)
+      .filter((order) => order.status === OrderStatus.CONFIRMED)
       .reduce((total, order) => {
         return (
           total +
@@ -152,7 +152,7 @@ export class RevenueService {
       await this.orderRepository.find({
         relations: ['order_details'],
       })
-    ).filter((order) => order.status !== OrderStatus.CANCELLED);
+    ).filter((order) => order.status === OrderStatus.CONFIRMED);
     const incomes = Array(12).fill(0);
     orders.forEach((order) => {
       if (order.status === OrderStatus.CANCELLED) {

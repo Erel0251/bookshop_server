@@ -64,27 +64,29 @@ export class UserController {
 
   // Get user's cart list items
   @Get(':id/cart')
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   async getCart(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
     try {
       const cart = await this.userService.getCart(id);
-      const response = cart.map((item) => {
-        return {
-          book: {
-            id: item.books_id,
-            title: item.books_title,
-            author: item.books_author,
-            overview: item.books_overview,
-            publisher: item.books_publisher,
-            img_urls: item.books_img_urls,
-            isbn: item.books_isbn,
-            price: item.books_price,
-            currency: item.books_currency,
-            sale_price: item.sale_price,
-          },
-          quantity: item.cart_items_quantity,
-        };
-      });
+      const response = cart
+        .filter((item) => item.book_id !== null)
+        .map((item) => {
+          return {
+            book: {
+              id: item.books_id,
+              title: item.books_title,
+              author: item.books_author,
+              overview: item.books_overview,
+              publisher: item.books_publisher,
+              img_urls: item.books_img_urls,
+              isbn: item.books_isbn,
+              price: item.books_price,
+              currency: item.books_currency,
+              sale_price: item.sale_price,
+            },
+            quantity: item.cart_items_quantity,
+          };
+        });
       return res.status(HttpStatus.OK).send(response);
     } catch (error) {
       this.logger.error(error);
@@ -94,7 +96,7 @@ export class UserController {
 
   // Add item to user's cart
   @Post(':id/cart')
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   async addToCart(
     @Param('id', ParseUUIDPipe) id: string,
     @Body() product: CreateCartDto,
@@ -111,7 +113,7 @@ export class UserController {
 
   // Update item quantity in user's cart
   @Post('/cart')
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   async updateCart(@Body() product: UpdateCartDto, @Res() res: any) {
     try {
       await this.userService.updateCartItem(product);
@@ -122,9 +124,22 @@ export class UserController {
     }
   }
 
+  // Clear user's cart after order
+  @Delete(':id/cart')
+  @Roles(Role.USER, Role.ADMIN)
+  async clearCart(@Param('id', ParseUUIDPipe) id: string, @Res() res: any) {
+    try {
+      await this.userService.clearCart(id);
+      return res.status(HttpStatus.OK).send({ message: 'Cart cleared' });
+    } catch (error) {
+      this.logger.error(error);
+      return res.status(error.status).send(error.message);
+    }
+  }
+
   // Remove item from user's cart
   @Delete(':id/cart/:productId')
-  @Roles(Role.USER)
+  @Roles(Role.USER, Role.ADMIN)
   async removeFromCart(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('productId', ParseUUIDPipe) productId: string,

@@ -79,4 +79,13 @@ export class CartService {
       await this.cartItemRepository.remove(cartExist);
     }
   }
+
+  async clearCart(userId: string): Promise<void | Error> {
+    const cartList = await this.cartItemRepository.find({
+      where: { user: { id: userId } },
+    });
+    if (cartList.length > 0) {
+      await this.cartItemRepository.remove(cartList);
+    }
+  }
 }
