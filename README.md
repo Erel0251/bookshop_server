@@ -1,38 +1,52 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+# BookShop Server
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Table of Contents
 
-## Description
+* [Technicals](#technicals)
+* [Featuress](#features)
+* [Installation](#installation)
+* [Running the App](#running-the-app)
+* [Migration](#migration)
+* [Test](#test)
+* [Author](#author)
+* [Acknowledgements](#acknowledgements)
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Technicals
+
+- [X] [Husky](https://typicode.github.io/husky/)
+    - [X] [Prettier](https://prettier.io/)
+    - [X] [Eslint](https://eslint.org/)
+    - [X] [Conventional Commit](https://www.conventionalcommits.org/en/v1.0.0/)
+- [X] [Swagger](https://swagger.io/)
+- [X] [TypeORM](https://typeorm.io/)
+- [X] [Jest](https://jestjs.io/)
+- [X] Admin and Client Roles
+- [X] JWT Authentication
+
+
+## Features
+
+- [X] Manage Books
+- [X] Manage Categories
+- [X] Manage Promotions
+- [X] Manage Accounts
+- [X] Process Orders
+- [X] Import CSV
+- [X] Vendors
+- [X] Report
+- [X] About Page
 
 ## Installation
+
+Install package with yarn
 
 ```bash
 $ yarn install
 ```
+    
+## Running the App
 
-## Running the app
 
 ```bash
 # development
@@ -45,7 +59,27 @@ $ yarn run start:dev
 $ yarn run start:prod
 ```
 
+## Migration
+
+To migration database, run the following commands
+
+```bash
+# create
+$ yarn run migration:create
+
+# generate script after update entity
+$ yarn run migration:genrate
+
+# run migration 
+$ yarn run migration:run
+
+# revert migration
+$ yarn run migration:revert
+```
+
 ## Test
+
+To run tests, run the following command
 
 ```bash
 # unit tests
@@ -58,16 +92,12 @@ $ yarn run test:e2e
 $ yarn run test:cov
 ```
 
-## Support
+## Author
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+- [@Erel0251](https://www.github.com/Erel0251)
 
-## Stay in touch
+## Acknowledgements
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+ - [Rookie to Engineer Program](https://careers.nashtechglobal.com/fresher-program/)
+ - [README.so](https://readme.so/)
+ - [Font Awesome](https://fontawesome.com/)
