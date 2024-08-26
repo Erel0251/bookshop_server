@@ -1,0 +1,20 @@
+supplement_name,supplement_description,supplement_supplier,supplement_date,supplement_detail_quantity,supplement_detail_price,supplement_detail_currency,book_id,book_title,book_isbn,book_author,book_publisher,book_price,book_currency
+NXB Kim Đồng 2024-01-14,Praesent blandit lacinia erat.,NXB Kim Đồng,2024-01-14,34,17730,VND,2ee2f754-d70a-437d-8b36-7455f8ee3f00,Securing Devops,9781617294136,Julien Vehent,manning,500000,VND
+NXB Trẻ 2024-01-05,,NXB Trẻ,2024-01-05,83,10186,VND,ac82a9f2-1add-461b-a14b-dd289dbfde78,"The Definitive Guide To Mongodb, 3rd Edition",9781484211830,Kristina Chodorow,O'reilly,800000,VND
+NXB Lao Động 2024-01-18,,NXB Lao Động,2024-01-18,139,13292,VND,3d0c5f2c-6da0-48f6-a98f-6968b058b93e,"mongodb in action, 2nd edition",9781617291609,kyle banker,manning,600000,VND
+NXB Giáo Dục 2024-01-21,,NXB Giáo Dục,2024-01-21,68,18837,VND,81a217bb-f4fe-492d-9c39-fb3bbc90594a,Practical Mongodb,9925001007774,,appress,815000,VND
+NXB ĐHQG 2024-02-08,Vestibulum ac est lacinia nisi venenatis tristique.,NXB ĐHQG,2024-02-08,194,12392,VND,fe0a27e8-f04a-455e-8e50-c4466692f68a,vrienden voor het leven,9789000307975,some one else,nxb kim đồng,200000,VND
+NXB Kim Đồng 2024-03-30,,NXB Kim Đồng,2024-03-30,47,19127,VND,212af699-f7d4-43bd-9510-af3787987346,Safe Haven,9780751548525,Nicholas Sparks,some one,900000,VND
+NXB Trẻ 2024-03-13,,NXB Trẻ,2024-03-13,45,13411,VND,3cf2968a-a71f-4224-b980-831d9e7d0bd6,Sakamoto Days,6486462157292,Suzuki Yuuto,Shonen Jump,50000,VND
+NXB Lao Động 2024-03-26,Nunc rhoncus dui vel sem.,NXB Lao Động,2024-03-26,72,15902,VND,78544a0d-6c8a-4f20-b1f9-721231c1f25f,And The Mountains Echoed,9781408842423,Khaled Hosseini,some one,250000,VND
+NXB Giáo Dục 2024-01-02,,NXB Giáo Dục,2024-01-02,187,14564,VND,ccf9ca12-fca6-4adb-a7dc-cebc5e689783,Magic Staff,9789022558027,Terry Brooks,New York Time,500000,VND
+NXB ĐHQG 2024-03-15,,NXB ĐHQG,2024-03-15,164,14605,VND,b89ee937-b2ff-4f2e-9257-d5867f96a8eb,A Week In Winter,9781617294136,Maeve Binchy,some one,300000,VND
+NXB Kim Đồng 2024-04-11,Nulla mollis molestie lorem.,NXB Kim Đồng,2024-04-11,160,10994,VND,761588de-da13-45f4-a4ef-c4e7dd9d232b,Git Pocket Guide,9781449325862,Richard E. Silverman,O'reilly,400000,VND
+NXB Trẻ 2024-06-01,"Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.",NXB Trẻ,2024-06-01,119,19407,VND,7e148e7a-24a6-4aca-a5d7-e0e67f5c003d,Mongodb Performance Tuning,9781484268780,Manning,manning,400000,VND
+NXB Lao Động 2024-02-15,,NXB Lao Động,2024-02-15,76,13969,VND,2ee2f754-d70a-437d-8b36-7455f8ee3f00,Securing Devops,9781617294136,Julien Vehent,manning,500000,VND
+NXB Giáo Dục 2024-03-17,,NXB Giáo Dục,2024-03-17,46,17705,VND,ac82a9f2-1add-461b-a14b-dd289dbfde78,"The Definitive Guide To Mongodb, 3rd Edition",9781484211830,Kristina Chodorow,O'reilly,800000,VND
+NXB ĐHQG 2024-02-15,Proin risus.,NXB ĐHQG,2024-02-15,195,19943,VND,3d0c5f2c-6da0-48f6-a98f-6968b058b93e,"mongodb in action, 2nd edition",9781617291609,kyle banker,manning,600000,VND
+NXB Kim Đồng 2024-03-09,"Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis.",NXB Kim Đồng,2024-03-09,142,15527,VND,81a217bb-f4fe-492d-9c39-fb3bbc90594a,Practical Mongodb,9925001007774,,appress,815000,VND
+NXB Trẻ 2024-03-07,,NXB Trẻ,2024-03-07,2,12990,VND,fe0a27e8-f04a-455e-8e50-c4466692f68a,vrienden voor het leven,9789000307975,some one else,nxb kim đồng,200000,VND
+NXB Lao Động 2024-01-24,,NXB Lao Động,2024-01-24,176,12475,VND,212af699-f7d4-43bd-9510-af3787987346,Safe Haven,9780751548525,Nicholas Sparks,some one,900000,VND
+NXB Giáo Dục 2024-06-05,,NXB Giáo Dục,2024-06-05,68,12875,VND,3cf2968a-a71f-4224-b980-831d9e7d0bd6,Sakamoto Days,6486462157292,Suzuki Yuuto,Shonen Jump,50000,VND

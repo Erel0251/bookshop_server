@@ -28,7 +28,7 @@ export class CategoryService {
   async findAll(isAdmin: boolean = false): Promise<Category[]> {
     const query = this.category.createQueryBuilder('category');
     if (!isAdmin) {
-      //query.where('category.is_published = true');
+      query.where('category.is_published = true');
     }
     query.leftJoinAndSelect('category.father', 'father');
     query.leftJoinAndSelect('category.books', 'books');

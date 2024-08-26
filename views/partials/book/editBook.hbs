@@ -47,7 +47,7 @@
                   <option value="AVAILABLE">Available</option>
                   <option value="OUT_OF_STOCK">Out of Stock</option>
                   <option value="COMING_SOON">Coming Soon</option>
-                  <option value="DISCOUNTINUED">Discountinued</option>
+                  <option value="DISCONTINUED">Discontinued</option>
                 </select>
               </div>
               <div class="mb-3">
@@ -100,9 +100,9 @@
         const publisher = currentRow.children[3].innerText;
         const isbn = currentRow.children[4].innerText;
         const price = currentRow.children[5].getAttribute('data-price');
-        const status = currentRow.children[7].innerText;
+        const status = currentRow.children[7].children[0].innerText;
         const currency = currentRow.children[5].getAttribute('data-currency');
-
+        console.log(url)
         // preview image
         const img = document.createElement('img');
         img.src = url;
@@ -110,6 +110,7 @@
         document.getElementById('editImagePreview').innerHTML = '';
         document.getElementById('editImagePreview').appendChild(img);
 
+        document.getElementById('editURL').value = url;
         document.getElementById('editName').value = name;
         document.getElementById('editAuthor').value = author;
         document.getElementById('editPublisher').value = publisher;
@@ -152,7 +153,7 @@
           window.location.reload();
         })
         .catch((error) => {
-          showToast(err.message, 'danger');
+          alert(error.message);
         });
     });
   });

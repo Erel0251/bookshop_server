@@ -23,12 +23,11 @@
         <div class="row mb-3">
           <div class="col-md-4">
             <label for="book-name" class="form-label">Book Name</label>
-            <input type="text" class="form-control" id="book-name" name="title" list="books" required>
-            <datalist id="books">
+            <select class="form-select" id="book-name" name="book-name" required>
               {{#each books}}
               <option value="{{lowerCase this.title}}" data-id="{{this.id}}">{{formatName this.title}}</option>
               {{/each}}
-            </datalist>
+            </select>
           </div>
           <div class="col-md-2">
             <label for="book-quantity" class="form-label">Quantity</label>
@@ -144,7 +143,7 @@
         window.location.reload();
       })
       .catch(error => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
   });
 
@@ -169,7 +168,7 @@
         window.location.reload();
       })
       .catch(error => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
   })
 </script>

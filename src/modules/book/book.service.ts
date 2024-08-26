@@ -10,7 +10,6 @@ import { Book } from './entities/book.entity';
 //import { AuthorService } from '../author/author.service';
 //import { Author } from '../author/entities/author.entity';
 import { Category } from '../category/entities/category.entity';
-import { BookStatus } from './constants/status.enum';
 import { generateISBN, queryBuilder } from './helpers/helper';
 import { SupplementDetail } from '../supplement/entities/supplement-detail.entity';
 import { ReviewService } from '../review/review.service';
@@ -18,6 +17,10 @@ import { Review } from '../review/entities/review.entity';
 import { PromotionService } from '../promotion/promotion.service';
 import { QueryBookDto } from './dto/query-book.dto';
 import { QueryReviewDto } from '../review/dto/query-review.dto';
+import { BookStatus } from './constants/status.enum';
+
+import * as fs from 'fs';
+import * as csv from 'csv-parser';
 
 @Injectable()
 export class BookService {
@@ -58,6 +61,10 @@ export class BookService {
 
     // if not admin, need pagination
     if (!isAdmin) {
+      // if not admin, get books with proper status
+      query.andWhere('book.status NOT LIKE :status', {
+        status: `%${BookStatus.DISCONTINUED}%`,
+      });
       query.offset(req.offset || 0);
       query.limit(req.limit || 20);
     } else {
@@ -95,22 +102,12 @@ export class BookService {
     return (await query.getMany()).length;
   }
 
-  async updateInventory(id: string, buy: number = 0): Promise<void> {
-    const book = await this.book.findOne({ where: { id } });
-    book.inventory -= buy;
-    // if inventory empty, set status to 'out of stock'
-    if (book.inventory === 0) {
-      book.status = BookStatus.OUT_OF_STOCK;
-    }
-    await this.book.save(book);
-  }
-
   async updateSupplement(
     id: string,
     supplementDetail: SupplementDetail,
   ): Promise<void> {
     const book = await this.book.findOne({ where: { id } });
-    book.inventory += supplementDetail.quantity;
+    book.inventory = Number(book.inventory) + Number(supplementDetail.quantity);
     book.supplement_details.push(supplementDetail);
     await this.book.save(book);
   }
@@ -121,10 +118,10 @@ export class BookService {
     await this.book.save(book);
   }
 
-  async getCurrentSalePrice(book: Book): Promise<number> {
+  async getCurrentSale(book: Book, type: string): Promise<number> {
     const promotion =
       await this.promotionService.findDetailPromotionByBook(book);
-    return promotion ? promotion.price : undefined;
+    return promotion ? promotion[type] : undefined;
   }
 
   async getPublisher(): Promise<string[]> {
@@ -186,5 +183,42 @@ export class BookService {
       (_, i) => reviews.filter((r) => r.rating === i + 1).length,
     );
     return { total, average, details };
+  }
+
+  async findOneByIsbn(isbn: string): Promise<Book | Error> {
+    return await this.book.findOne({
+      where: { isbn },
+    });
+  }
+
+  async import(filePath: string): Promise<void> {
+    const results = [];
+    return new Promise((resolve, reject) => {
+      fs.createReadStream(filePath)
+        .pipe(csv())
+        .on('data', (data) => results.push(data))
+        .on('end', async () => {
+          fs.unlinkSync(filePath); // remove the file after processing
+
+          for (const row of results) {
+            // Insert Book
+            const newbook = new CreateBookDto();
+            newbook.title = row.title.toLowerCase();
+            newbook.img_urls = [row.img];
+            newbook.isbn = row.isbn ?? generateISBN();
+            newbook.author = row.author.toLowerCase();
+            newbook.publisher = row.publisher.toLowerCase();
+            newbook.price = Number(row.price);
+            newbook.currency = row.currency;
+            newbook.inventory = 0;
+            newbook.status = BookStatus.COMING_SOON;
+            newbook.keyword = `${newbook.title}-${newbook.author}-${newbook.publisher}-${newbook.isbn}`;
+            await this.book.save(newbook);
+          }
+
+          resolve();
+        })
+        .on('error', (error) => reject(error));
+    });
   }
 }

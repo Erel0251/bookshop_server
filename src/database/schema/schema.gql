@@ -76,6 +76,7 @@ type Book {
   reviews(rating: Float, offset: Float = 0, limit: Float = 10, sortBy: String = "created_at", order: String = "DESC"): ReviewResponse
   id: ID!
   sale_price: Float
+  sale_inventory: Float
 }
 
 type BooksResponse {

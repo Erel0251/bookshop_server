@@ -33,6 +33,7 @@
           <option value="PENDING">Pending</option>
           <option value="CONFIRMED">Confirmed</option>
           <option value="REJECTED">Rejected</option>
+          <option value="CANCELLED">Cancelled</option>
         </select>
       </div>
     </div>
@@ -128,7 +129,7 @@
         .then((data) => {
           window.location.reload();
         }).catch((error) => {
-          showToast(data.message, 'success');
+          alert(data.message);
         });
     });
   });
@@ -150,7 +151,7 @@
         .then((data) => {
           window.location.reload();
         }).catch((error) => {
-          showToast(data.message, 'success');
+          alert(data.message);
         });
     });
   });

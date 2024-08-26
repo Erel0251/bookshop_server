@@ -9,6 +9,8 @@ import { validStatusTransition } from './helpers/helpers';
 import { BookService } from '../book/book.service';
 import { QueryOrderDto } from './dto/query-order.dto';
 import { User } from '../user/entities/user.entity';
+import { OrderStatus } from './constants/order-status.enum';
+import { BookStatus } from '../book/constants/status.enum';
 
 @Injectable()
 export class OrderService {
@@ -40,7 +42,12 @@ export class OrderService {
         const book = await this.bookService.findOne(orderDetail.book_id);
         detail.books = book;
         detail.orders = order;
+        book.inventory = Number(book.inventory) - Number(orderDetail.quantity);
+        if (book.inventory <= 0) {
+          book.status = BookStatus.OUT_OF_STOCK;
+        }
         await this.orderDetailRepository.save(detail);
+        await this.bookService.update(book.id, book);
       });
     }
     return;
@@ -62,12 +69,6 @@ export class OrderService {
       query.andWhere('order.phone LIKE :phone', { phone: `%${req.phone}%` });
     }
 
-    if (req.date) {
-      query.andWhere('order.update_at::text LIKE :date', {
-        date: `%${req.date}%`,
-      });
-    }
-
     if (req.status) {
       query.andWhere('order.status LIKE :status', {
         status: `%${req.status.toUpperCase()}%`,
@@ -80,7 +81,8 @@ export class OrderService {
           WHEN order.status = 'DELIVERING' THEN 3
           WHEN order.status = 'DELIVERED' THEN 4
           WHEN order.status = 'CANCELLED' THEN 5
-          ELSE 6
+          WHEN order.status = 'REJECTED' THEN 6
+          ELSE 7
         END`,
         'ASC',
       );
@@ -90,7 +92,20 @@ export class OrderService {
       .leftJoinAndSelect('order.order_details', 'order_details')
       // get book name and id
       .leftJoinAndSelect('order_details.books', 'book');
-    return await query.getMany();
+    const orders = await query.getMany();
+    if (req.date) {
+      return orders.filter((order) => {
+        const orderDate = new Date(order.created_at);
+        const date = new Date(req.date);
+        return (
+          orderDate.getDate() === date.getDate() &&
+          orderDate.getMonth() === date.getMonth() &&
+          orderDate.getFullYear() === date.getFullYear()
+        );
+      });
+    } else {
+      return orders;
+    }
   }
 
   async findOne(id: string): Promise<Order | Error> {
@@ -114,7 +129,10 @@ export class OrderService {
     id: string,
     updateOrderDto: UpdateOrderDto,
   ): Promise<Order | Error> {
-    const order = await this.orderRepository.findOne({ where: { id } });
+    const order = await this.orderRepository.findOne({
+      where: { id },
+      relations: ['order_details', 'order_details.books'],
+    });
     if (!order) {
       return new Error('Order not found');
     }
@@ -124,6 +142,17 @@ export class OrderService {
     }
 
     order.status = updateOrderDto.status;
+
+    if (updateOrderDto.status === OrderStatus.REJECTED) {
+      order.order_details.map(async (orderDetail) => {
+        const book = await this.bookService.findOne(orderDetail.books.id);
+        book.inventory = Number(book.inventory) + Number(orderDetail.quantity);
+        if (book.status === BookStatus.OUT_OF_STOCK) {
+          book.status = BookStatus.AVAILABLE;
+        }
+        await this.bookService.update(book.id, book);
+      });
+    }
 
     return await this.orderRepository.save(order);
   }

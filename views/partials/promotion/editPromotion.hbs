@@ -96,7 +96,7 @@
         .then(response => response.json())
         .then(data => { window.location.reload(); })
         .catch((error) => {
-          showToast(err.message, 'danger');
+          alert(error.message);
         });
     });
   });

@@ -1,0 +1,75 @@
+{{> sidebar}}
+<!-- component -->
+
+<div class="col container-fluid">
+  <div class="d-flex justify-content-between align-items-center  m-4">
+    <h2 class="text-left">Counter</h2>
+    <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createPromotion">Create</div>
+  </div>
+
+  <!-- Add Book Section -->
+  <div class="card m-3">
+    <div class="card-header h3 p-3">Add book by ISBN</div>
+    <div class="card-body">
+      <form id="addBook">
+        <div class="row mb-3">
+          <div class="col-md-2">
+            <input type="text" placeholder="isbn code" class="form-control" id="isbnInput" name="isbn" required>
+          </div>
+          <div class="col-md-2">
+            <input type="text" placeholder="quantity" class="form-control" id="quantity" name="quantity">
+          </div>
+          <div class="col">
+            <button type="button" class="btn btn-success">Add Stored Book</button>
+          </div>
+          <div class="col">
+            <button type="submit" class="btn btn-success">Add Stored Book</button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card m-3">
+    <div id="booksContainer"></div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('isbnInput').addEventListener('keypress', async function (event) {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      const isbn = event.target.value;
+      try {
+        const response = await fetch(`/counter/isbn/${isbn}`);
+        if (!response.ok) {
+          throw new Error('Book not found');
+        }
+        const data = await response.json();
+        addBookToDisplay(data.book);
+      } catch (error) {
+        alert(error.message);
+      }
+      event.target.value = ''; // Clear the input
+    }
+  });
+
+  function addBookToDisplay(book) {
+    const booksContainer = document.getElementById('booksContainer');
+    const bookCard = document.createElement('div');
+    bookCard.className = 'card book-card';
+    bookCard.innerHTML = `
+        <div class="card-body">
+          <h5 class="card-title">Title: <input type="text" class="form-control" value="${book.title}" data-field="title"></h5>
+          <h6 class="card-subtitle mb-2 text-muted">Author: <input type="text" class="form-control" value="${book.author}" data-field="author"></h6>
+          <p class="card-text">ISBN: <input type="text" class="form-control" value="${book.isbn}" data-field="isbn"></p>
+          <button class="btn btn-danger" onclick="removeBook(this)">Remove</button>
+        </div>
+      `;
+    booksContainer.appendChild(bookCard);
+  }
+
+  function removeBook(button) {
+    button.closest('.book-card').remove();
+  }
+</script>

@@ -1,0 +1,139 @@
+{{> sidebar}}
+<!-- component -->
+<div class="col container-fluid">
+
+  <div class="d-flex justify-content-between align-items-center  m-4">
+    <h2 class="text-left">DashBoard</h2>
+  </div>
+
+
+  <div class="m-4">
+    <div class="accordion" id="statistics">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingOne">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne"
+            aria-expanded="true" aria-controls="collapseOne">
+            Common statistics
+          </button>
+        </h2>
+        <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne"
+          data-bs-parent="#statistics">
+          <div class="accordion-body m-3 p-0">
+            <div class="container-fluid">
+              <div class="row text-white text-center">
+                <div class="col-2 col-md-3 ">
+                  <div class="card mb-3" style="color:darkslategray;background-color:darkseagreen;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-evenly align-items-center m-2">
+                        <div class="display-4" style="min-height: 80px;">{{data.registered}}</div>
+                        <div class="h5">Registered customers</div>
+                      </div>
+                    </div>
+                      <div class="card-footer d-flex justify-content-between align-items-center">
+                        <div class="text-body-secondary">{{data.account_admin}} Admin</div>
+                        <a href="/user" style="text-decoration: none;">View</a>
+                        <div class="text-body-secondary">{{data.account_user}} User</div>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-2 col-md-3 ">
+                  <div class="card mb-3" style="color: darkslategray;background-color: burlywood;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-evenly align-items-center m-2">
+                        <div class="display-4" style="min-height: 80px;">{{data.category.total}}</div>
+                        <div class="h5">Categories</div>
+                      </div>
+                    </div>
+                      <div class="card-footer d-flex justify-content-between align-items-center">
+                        <div class="text-body-secondary">{{data.category.published}} Published</div>
+                        <a href="/category" style="text-decoration: none;">View</a>
+                        <div class="text-body-secondary">{{data.category.unpublished}} Unblished</div>
+                      </div>
+                  </div>
+                </div>
+                <div class="col-2 col-md-3 ">
+                  <div class="card mb-3" style="color: darkslategray;background-color:powderblue;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-evenly align-items-center m-2">
+                        <div class="display-4" style="min-height: 80px;">{{data.book}}</div>
+                        <div class="h5">Books</div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <a href="/book" style="text-decoration: none;">View</a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-2 col-md-3 ">
+                  <div class="card mb-3" style="color: darkslategray;background-color:gainsboro;">
+                    <div class="card-body">
+                      <div class="d-flex justify-content-evenly align-items-center m-2">
+                        <div class="display-4" style="min-height: 80px;">{{data.order}}</div>
+                        <div class="h5">Orders</div>
+                      </div>
+                    </div>
+                      <div class="card-footer d-flex justify-content-between align-items-center">
+                        <div class="text-danger fw-bold">-{{formatPrice data.expense 'VND'}}</div>
+                        <div class="text-success fw-bold">+{{formatPrice data.income 'VND'}}</div>
+                      </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="m-4">
+    <div class="accordion" id="graph">
+      <div class="accordion-item">
+        <h2 class="accordion-header" id="headingTwo">
+          <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo">
+            Graphical statistics
+          </button>
+        </h2>
+        <div id="collapseTwo" class="accordion-collapse collapse" data-bs-parent="#graph">
+          <div class="accordion-body">
+            <canvas id="DataChart"></canvas>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('DataChart');
+
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: [{{{formatArray graph.labels}}}],
+      datasets: [
+        {
+          label: 'Income',
+          data: [{{{formatArray graph.incomes}}}],
+          borderColor: 'rgba(75, 192, 192, 1)',
+          borderWidth: 1
+        },
+        {
+          label: 'Expense',
+          data: [{{{formatArray graph.expenses}}}],
+          borderColor: 'rgba(255, 99, 132, 1)',
+          borderWidth: 1
+        } 
+      ]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+    }
+  });
+</script>

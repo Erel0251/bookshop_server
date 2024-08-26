@@ -165,6 +165,10 @@ export class PromotionService {
     let detailPromotion: PromotionBook;
     for (const promotion of promotions) {
       for (const promotionBook of promotion.promotion_books) {
+        // check if the inventory of sale book is greater than 0
+        if (promotionBook.quantity <= 0) {
+          continue;
+        }
         minPrice = Math.min(minPrice, promotionBook.price);
         if (minPrice === promotionBook.price) {
           detailPromotion = promotionBook;

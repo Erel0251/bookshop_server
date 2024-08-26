@@ -32,7 +32,7 @@
           </div>
           <div class="col-md-2">
             <label for="book-quantity" class="form-label">Quantity</label>
-            <input type="number" class="form-control" id="book-quantity" name="bookQuantity" min="1"/>
+            <input type="number" class="form-control" id="book-quantity" name="bookQuantity" min="0"/>
           </div>
           <div class="col-md-2">
             <label for="book-discount" class="form-label">Discount (%)</label>
@@ -136,7 +136,7 @@
         window.location.reload();
       })
       .catch(error => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
   });
 
@@ -161,7 +161,7 @@
         window.location.reload();
       })
       .catch(error => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
   })
 </script>

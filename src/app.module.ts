@@ -28,6 +28,8 @@ import { PromotionModule } from './modules/promotion/promotion.module';
 import { AppController } from './app.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { CloudinaryModule } from './shared/cloudinary/cloudinary.module';
+import { RevenueModule } from './modules/revenue/revenue.module';
+import { CounterModule } from './modules/counter/counter.module';
 
 @Module({
   imports: [
@@ -83,6 +85,8 @@ import { CloudinaryModule } from './shared/cloudinary/cloudinary.module';
     OrderModule,
     CartModule,
     SupplementModule,
+    RevenueModule,
+    CounterModule,
   ],
   controllers: [AppController],
 })

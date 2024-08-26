@@ -103,4 +103,8 @@ export class UserService {
       ],
     });
   }
+
+  async clearCart(userId: string) {
+    return await this.cartService.clearCart(userId);
+  }
 }

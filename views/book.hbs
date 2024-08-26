@@ -7,9 +7,7 @@
     <h2 class="text-left">Book Inventory</h2>
     <div class="d-flex justify-content-evenly gap-3">
       <div class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#createBook">Create</div>
-      <!--
-      <div class="btn btn-outline-success">Import</div>
-      -->
+      <div class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#importBook">Import</div>
     </div>
   </div>
 
@@ -40,7 +38,11 @@
           <td class="editable">{{isbn}}</td>
           <td class="editable" data-price="{{price}}" data-currency="{{currency}}">{{formatPrice price currency}}</td>
           <td class="editable">{{avgRating reviews}}</td>
-          <td class="editable">{{formatName status}}</td>
+          <td class="editable" style="min-width: 150px;" align="center">
+            <div class="{{lowerCase status}}">
+            {{formatName status}}
+            </div>
+          </td>
           <td>{{inventory}}</td>
           <td>
             <button class="btn btn-outline-primary btn-sm editBtn" data-bs-toggle="modal"
@@ -89,6 +91,35 @@
   </div>
 </div>
 
+
+<!-- Form import Csv file -->
+<div class="modal fade" id="importBook" tabindex="-1" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Import Book</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="importCsv" enctype="multipart/form-data" class="p-4 m-4">
+          <div class="row mb-3">
+            <div class="col-2">
+              <a href="/book_sample.csv" download>
+                <button class="btn btn-outline-primary" type="button">Download Sample</button>
+              </a>
+            </div>
+            <div class="col">
+              <label for="file" class="form-label">Import CSV file</label>
+              <input type="file" class="form-control" id="file" name="file" accept=".csv">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success" style="width: 100%;">Import</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 {{> book/createBook}}
 {{> book/editBook}}
 
@@ -102,4 +133,25 @@
       placeholder: "Search by Title, Author, Publisher, ISBN, Price, Status, Currency, Inventory"
     }
   })
+
+  const form = document.getElementById('importCsv');
+  form.addEventListener('submit', function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(form);
+
+    fetch('/book/import', {
+      method: 'POST',
+      body: formData,
+    })
+      .then(response => response.json())
+      .then((message) => {
+        // Reload the page after form submission
+        window.location.reload();
+      })
+      .catch(error => {
+        alert(error.message);
+      });
+  })
+
 </script>

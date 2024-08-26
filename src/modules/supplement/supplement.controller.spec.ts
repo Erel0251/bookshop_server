@@ -79,17 +79,6 @@ describe('SupplementController', () => {
     });
   });
 
-  // Import supplements from CSV or Excel file
-  describe('import', () => {
-    it('should return a message', async () => {
-      const res = mockResponse();
-      await controller.import(res);
-
-      expect(res.status).toHaveBeenCalledWith(HttpStatus.NOT_IMPLEMENTED);
-      expect(res.send).toHaveBeenCalledWith({ message: 'Not implemented' });
-    });
-  });
-
   // Get a supplement by id
   describe('findOne', () => {
     it('should return a supplement', async () => {

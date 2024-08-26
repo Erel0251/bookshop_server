@@ -119,12 +119,11 @@
     })
       .then(response => response.json())
       .then((message) => {
-        showToast(message.message, 'success');
         // Reload the page after form submission
         window.location.reload();
       })
       .catch(error => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
   });
 
@@ -144,13 +143,12 @@
       },
     })
       .then(response => response.json())
-      .then((message) => {
-        showToast(message.message, 'success');
+      .then((message) => {  
         // Reload the page after form submission
         window.location.reload();
       })
       .catch(error => {
-        showToast(err.message, 'danger');
+        alert(error.message);
       });
   })
 </script>
